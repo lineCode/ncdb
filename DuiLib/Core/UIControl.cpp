@@ -350,7 +350,7 @@ namespace DuiLib {
 
 		if( m_bFloat ) {
 			CControlUI* pParent = GetParent();
-			/*if( pParent != NULL ) {
+			if( pParent != NULL ) {
 				RECT rcParentPos = pParent->GetPos();
 				RECT rcCtrl = {rcParentPos.left + rc.left, rcParentPos.top + rc.top, 
 					rcParentPos.left + rc.right, rcParentPos.top + rc.bottom};
@@ -364,12 +364,12 @@ namespace DuiLib {
 				m_cXY.cy = rc.top - rcPercent.top;
 				m_cxyFixed.cx = rc.right - rcPercent.right - m_cXY.cx;
 				m_cxyFixed.cy = rc.bottom - rcPercent.bottom - m_cXY.cy;
-			}*/
+			}
 		}
 		else {
 			m_rcItem = rc;
 		}
-		m_rcItem = rc;
+		//m_rcItem = rc;
 		if( m_pManager == NULL ) return;
 
 		if( !m_bSetPos ) {
