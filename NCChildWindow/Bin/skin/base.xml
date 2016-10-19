@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window caption="0,0,0,122" size="450,400" sizebox="6,6,6,6" maxinfo="450,400" roundcorner="2,2" showshadow="true" shadowimage="shaow.png" shadowcorner="9,9,9,9" shadowsize="6">
+<Window caption="0,0,0,122" size="450,400" sizebox="0,0,0,0" maxinfo="450,400" roundcorner="2,2" showshadow="true" shadowimage="shaow.png" shadowcorner="9,9,9,9" shadowsize="6">
   <Font id="0" name="微软雅黑" size="12" default="true"/>
   <VerticalLayout bkcolor="#FFFFFFFF">
 	<HorizontalLayout name="appbar" height="28" bkcolor="#FF00A9E8">

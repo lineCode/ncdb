@@ -2,9 +2,16 @@
 #include "CBaseWnd.h"
 #include "NCChildWindow.h"
 
-
+vector<char*> vecFormTag;
+vector<HWND> vecHwnd;
 CBaseWnd *CBaseWnd::s_pInstance = NULL;
-CBaseWnd *CBaseWnd::getInstance(HWND pWnd, char* caption, char* path, bool *btnStatus)
+struct WndTag
+{
+	char* wndString;
+	HWND pWnd;
+};
+vector<WndTag> vecWndTag;
+CBaseWnd *CBaseWnd::getInstance(HWND pWnd, char* caption, char* path, bool *btnStatus, char* formTag, bool isOnly, bool isShowModal)
 {
 	s_pInstance = new CBaseWnd();
 	s_pInstance->caption = caption;
@@ -14,8 +21,27 @@ CBaseWnd *CBaseWnd::getInstance(HWND pWnd, char* caption, char* path, bool *btnS
 	s_pInstance->sbMax = btnStatus[2];
 	s_pInstance->sbMin = btnStatus[3];
 	s_pInstance->sbOther = btnStatus[4];
+	s_pInstance->isOnly = isOnly;
+	s_pInstance->formTagString = formTag;
+
+	if (isOnly){
+		for (auto wndTag : vecWndTag){
+			if (wndTag.wndString == formTag){
+				SwitchToThisWindow(wndTag.pWnd, true);
+				return NULL;
+			}
+		}
+	}
 	s_pInstance->Create(pWnd, CharToDuiString(caption), UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
+	if (isOnly){
+		WndTag tag;
+		tag.wndString = formTag;
+		tag.pWnd = s_pInstance->GetHWND();
+		vecWndTag.push_back(tag);
+	}
 	s_pInstance->CenterWindow();
+	if (isShowModal)
+		s_pInstance->ShowModal();
 	return s_pInstance;
 }
 
@@ -25,6 +51,7 @@ CBaseWnd::CBaseWnd()
 	, m_pFeedBack(nullptr)
 	, m_pMin(nullptr)
 	, m_pMax(nullptr)
+	, m_pRestore(nullptr)
 	, m_pClose(nullptr)
 {
 }
@@ -35,8 +62,18 @@ CBaseWnd::~CBaseWnd(void)
 
 void CBaseWnd::OnFinalMessage(HWND hWnd)
 {
+	if (isOnly){
+		for (vector<WndTag>::iterator it = vecWndTag.begin(); it != vecWndTag.end(); it++)
+		{
+			if ((*it).wndString == formTagString){
+				vecWndTag.erase(it);
+				break;
+			}			
+		}
+	}
 	__super::OnFinalMessage(hWnd);
 	delete this;
+	s_pInstance = NULL;
 }
 
 DuiLib::CDuiString CBaseWnd::GetSkinFile()
@@ -55,11 +92,13 @@ void CBaseWnd::SetWndSize(int cx, int cy)
 }
 void CBaseWnd::InitWindow()
 {	
+	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
 	m_pLogo = static_cast<CControlUI*>(m_pm.FindControl(_T("logo")));
 	m_pTitle = static_cast<CLabelUI*>(m_pm.FindControl(_T("title")));
 	m_pFeedBack = static_cast<CButtonUI*>(m_pm.FindControl(_T("feedbackbtn")));
 	m_pMin = static_cast<CButtonUI*>(m_pm.FindControl(_T("minbtn")));
 	m_pMax = static_cast<CButtonUI*>(m_pm.FindControl(_T("maxbtn")));
+	m_pRestore = static_cast<CButtonUI*>(m_pm.FindControl(_T("restorebtn")));
 	m_pClose = static_cast<CButtonUI*>(m_pm.FindControl(_T("closebtn")));
 
 	m_pLogo->SetBkImage(CharToDuiString(path));
@@ -68,6 +107,8 @@ void CBaseWnd::InitWindow()
 	m_pMin->SetVisible(sbMin);
 	m_pClose->SetVisible(sbClose);
 	m_pMax->SetVisible(sbMax);
+	m_pRestore->SetVisible(sbMax);
+	
 }
 
 void CBaseWnd::Notify(TNotifyUI &msg)

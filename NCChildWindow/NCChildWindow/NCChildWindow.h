@@ -24,6 +24,9 @@ struct TCFormFrame
 	char* caption;
 	char* path;
 	HWND pWnd;
+	char* formTag;
+	bool isOnly;
+	bool isShowModal;
 };
 struct TCFormSysButton
 {

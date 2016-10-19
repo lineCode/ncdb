@@ -7,7 +7,7 @@ class CBaseWnd : public WindowImplBase
 public:
 	CBaseWnd();
 	~CBaseWnd(void);
-	static CBaseWnd *getInstance(HWND pWnd,char* caption,char* path,bool *btnStatus);
+	static CBaseWnd *getInstance(HWND pWnd,char* caption,char* path,bool *btnStatus,char* formTag,bool isOnly,bool isShowModal);
 public:
 	virtual void OnFinalMessage(HWND);
 	virtual CDuiString GetSkinFile();
@@ -31,7 +31,10 @@ private:
 	CButtonUI* m_pFeedBack;
 	CButtonUI* m_pMin;
 	CButtonUI* m_pMax;
+	CButtonUI* m_pRestore;
 	CButtonUI* m_pClose;
+	char* formTagString;
+	bool isOnly;
 	static CBaseWnd *s_pInstance;
 };
 

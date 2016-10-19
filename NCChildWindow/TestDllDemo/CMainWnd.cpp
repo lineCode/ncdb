@@ -6,6 +6,7 @@
 
 CMainWnd::CMainWnd(void)
 	:m_pTestBtn(nullptr)
+	, m_pTest2Btn(nullptr)
 {
 }
 
@@ -36,6 +37,7 @@ void CMainWnd::SetWndSize(int cx, int cy)
 void CMainWnd::InitWindow()
 {	
 	m_pTestBtn = static_cast<CButtonUI*>(m_pm.FindControl(_T("testBtn")));
+	m_pTest2Btn = static_cast<CButtonUI*>(m_pm.FindControl(_T("test2Btn")));
 }
 typedef	int(*TCFormInitCallBack)(const HWND AFormHandle, const int AWidth, int AHeight);
 int InitCallBack(const HWND AFormHandle, const int AWidth, int AHeight)
@@ -58,9 +60,12 @@ void CMainWnd::Notify(TNotifyUI &msg)
 		if (msg.pSender == m_pTestBtn)
 		{
 			TCFormFrame frame;
-			frame.caption = "标题栏zzzzzz";
+			frame.caption = "标题栏zzzzzz    第一个窗口";
 			frame.path = "Logo.png";
 			frame.pWnd = GetHWND();
+			frame.formTag = "第一个窗口";
+			frame.isOnly = true;
+			frame.isShowModal = false;
 			TCFormSysButton button;
 			button.sbClose = true;
 			button.sbMax = false;
@@ -69,8 +74,25 @@ void CMainWnd::Notify(TNotifyUI &msg)
 			button.sbOther = false;
 			TCFormInitCallBack callback;
 			callback = InitCallBack;
+			CShowChildWindow(frame, button, callback);	
+		}
+		else if (msg.pSender == m_pTest2Btn){
+			TCFormFrame frame;
+			frame.caption = "标题栏sssssss       第二个窗口";
+			frame.path = "Logo.png";
+			frame.pWnd = GetHWND();
+			frame.formTag = "第二个窗口";
+			frame.isOnly = true;
+			frame.isShowModal = false;
+			TCFormSysButton button;
+			button.sbClose = true;
+			button.sbMax = false;
+			button.sbFeedback = false;
+			button.sbMin = false;
+			button.sbOther = false;
+			TCFormInitCallBack callback;
+			callback = InitCallBack;
 			CShowChildWindow(frame, button, callback);
-			
 		}
 	}
 	else if (msg.sType == DUI_MSGTYPE_VALUECHANGED)

@@ -18,4 +18,5 @@ public:
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 private:
 	CButtonUI* m_pTestBtn;
+	CButtonUI* m_pTest2Btn;
 };

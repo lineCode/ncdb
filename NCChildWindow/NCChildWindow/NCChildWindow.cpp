@@ -41,10 +41,13 @@ NCCHILDWINDOW_API HWND CShowChildWindow(TCFormFrame frame, TCFormSysButton butto
 	btnStatus[2] = button.sbMax;
 	btnStatus[3] = button.sbMin;
 	btnStatus[4] = button.sbOther;
-	CBaseWnd* pFrame = CBaseWnd::getInstance(frame.pWnd, frame.caption, frame.path, btnStatus);
-
-	RECT rc;   //窗口位置  父窗口位置
-	GetWindowRect(pFrame->GetHWND(), &rc);
-	callback(pFrame->GetHWND(), rc.right - rc.left, rc.bottom - rc.top);
-	return pFrame->GetHWND();
+	CBaseWnd* pFrame = CBaseWnd::getInstance(frame.pWnd, frame.caption, frame.path, btnStatus,frame.formTag,frame.isOnly,frame.isShowModal);
+	if (pFrame){
+		RECT rc;   //窗口位置  父窗口位置
+		GetWindowRect(pFrame->GetHWND(), &rc);
+		callback(pFrame->GetHWND(), rc.right - rc.left, rc.bottom - rc.top);
+		return pFrame->GetHWND();
+	}
+	return NULL;
+	
 }
