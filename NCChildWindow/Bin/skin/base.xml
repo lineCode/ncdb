@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window caption="0,0,0,122" size="450,400" sizebox="6,6,6,6" maxinfo="450,400" roundcorner="2,2" showshadow="true" shadowimage="shaow.png" shadowcorner="9,9,9,9" shadowsize="6">
+  <Font id="0" name="微软雅黑" size="12" default="true"/>
+  <VerticalLayout bkcolor="#FFFFFFFF">
+	<HorizontalLayout name="appbar" height="28" bkcolor="#FF00A9E8">
+		<Control name="logo" width="16" height="16" padding="5,7,0,0" bkimage="Logo.png"/>
+		<Label name="title" text="标题栏" padding="2,2,0,0" textcolor="#FFFFFFFF"/>
+		<Control/>
+		<Button name="feedbackbtn" width="30" height="28" tooltip="反馈" normalimage="file='sysbtn.png' source='60,0,90,28'" hotimage="file='sysbtn.png' source='90,0,120,28'"/>
+		<Button name="minbtn" width="30" height="28" tooltip="最小化" normalimage="file='sysbtn.png' source='120,0,150,28'" hotimage="file='sysbtn.png' source='150,0,180,28'"/>
+		<Button name="maxbtn" width="30" height="28" tooltip="最大化" normalimage="file='sysbtn.png' source='180,0,210,28'" hotimage="file='sysbtn.png' source='210,0,240,28'"/>
+		<Button name="restorebtn" width="30" height="28" tooltip="还原" visible="false" normalimage="file='sysbtn.png' source='240,0,270,28'" hotimage="file='sysbtn.png' source='270,0,300,28'"/>
+		<Button name="closebtn" width="30" height="28" tooltip="关闭" normalimage="file='sysbtn.png' source='300,0,330,28'" hotimage="file='sysbtn.png' source='330,0,360,28'"/>
+	</HorizontalLayout>
+  </VerticalLayout>
+</Window>
