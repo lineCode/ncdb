@@ -26,4 +26,13 @@
 #define MSGID_CANCEL		         0
 #define MSGID_OK	                 1
 #define MSGID_RETRY                  2
+
+//***************************************************************************
+//                 HWND hWnd:          父窗口句柄，如果没有的话可传入NULL
+//                 LPCTSTR lpText:     提示信息
+//                 LPCTSTR lpCaption:  标题
+//                 UINT uType:         按钮类型
+//                 UINT uIcon:         图标类型
+//                 POINT pPosition:    窗口弹出位置
+//***************************************************************************
 NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType = BTN_OK, UINT uIcon = NCICON_WARN, POINT pPosition = { 0, 0 });
