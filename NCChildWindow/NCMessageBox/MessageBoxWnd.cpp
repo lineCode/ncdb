@@ -52,7 +52,10 @@ LPCTSTR CMessageBoxWnd::GetWindowClassName(void) const
 }
 
 void CMessageBoxWnd::InitWindow()
-{	
+{		
+	//设置窗口靠近屏幕边缘不最大化
+	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
+
 	m_pCloseBtn = static_cast<CButtonUI*>(m_pm.FindControl(_T("close")));
 	m_pBtn1 = static_cast<CButtonUI*>(m_pm.FindControl(_T("btn1")));
 	m_pBtn2 = static_cast<CButtonUI*>(m_pm.FindControl(_T("btn2")));

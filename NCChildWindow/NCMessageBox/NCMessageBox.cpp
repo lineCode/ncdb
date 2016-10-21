@@ -12,7 +12,7 @@ NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, 
 	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
 	strResourcePath += _T("MessageBoxSkin\\");
 	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
-
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);    //CRT检测是否有内存泄漏，检测结果在output窗口输出
 	
 	return CMessageBoxWnd::LvMessageBox(hWnd, lpText, lpCaption, uType, uIcon, pPosition);
 }
