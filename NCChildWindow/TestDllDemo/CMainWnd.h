@@ -19,4 +19,5 @@ public:
 private:
 	CButtonUI* m_pTestBtn;
 	CButtonUI* m_pTest2Btn;
+	CButtonUI* m_pTest3Btn;
 };

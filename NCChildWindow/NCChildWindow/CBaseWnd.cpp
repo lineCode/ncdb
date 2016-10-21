@@ -92,7 +92,9 @@ void CBaseWnd::SetWndSize(int cx, int cy)
 }
 void CBaseWnd::InitWindow()
 {	
-	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
+	//设置窗口靠近屏幕边缘不最大化
+	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);    
+
 	m_pLogo = static_cast<CControlUI*>(m_pm.FindControl(_T("logo")));
 	m_pTitle = static_cast<CLabelUI*>(m_pm.FindControl(_T("title")));
 	m_pFeedBack = static_cast<CButtonUI*>(m_pm.FindControl(_T("feedbackbtn")));

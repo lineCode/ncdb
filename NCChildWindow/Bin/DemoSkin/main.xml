@@ -14,5 +14,6 @@
 	</HorizontalLayout>
 	<Button name="testBtn" text="测试按钮1" padding="100,200" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
 	<Button name="test2Btn" text="测试按钮2" padding="100,10" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+	<Button name="test3Btn" text="Messagebox测试" padding="100,10" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
   </VerticalLayout>
 </Window>

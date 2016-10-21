@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="335,150" caption="0,0,0,30" showshadow="true" shadowimage="shaow.png" shadowcorner="9,9,9,9" shadowsize="6" roundcorner="2,2">
+  <Default name="VScrollBar" shared="true" value="width=&quot;10&quot; button1normalimage=&quot;file='scrollbar.png' source='4,110,14,122' mask='#FFFF00FF'&quot; button1hotimage=&quot;file='scrollbar.png' source='4,146,14,158' mask='#FFFF00FF'&quot; button1pushedimage=&quot;file='scrollbar.png' source='4,146,14,158' mask='#FFFF00FF'&quot; button2normalimage=&quot;file='scrollbar.png' source='4,128,14,140' mask='#FFFF00FF'&quot; button2hotimage=&quot;file='scrollbar.png' source='4,164,14,176' mask='#FFFF00FF'&quot; button2pushedimage=&quot;file='scrollbar.png' source='4,164,14,176' mask='#FFFF00FF'&quot; thumbnormalimage=&quot;file='scrollbar.png' source='3,180,13,196' corner='4,4,4,4' mask='#FFFF00FF'&quot; thumbhotimage=&quot;file='scrollbar.png' source='3,198,13,214' corner='4,4,4,4' mask='#FFFF00FF'&quot; thumbpushedimage=&quot;file='scrollbar.png' source='3,198,13,214' corner='4,4,4,4' mask='#FFFF00FF'&quot; bkhotimage=&quot;file='scrollbar.png' source='3,180,13,196' corner='4,4,4,4' mask='#FFFF00FF'&quot; bkpushedimage=&quot;file='scrollbar.png' source='3,180,13,196' corner='4,4,4,4' mask='#FFFF00FF'&quot; " />
+	<Font id="0" name="微软雅黑" size="12" default="true"/>
+	<VerticalLayout>
+		<HorizontalLayout height="28" bkcolor="#FF08A3DC">
+			<Control width="5"/>
+			<Control bkimage="file='Logo.png'" width="16" height="16" padding="0,5,0,0"/>
+			<Label name="title" text="title" padding="2,2,0,0" align="left" textcolor="#FFFFFFFF" endellipsis="true"/>
+			<Button name="close" padding="0,0,-2,0" width="30" height="28" tooltip="关闭" normalimage="file='close.png' source='0,0,30,28'" hotimage="file='close.png' source='30,0,60,28'" pushedimage="file='close.png' source='30,0,60,28'"/>
+		</HorizontalLayout>
+		<HorizontalLayout bkcolor="#FFFFFFFF">
+			<Control width="24"/>
+			<Control name="icon" height="36" width="36" padding="0,26,0,0" bkimage="Ask.png"/>
+			<VerticalLayout>
+				<Control name="upCtrl" height="30"/>
+				<RichEdit name="message" padding="10,0,0,0" height="60" width="240" multiline="true" vscrollbar="true" autovscroll="true" rich="true" readonly="true"/>
+			</VerticalLayout>
+		</HorizontalLayout>
+		<HorizontalLayout height="38" bkcolor="#FFE8F5FD" topbordersize="1" bordercolor="#FFD3DDE2">
+			<Control/>
+			<Button name="btn1" padding="0,8,0,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+			<Button name="btn2" padding="6,8,0,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+			<Button name="btn3" padding="6,8,6,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>				
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>
