@@ -14,6 +14,7 @@
 #define BTN_OK                       0
 #define BTN_OKCANCEL                 1
 #define BTN_YESRETRYCANCEL           2
+#define BTN_YESNO                    3
 
 //图标定义
 #define NCICON_WARN                  0
@@ -26,6 +27,9 @@
 #define MSGID_CANCEL		         0
 #define MSGID_OK	                 1
 #define MSGID_RETRY                  2
+#define MSGID_CANCEL_NOWARN		     3
+#define MSGID_OK_NOWARN	             4
+#define MSGID_RETRY_NOWARN           5
 
 //***************************************************************************
 //                 HWND hWnd:          父窗口句柄，如果没有的话可传入NULL
@@ -34,5 +38,6 @@
 //                 UINT uType:         按钮类型
 //                 UINT uIcon:         图标类型
 //                 POINT pPosition:    窗口弹出位置
+//                 BOOL bCheck:        不再提示复选框
 //***************************************************************************
-NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType = BTN_OK, UINT uIcon = NCICON_WARN, POINT pPosition = { 0, 0 });
+NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType = BTN_OK, UINT uIcon = NCICON_WARN, POINT pPosition = { -1, -1 }, BOOL bCheck=FALSE);

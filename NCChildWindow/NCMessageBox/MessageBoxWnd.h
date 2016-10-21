@@ -13,7 +13,7 @@ public:
 	virtual LPCTSTR GetWindowClassName(void) const;
 	virtual void Notify(TNotifyUI &msg);
 	virtual void InitWindow();
-	static int LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR lpstrTitle, UINT uType, UINT uIcon, POINT pPosition = { 0, 0 });
+	static int LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR lpstrTitle, UINT uType, UINT uIcon, POINT pPosition,BOOL bCheck);
 	LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void InitBtn();
@@ -28,10 +28,12 @@ private:
 	CRichEditUI* m_pMessage;
 	CControlUI* m_pIcon;
 	CControlUI* m_pUpCtrl;
+	COptionUI* m_pNoWarn;
 
 	CDuiString m_strTitle;
 	CDuiString m_strMsg;
 	unsigned int uType;
 	unsigned int uIcon;
 	POINT posWnd;
+	bool bCheck;
 };

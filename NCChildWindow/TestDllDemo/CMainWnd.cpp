@@ -99,7 +99,7 @@ void CMainWnd::Notify(TNotifyUI &msg)
 			CShowChildWindow(frame, button, callback);	
 		}
 		else if (msg.pSender == m_pTest3Btn){
-			int result = NCMessageBox(GetHWND(), _T("文字内容啦啦啦等等等等等噢噢噢的等等等斤斤计较经济等"), _T("标题栏"));
+			int result = NCMessageBox(GetHWND(), _T("文字内容啦啦啦等等等等等噢噢啦等等等噢噢噢的等等等斤等斤斤计较经济等"), _T("标题栏"), BTN_YESRETRYCANCEL, NCICON_ERROR, {-1,-1},true);
 			//int result = NCMessageBox(GetHWND(), _T("文字内容啦啦啦啦啦啦啦啦日日日日日日日日日日日日日日日日日日日日日日eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约啦啦啦啦啦啦啦啦啦eeeeeeeeeeeeeeeeeeeeee等等等等等等等等等等等等等等等啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvv等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvv等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv啦"), _T("标题栏"));
 		}
 	}

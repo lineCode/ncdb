@@ -18,6 +18,7 @@
 			</VerticalLayout>
 		</HorizontalLayout>
 		<HorizontalLayout height="38" bkcolor="#FFE8F5FD" topbordersize="1" bordercolor="#FFD3DDE2">
+			<Option name="noWarn" padding="10,15,0,0" width="70" text="不再提示" textpadding="15,-8,0,0" normalimage="file='check_normal.png' dest='0,0,13,13'" hotimage="file='check_hot.png' dest='0,0,13,13'" selectedimage="file='check_selected.png' dest='0,0,13,13'"/>
 			<Control/>
 			<Button name="btn1" padding="0,8,0,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
 			<Button name="btn2" padding="6,8,0,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>

@@ -11,6 +11,7 @@ CMessageBoxWnd::CMessageBoxWnd(void)
 	, m_pMessage(nullptr)
 	, m_pIcon(nullptr)
 	, m_pUpCtrl(nullptr)
+	, m_pNoWarn(nullptr)
 {
 }
 
@@ -24,7 +25,7 @@ void CMessageBoxWnd::OnFinalMessage(HWND hWnd)
 	delete this;
 }
 
-int CMessageBoxWnd::LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR  lpstrTitle, UINT uType, UINT uIcon, POINT pPosition)
+int CMessageBoxWnd::LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR  lpstrTitle, UINT uType, UINT uIcon, POINT pPosition, BOOL bCheck)
 {
 	CMessageBoxWnd *s_pInstance = new CMessageBoxWnd();
 	s_pInstance->m_strTitle = lpstrTitle;
@@ -32,8 +33,9 @@ int CMessageBoxWnd::LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR  lpstrT
 	s_pInstance->uType = uType;
 	s_pInstance->uIcon = uIcon;
 	s_pInstance->posWnd = pPosition;
+	s_pInstance->bCheck = bCheck;
 	s_pInstance->Create(hParent, lpstrTitle, UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
-	if (!pPosition.x&&!pPosition.y)
+	if (pPosition.x == -1 && pPosition.y == -1)
 		s_pInstance->CenterWindow();
 	if (uType == BTN_OK)
 		return MSGID_OK;
@@ -64,13 +66,16 @@ void CMessageBoxWnd::InitWindow()
 	m_pIcon = static_cast<CControlUI*>(m_pm.FindControl(_T("icon")));
 	m_pMessage = static_cast<CRichEditUI*>(m_pm.FindControl(_T("message")));
 	m_pUpCtrl = static_cast<CControlUI*>(m_pm.FindControl(_T("upCtrl")));
+	m_pNoWarn = static_cast<COptionUI*>(m_pm.FindControl(_T("noWarn")));
 	
 	m_pTitle->SetText(m_strTitle);
 	m_pMessage->SetText(m_strMsg);
+	m_pNoWarn->SetVisible(bCheck);
+
 	InitBtn();
 	InitIcon();	
 
-	if (posWnd.x || posWnd.y){
+	if (posWnd.x != -1 || posWnd.y != -1){
 		RECT rc;   //窗口位置
 		GetWindowRect(this->GetHWND(), &rc);
 		MoveWindow(GetHWND(), posWnd.x, posWnd.y, rc.right - rc.left, rc.bottom - rc.top, true);
@@ -85,22 +90,43 @@ void CMessageBoxWnd::Notify(TNotifyUI &msg)
 			Close(MSGID_CANCEL);
 		if (uType == BTN_OK){
 			if (msg.pSender == m_pBtn3){
-				Close(MSGID_OK);
+				if (m_pNoWarn->IsVisible() && m_pNoWarn->IsSelected())
+					Close(MSGID_OK_NOWARN);
+				else
+					Close(MSGID_OK);
 			}		
 		}
-		else if (uType == BTN_OKCANCEL){
-			if (msg.pSender == m_pBtn2)
-				Close(MSGID_OK);
-			else if (msg.pSender == m_pBtn3)
-				Close(MSGID_CANCEL);
+		else if (uType == BTN_OKCANCEL||uType==BTN_YESNO){
+			if (m_pNoWarn->IsVisible() && m_pNoWarn->IsSelected()){
+				if (msg.pSender == m_pBtn2)
+					Close(MSGID_OK_NOWARN);
+				else if (msg.pSender == m_pBtn3)
+					Close(MSGID_CANCEL_NOWARN);
+			}
+			else{
+				if (msg.pSender == m_pBtn2)
+					Close(MSGID_OK);
+				else if (msg.pSender == m_pBtn3)
+					Close(MSGID_CANCEL);
+			}
 		}
 		else if (uType == BTN_YESRETRYCANCEL){
-			if (msg.pSender == m_pBtn1)
-				Close(MSGID_OK);
-			else if (msg.pSender == m_pBtn2)
-				Close(MSGID_RETRY);
-			else if (msg.pSender == m_pBtn3)
-				Close(MSGID_CANCEL);
+			if (m_pNoWarn->IsVisible() && m_pNoWarn->IsSelected()){
+				if (msg.pSender == m_pBtn1)
+					Close(MSGID_OK_NOWARN);
+				else if (msg.pSender == m_pBtn2)
+					Close(MSGID_RETRY_NOWARN);
+				else if (msg.pSender == m_pBtn3)
+					Close(MSGID_CANCEL_NOWARN);
+			}
+			else{
+				if (msg.pSender == m_pBtn1)
+					Close(MSGID_OK);
+				else if (msg.pSender == m_pBtn2)
+					Close(MSGID_RETRY);
+				else if (msg.pSender == m_pBtn3)
+					Close(MSGID_CANCEL);
+			}
 		}
 	}
 	return WindowImplBase::Notify(msg);
@@ -137,6 +163,11 @@ void CMessageBoxWnd::InitBtn()
 		m_pBtn1->SetVisible(false);
 		m_pBtn2->SetText(_T("确定"));
 		m_pBtn3->SetText(_T("取消"));
+	}
+	else if (uType == BTN_YESNO){
+		m_pBtn1->SetVisible(false);
+		m_pBtn2->SetText(_T("是"));
+		m_pBtn3->SetText(_T("否"));
 	}
 	else if (uType == BTN_YESRETRYCANCEL){
 		m_pBtn1->SetText(_T("确定"));
@@ -192,7 +223,7 @@ void CMessageBoxWnd::OnTimer(UINT_PTR idEvent)
 		int editHeight = m_pMessage->GetHeight();
 		m_pMessage->SetFixedHeight(editHeight + height);
 		ResizeClient(rc.right - rc.left, rc.bottom - rc.top + height);
-		if (!posWnd.x&&!posWnd.y)
+		if (posWnd.x == -1 && posWnd.y == -1)
 			this->CenterWindow();
 	}
 
