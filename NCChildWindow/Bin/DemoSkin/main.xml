@@ -12,8 +12,10 @@
 		<Button name="restorebtn" width="30" height="28" tooltip="还原" visible="false" normalimage="file='sysbtn.png' source='240,0,270,28'" hotimage="file='sysbtn.png' source='270,0,300,28'"/>
 		<Button name="closebtn" width="30" height="28" tooltip="关闭" normalimage="file='sysbtn.png' source='300,0,330,28'" hotimage="file='sysbtn.png' source='330,0,360,28'"/>
 	</HorizontalLayout>
-	<Button name="testBtn" text="测试按钮1" padding="100,200" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+	<Button name="testBtn" text="测试按钮1" padding="100,100" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
 	<Button name="test2Btn" text="测试按钮2" padding="100,10" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
 	<Button name="test3Btn" text="Messagebox测试" padding="100,10" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
-  </VerticalLayout>
+	<Button name="test4Btn" text="提醒窗口测试" padding="100,10" width="200" height="100" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/> 
+	<Edit name="edit" visible="false" padding="100,10,0,0" bordercolor="#FF0000FF" bordersize="1" width="200" height="30"/>
+ </VerticalLayout>
 </Window>

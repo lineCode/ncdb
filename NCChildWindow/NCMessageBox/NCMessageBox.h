@@ -41,3 +41,10 @@
 //                 BOOL bCheck:        不再提示复选框
 //***************************************************************************
 NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType = BTN_OK, UINT uIcon = NCICON_WARN, POINT pPosition = { -1, -1 }, BOOL bCheck=FALSE);
+
+//***************************************************************************
+//                 
+//               LPCTSTR lpCaption:    标题
+//                 
+//***************************************************************************
+NCMESSAGEBOX_API void NCWarnWnd(LPCTSTR lpCaption);

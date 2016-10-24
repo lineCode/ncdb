@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="335,150" caption="0,0,0,30" showshadow="true" shadowimage="shaow.png" shadowcorner="9,9,9,9" shadowsize="6" roundcorner="2,2">
+	<Font id="0" name="微软雅黑" size="12" default="true"/>
+	<VerticalLayout>
+		<HorizontalLayout height="28" bkcolor="#FF08A3DC">
+			<Control width="5"/>
+			<Control bkimage="file='Logo.png'" width="16" height="16" padding="0,5,0,0"/>
+			<Label name="title" text="title" padding="2,2,0,0" align="left" textcolor="#FFFFFFFF" endellipsis="true"/>
+			<Button name="close" padding="0,0,-2,0" width="30" height="28" tooltip="关闭" normalimage="file='close.png' source='0,0,30,28'" hotimage="file='close.png' source='30,0,60,28'" pushedimage="file='close.png' source='30,0,60,28'"/>
+		</HorizontalLayout>
+		<HorizontalLayout bkcolor="#FFFFFFFF">
+
+		</HorizontalLayout>
+		<HorizontalLayout height="38" bkcolor="#FFE8F5FD" topbordersize="1" bordercolor="#FFD3DDE2">
+			<Control/>
+			<Button name="btn1" padding="0,8,0,0" visible="false" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+			<Button name="btn2" padding="6,8,0,0" visible="false" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>
+			<Button name="btn3" padding="6,8,6,0" height="24" width="70" normalimage="file='bkbtn.png' source='0,0,10,24' corner='2,2,2,2'" hotimage="file='bkbtn.png' source='10,0,20,24' corner='2,2,2,2'" pushedimage="file='bkbtn.png' source='20,0,30,24' corner='2,2,2,2'"/>				
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>

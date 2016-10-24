@@ -20,4 +20,7 @@ private:
 	CButtonUI* m_pTestBtn;
 	CButtonUI* m_pTest2Btn;
 	CButtonUI* m_pTest3Btn;
+	CButtonUI* m_pTest4Btn;
+	CEditUI* m_pEdit;
+	int i=0;
 };

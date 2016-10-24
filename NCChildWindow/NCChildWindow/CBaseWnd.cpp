@@ -2,8 +2,6 @@
 #include "CBaseWnd.h"
 #include "NCChildWindow.h"
 
-vector<char*> vecFormTag;
-vector<HWND> vecHwnd;
 CBaseWnd *CBaseWnd::s_pInstance = NULL;
 struct WndTag
 {

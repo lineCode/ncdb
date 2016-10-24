@@ -10,6 +10,8 @@ CMainWnd::CMainWnd(void)
 	:m_pTestBtn(nullptr)
 	, m_pTest2Btn(nullptr)
 	, m_pTest3Btn(nullptr)
+	, m_pTest4Btn(nullptr)
+	, m_pEdit(nullptr)
 {
 }
 
@@ -42,6 +44,8 @@ void CMainWnd::InitWindow()
 	m_pTestBtn = static_cast<CButtonUI*>(m_pm.FindControl(_T("testBtn")));
 	m_pTest2Btn = static_cast<CButtonUI*>(m_pm.FindControl(_T("test2Btn")));
 	m_pTest3Btn = static_cast<CButtonUI*>(m_pm.FindControl(_T("test3Btn")));
+	m_pTest4Btn = static_cast<CButtonUI*>(m_pm.FindControl(_T("test4Btn")));
+	m_pEdit = static_cast<CEditUI*>(m_pm.FindControl(_T("edit")));
 }
 typedef	int(*TCFormInitCallBack)(const HWND AFormHandle, const int AWidth, int AHeight);
 int InitCallBack(const HWND AFormHandle, const int AWidth, int AHeight)
@@ -102,11 +106,25 @@ void CMainWnd::Notify(TNotifyUI &msg)
 			int result = NCMessageBox(GetHWND(), _T("文字内容啦啦啦等等等等等噢噢啦等等等噢噢噢的等等等斤等斤斤计较经济等"), _T("标题栏"), BTN_YESRETRYCANCEL, NCICON_ERROR, {-1,-1},true);
 			//int result = NCMessageBox(GetHWND(), _T("文字内容啦啦啦啦啦啦啦啦日日日日日日日日日日日日日日日日日日日日日日eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日日隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约隐隐约约啦啦啦啦啦啦啦啦啦eeeeeeeeeeeeeeeeeeeeee等等等等等等等等等等等等等等等啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢噢等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvv等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvv等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等等vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv啦"), _T("标题栏"));
 		}
-	}
-	else if (msg.sType == DUI_MSGTYPE_VALUECHANGED)
-	{
+		else if (msg.pSender == m_pTest4Btn){
+			WCHAR buf[16];
+			wsprintfW(buf, L"%d", i);
+			CDuiString title = _T("标题栏   窗口");
+			title += buf;
 
+			NCWarnWnd(title);
+			i++;
+		}
 	}
+	//else if (msg.sType == DUI_MSGTYPE_TEXTCHANGED){
+	//	WCHAR buf[16];
+	//	wsprintfW(buf, L"%d", i);
+	//	CDuiString title = _T("标题栏   窗口");
+	//	title += buf;
+
+	//	NCWarnBox(title);
+	//	i++;
+	//}
 	return WindowImplBase::Notify(msg);
 }
 
