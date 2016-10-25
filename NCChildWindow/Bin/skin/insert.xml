@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Window size="200,200">
-  <Font id="0" name="微软雅黑" size="12" default="true"/>
-  <VerticalLayout bkcolor="#FFD5FFD5">
-
-  </VerticalLayout>
-</Window>
