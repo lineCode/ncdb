@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NXwke", "NXwke\NXwke.vcxproj", "{DD825DE9-A381-4AB8-8E3C-1CB02629CC11}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UseNXwke", "UseNXwke\UseNXwke.vcxproj", "{593E09E5-8F76-48DD-8060-3EAFFE4A3D7E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DD825DE9-A381-4AB8-8E3C-1CB02629CC11} = {DD825DE9-A381-4AB8-8E3C-1CB02629CC11}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD825DE9-A381-4AB8-8E3C-1CB02629CC11}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD825DE9-A381-4AB8-8E3C-1CB02629CC11}.Debug|Win32.Build.0 = Debug|Win32
+		{DD825DE9-A381-4AB8-8E3C-1CB02629CC11}.Release|Win32.ActiveCfg = Release|Win32
+		{DD825DE9-A381-4AB8-8E3C-1CB02629CC11}.Release|Win32.Build.0 = Release|Win32
+		{593E09E5-8F76-48DD-8060-3EAFFE4A3D7E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{593E09E5-8F76-48DD-8060-3EAFFE4A3D7E}.Debug|Win32.Build.0 = Debug|Win32
+		{593E09E5-8F76-48DD-8060-3EAFFE4A3D7E}.Release|Win32.ActiveCfg = Release|Win32
+		{593E09E5-8F76-48DD-8060-3EAFFE4A3D7E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

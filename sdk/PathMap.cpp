@@ -1,0 +1,5 @@
+#include "StdAfx.h"
+#include "PathMap.h"
+#include "doString.h"
+#include "define_gnl.h"
+#include "PathLight.h"
