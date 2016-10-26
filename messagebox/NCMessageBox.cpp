@@ -11,7 +11,7 @@ void initDuilib()
 	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
 	// 初始化资源
 	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
-	strResourcePath += _T("MessageBoxSkin\\");
+	strResourcePath += _T("..\\Skins\\Default\\MessageBoxSkin\\");
 	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);    //CRT检测是否有内存泄漏，检测结果在output窗口输出
 }

@@ -42,12 +42,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)Temp\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\Bin\</OutDir>
+    <OutDir>$(SolutionDir)..\output\Bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir)Temp\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\Bin\</OutDir>
+    <OutDir>$(SolutionDir)..\output\Bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

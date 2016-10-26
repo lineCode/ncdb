@@ -28,7 +28,7 @@ NCCHILDWINDOW_API HWND CShowChildWindow(TCFormFrame frame, TCFormSysButton butto
 	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
 	// 初始化资源
 	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
-	strResourcePath += _T("skin\\");
+	strResourcePath += _T("..\\Skins\\Default\\ChildWndSkin\\");
 	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
 
 	//CBaseWnd* pFrame = new CBaseWnd(frame, button);

@@ -39,7 +39,7 @@ void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
 	strTitle = pTitle;
 	CWarnWnd *s_pInstance = new CWarnWnd();
 	s_pInstance->Create(NULL, _T(""), UI_WNDSTYLE_FRAME, WS_EX_TOOLWINDOW , 0, 0, 0, 0);
-	//s_pInstance->Create(NULL, _T(""), WS_DISABLED, WS_EX_NOACTIVATE, 0, 0, 0, 0);
+	//HWND pWnd= s_pInstance->Create(NULL, _T(""), WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, 0, 0, 0, 0, 0);
 	//s_pInstance->ShowWindow(true, false);
 	//::ShowWindow(s_pInstance->GetHWND(), SW_SHOWNOACTIVATE);
 	vecWnd.push_back(s_pInstance->GetHWND()); 	
