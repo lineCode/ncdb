@@ -6,10 +6,12 @@
 #include "MessageBoxWnd.h"
 #include "WarnWnd.h"
 
+CDuiString path;
 void initDuilib()
 {
 	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
 	// 初始化资源
+	path= CPaintManagerUI::GetResourcePath();
 	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
 	strResourcePath += _T("..\\Skins\\Default\\MessageBoxSkin\\");
 	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
@@ -19,11 +21,16 @@ void initDuilib()
 NCMESSAGEBOX_API int NCMessageBox(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType, UINT uIcon, POINT pPosition, BOOL bCheck)
 {
 	initDuilib();
-	return CMessageBoxWnd::LvMessageBox(hWnd, lpText, lpCaption, uType, uIcon, pPosition, bCheck);
+	int result = CMessageBoxWnd::LvMessageBox(hWnd, lpText, lpCaption, uType, uIcon, pPosition, bCheck);
+	if (!path.IsEmpty())
+		CPaintManagerUI::SetResourcePath(path.GetData());
+	return result;
 }
 
 NCMESSAGEBOX_API void NCWarnWnd(LPCTSTR lpCaption)
 {
 	initDuilib();
 	CWarnWnd::LvWarnWnd(lpCaption);
+	if (!path.IsEmpty())
+		CPaintManagerUI::SetResourcePath(path.GetData());
 }

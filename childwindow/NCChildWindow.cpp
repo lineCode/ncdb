@@ -27,6 +27,7 @@ NCCHILDWINDOW_API HWND CShowChildWindow(TCFormFrame frame, TCFormSysButton butto
 	// 初始化UI管理器
 	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
 	// 初始化资源
+	CDuiString path = CPaintManagerUI::GetResourcePath();
 	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
 	strResourcePath += _T("..\\Skins\\Default\\ChildWndSkin\\");
 	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
@@ -42,6 +43,8 @@ NCCHILDWINDOW_API HWND CShowChildWindow(TCFormFrame frame, TCFormSysButton butto
 	btnStatus[3] = button.sbMin;
 	btnStatus[4] = button.sbOther;
 	CMainWnd* pFrame = CMainWnd::getInstance(frame.pWnd, frame.caption, frame.path, btnStatus, frame.formTag, frame.isOnly, frame.isShowModal);
+	if (!path.IsEmpty())
+		CPaintManagerUI::SetResourcePath(path.GetData());
 	if (pFrame){
 		RECT rc;   //窗口位置  父窗口位置
 		GetWindowRect(pFrame->GetHWND(), &rc);
