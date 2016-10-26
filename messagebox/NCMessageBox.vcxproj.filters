@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="DuilibEx">
+      <UniqueIdentifier>{755f0c2c-b408-4203-8cf5-db7cabfe2069}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,6 +36,18 @@
     <ClInclude Include="WarnWnd.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIChildLayoutEx.h">
+      <Filter>DuilibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIComboEx.h">
+      <Filter>DuilibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIOptionEx.h">
+      <Filter>DuilibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\baseform\CBaseWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +63,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WarnWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIChildLayoutEx.cpp">
+      <Filter>DuilibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIComboEx.cpp">
+      <Filter>DuilibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIOptionEx.cpp">
+      <Filter>DuilibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\baseform\CBaseWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,11 +19,11 @@ CMessageBoxWnd::~CMessageBoxWnd(void)
 {
 }
 
-void CMessageBoxWnd::OnFinalMessage(HWND hWnd)
-{
-	__super::OnFinalMessage(hWnd);
-	delete this;
-}
+//void CMessageBoxWnd::OnFinalMessage(HWND hWnd)
+//{
+//	__super::OnFinalMessage(hWnd);
+//	delete this;
+//}
 
 int CMessageBoxWnd::LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR  lpstrTitle, UINT uType, UINT uIcon, POINT pPosition, BOOL bCheck)
 {
@@ -43,18 +43,30 @@ int CMessageBoxWnd::LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR  lpstrT
 	return s_pInstance->ShowModal();
 }
 
-DuiLib::CDuiString CMessageBoxWnd::GetSkinFile()
+//DuiLib::CDuiString CMessageBoxWnd::GetSkinFile()
+//{
+//	return _T("MessageBoxWnd.xml");
+//}
+//
+//LPCTSTR CMessageBoxWnd::GetWindowClassName(void) const
+//{
+//	return _T("MessageBoxWnd");
+//}
+void CMessageBoxWnd::SetWndAttribute()
 {
-	return _T("MessageBoxWnd.xml");
-}
+	SetSkinFile(_T("MessageBoxWnd.xml"));
+	ResizeClient(335, 130);
 
-LPCTSTR CMessageBoxWnd::GetWindowClassName(void) const
-{
-	return _T("MessageBoxWnd");
+	//RECT rc = { 0, 0, 0, -1 };
+	//m_pm.SetCaptionRect(rc);
+	RECT rcSizeBox = { 0, 0, 0, 0 };
+	m_pm.SetSizeBox(rcSizeBox);
+	m_pm.SetMaxInfo(335, 150);
 }
 
 void CMessageBoxWnd::InitWindow()
 {		
+	SetWndAttribute();
 	//设置窗口靠近屏幕边缘不最大化
 	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
 

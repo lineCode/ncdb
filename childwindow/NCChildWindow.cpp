@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "NCChildWindow.h"
-#include "CBaseWnd.h"
+#include "CMainWnd.h"
 
 
 // 这是导出变量的一个示例
@@ -41,7 +41,7 @@ NCCHILDWINDOW_API HWND CShowChildWindow(TCFormFrame frame, TCFormSysButton butto
 	btnStatus[2] = button.sbMax;
 	btnStatus[3] = button.sbMin;
 	btnStatus[4] = button.sbOther;
-	CBaseWnd* pFrame = CBaseWnd::getInstance(frame.pWnd, frame.caption, frame.path, btnStatus,frame.formTag,frame.isOnly,frame.isShowModal);
+	CMainWnd* pFrame = CMainWnd::getInstance(frame.pWnd, frame.caption, frame.path, btnStatus, frame.formTag, frame.isOnly, frame.isShowModal);
 	if (pFrame){
 		RECT rc;   //窗口位置  父窗口位置
 		GetWindowRect(pFrame->GetHWND(), &rc);

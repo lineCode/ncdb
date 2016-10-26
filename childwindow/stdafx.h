@@ -31,3 +31,5 @@ using namespace DuiLib;
 #       pragma comment(lib, "..\\..\\lib\\DuiLibA.lib")
 #   endif
 #endif
+
+#include "..\baseform\CBaseWnd.h"

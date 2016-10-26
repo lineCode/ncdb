@@ -87,6 +87,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\baseform\CBaseWnd.h" />
+    <ClInclude Include="..\DuiLibEx\UIChildLayoutEx.h" />
+    <ClInclude Include="..\DuiLibEx\UIComboEx.h" />
+    <ClInclude Include="..\DuiLibEx\UIOptionEx.h" />
     <ClInclude Include="MessageBoxWnd.h" />
     <ClInclude Include="NCMessageBox.h" />
     <ClInclude Include="stdafx.h" />
@@ -94,6 +98,10 @@
     <ClInclude Include="WarnWnd.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\baseform\CBaseWnd.cpp" />
+    <ClCompile Include="..\DuiLibEx\UIChildLayoutEx.cpp" />
+    <ClCompile Include="..\DuiLibEx\UIComboEx.cpp" />
+    <ClCompile Include="..\DuiLibEx\UIOptionEx.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

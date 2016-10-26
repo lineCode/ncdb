@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="DuilibEx">
+      <UniqueIdentifier>{4f5aade9-66af-4ccf-b6ea-4c8a8bdb78c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,8 +30,20 @@
     <ClInclude Include="NCChildWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CBaseWnd.h">
+    <ClInclude Include="CMainWnd.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\baseform\CBaseWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIChildLayoutEx.h">
+      <Filter>DuilibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIComboEx.h">
+      <Filter>DuilibEx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DuiLibEx\UIOptionEx.h">
+      <Filter>DuilibEx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +56,20 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CBaseWnd.cpp">
+    <ClCompile Include="CMainWnd.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\baseform\CBaseWnd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIChildLayoutEx.cpp">
+      <Filter>DuilibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIComboEx.cpp">
+      <Filter>DuilibEx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DuiLibEx\UIOptionEx.cpp">
+      <Filter>DuilibEx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

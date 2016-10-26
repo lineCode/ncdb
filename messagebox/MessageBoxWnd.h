@@ -2,15 +2,15 @@
 //////////////////////////////////////////////////////////////////////////
 ///
 #define SIZE_TIMERID	    UIMSG_USER+1         //
-class CMessageBoxWnd : public WindowImplBase
+class CMessageBoxWnd : public CBaseWnd
 {
 public:
 	CMessageBoxWnd(void);
 	~CMessageBoxWnd(void);
 public:
-	virtual void OnFinalMessage(HWND);
-	virtual CDuiString GetSkinFile();
-	virtual LPCTSTR GetWindowClassName(void) const;
+	//virtual void OnFinalMessage(HWND);
+	//virtual CDuiString GetSkinFile();
+	//virtual LPCTSTR GetWindowClassName(void) const;
 	virtual void Notify(TNotifyUI &msg);
 	virtual void InitWindow();
 	static int LvMessageBox(HWND hParent, LPCTSTR lpstrMsg, LPCTSTR lpstrTitle, UINT uType, UINT uIcon, POINT pPosition,BOOL bCheck);
@@ -19,6 +19,7 @@ public:
 	void InitBtn();
 	void InitIcon();
 	void OnTimer(UINT_PTR idEvent);
+	void SetWndAttribute();
 private:
 	CButtonUI* m_pCloseBtn;
 	CButtonUI* m_pBtn1;

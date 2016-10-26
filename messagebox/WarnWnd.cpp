@@ -29,7 +29,7 @@ void CWarnWnd::OnFinalMessage(HWND hWnd)
 		}
 	}
 	__super::OnFinalMessage(hWnd);
-	delete this;
+	//delete this;
 }
 
 void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
@@ -45,20 +45,32 @@ void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
 	vecWnd.push_back(s_pInstance->GetHWND()); 	
 }
 
-DuiLib::CDuiString CWarnWnd::GetSkinFile()
+//DuiLib::CDuiString CWarnWnd::GetSkinFile()
+//{
+//	return _T("WarnWnd.xml");
+//}
+//
+//LPCTSTR CWarnWnd::GetWindowClassName(void) const
+//{
+//	return _T("MessageBoxWnd");
+//}
+void CWarnWnd::SetWndAttribute()
 {
-	return _T("WarnWnd.xml");
-}
+	SetSkinFile(_T("WarnWnd.xml"));
+	ResizeClient(335, 130);
 
-LPCTSTR CWarnWnd::GetWindowClassName(void) const
-{
-	return _T("MessageBoxWnd");
+	//RECT rc = { 0, 0, 0, -1 };
+	//m_pm.SetCaptionRect(rc);
+	RECT rcSizeBox = { 0, 0, 0, 0 };
+	m_pm.SetSizeBox(rcSizeBox);
+	m_pm.SetMaxInfo(335, 150);
 }
 
 void CWarnWnd::InitWindow()
 {		
+	SetWndAttribute();
 	//设置窗口靠近屏幕边缘不最大化
-	//SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
+	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
 
 	SetTimer(GetHWND(), ACTIVE_TIMERID, 10, NULL);
 	
