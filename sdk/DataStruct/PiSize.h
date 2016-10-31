@@ -1,5 +1,5 @@
 #pragma once
-
+#include <windef.h>
 class CPiSize : public SIZE
 {
 public:

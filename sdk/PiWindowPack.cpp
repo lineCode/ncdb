@@ -225,6 +225,20 @@ tstring CPiWindowPack::GetOneDragFilePath( const HDROP& hd, bool bDropFinish /*=
 	return strName.c_str();
 }
 
+tstring CPiWindowPack::GetOneDragFilePath(const HDROP& hd)
+{
+	tstring strName;
+	strName.resize(FILENAME_MAX);
+
+	int nTotal = DragQueryFile(hd, 0xFFFFFFFF, 0, 0);
+	if (!nTotal)
+	{
+		return strName;
+	}
+	DragQueryFile(hd, 0, &strName.at(0), FILENAME_MAX);
+	return strName.c_str();
+}
+
 LST_STRING CPiWindowPack::GetDragFilePathList( const HDROP& hd, bool bDropFinish /*= true*/ )
 {
 	LST_STRING lstPath;
