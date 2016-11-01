@@ -331,3 +331,18 @@ int CPiWindowPack::CenterPosX( ARR_RECT& lstRect, int nSpace, int nAreaWidth )
 	return nAreaWidth;
 }
 
+RECT CPiWindowPack::GetClientRectToParent(HWND hWnd)
+{
+	RECT rtTemp = { 0 };
+	RECT rt = { 0 };
+	::GetWindowRect(hWnd, &rtTemp);
+	rtTemp;
+	POINT pt = { rtTemp.left, rtTemp.top };
+	ScreenToClient(::GetParent(hWnd), &pt);
+	rt.left = pt.x;
+	rt.top = pt.y;
+	rt.right = rt.left + rtTemp.right - rtTemp.left;
+	rt.bottom = rt.top + (rtTemp.bottom - rtTemp.top);
+	return rt;
+}
+
