@@ -1,3 +1,4 @@
+#include "stdAfx.h"
 #include "WkeCommon.h"
 
 

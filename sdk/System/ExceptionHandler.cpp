@@ -1,3 +1,4 @@
+#include "stdAfx.h"
 #include "ExceptionHandler.h"
 #include <eh.h> 
 #include <signal.h>
@@ -5,9 +6,12 @@
 #include "new.h"
 #include "DbgHelp.h"
 #include <shlobj.h>
-
+#include <shlwapi.h>
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "Dbghelp.lib")
+#pragma comment(lib, "shlwapi.lib")
+
+
 using std::string;
 using std::wstring;
 using std::ostringstream;
@@ -28,6 +32,7 @@ EXTERNC void * _ReturnAddress(void);
 
 #endif 
 
+static HMODULE g_hModule;
 static string g_strDumpHeadName;
 
 void dumpException(EXCEPTION_POINTERS *pException)
@@ -50,10 +55,17 @@ void dumpException(EXCEPTION_POINTERS *pException)
 	sprintf_s(cBuf, _countof(cBuf), "%04d-%02d-%02d %02d%02d%02d",
 		st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
+	string strName;
+	string strPath(MAX_PATH, 0);
+	GetModuleFileNameA(g_hModule, &strPath.at(0), MAX_PATH);
+	strName = ::PathFindFileNameA(strPath.c_str());
+	
+	
 	char cBufName[50] = { 0 };
-	sprintf_s(cBufName, "%s_%s.dmp", g_strDumpHeadName.c_str(), cBuf);
+	sprintf_s(cBufName, "%s_%s.dmp", strName.c_str(), cBuf);
 	logPath += cBufName;
 
+	
 	//OutputDebugStringA(logPath.c_str());
 
 	// 创建Dump文件  
@@ -529,6 +541,11 @@ void ExceptionHandler::SigtermHandler(int)
 void ExceptionHandler::SetDumpHeadName(LPCSTR szName)
 {
 	g_strDumpHeadName = szName;
+}
+
+void ExceptionHandler::SetModuleHandle(HMODULE hModule)
+{
+	g_hModule = hModule;
 }
 
 

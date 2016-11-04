@@ -165,10 +165,7 @@ tstring CPathLight::GetExt( StringCRef strPath )
 tstring CPathLight::GetFileTitleFromPath( tcpchar szPath )
 {
     tchar szTitle[_MAX_FNAME] = {0};
-    //tchar szPath[MAX_PATH + 1] = {0};
 	_tsplitpath_s(szPath, NULL, 0, NULL, 0, szTitle, _MAX_FNAME, NULL, 0);
-	//_tsplitpath(szPath, NULL, NULL, szTitle, NULL);
-
     return szTitle;
 }
 
