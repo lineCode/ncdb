@@ -10,5 +10,6 @@ public:
 	~CWkeCommon();
 public:
 	static wstring GetString(HNCwkeWebView pWeb, wkeJSValue jsV);
+	static bool IsJSUnderined(HNCwkeWebView pWeb, wkeJSValue vVal);
 };
 

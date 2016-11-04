@@ -20,3 +20,10 @@ wstring CWkeCommon::GetString(HNCwkeWebView pWeb, wkeJSValue jsV)
 	}
 	return strRet;
 }
+
+bool CWkeCommon::IsJSUnderined(HNCwkeWebView pWeb, wkeJSValue vVal)
+{
+	wkeJSState* es = wkeGlobalExec(pWeb);
+	wstring strRet;
+	return wkeJSIsUndefined(es, vVal);
+}
