@@ -42,6 +42,7 @@ void dumpException(EXCEPTION_POINTERS *pException)
 	SHGetSpecialFolderPathA(NULL, MyDir, CSIDL_APPDATA, 0);
 	std::string logPath(MyDir);
 	logPath += "\\2LV Files\\logs\\";
+	SHCreateDirectoryExA(NULL, logPath.c_str(), NULL);
 
 	SYSTEMTIME st = { 0 };
 	::GetLocalTime(&st);
@@ -56,7 +57,6 @@ void dumpException(EXCEPTION_POINTERS *pException)
 	//OutputDebugStringA(logPath.c_str());
 
 	// 创建Dump文件  
-	//  
 	HANDLE hDumpFile = CreateFileA(logPath.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hDumpFile == INVALID_HANDLE_VALUE)
 	{
