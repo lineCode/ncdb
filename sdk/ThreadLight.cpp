@@ -7,7 +7,7 @@
 #include "Lock.h"
 #include "functional.h"
 #include "AutoType.h"
-#include "System/ExceptionHandle.h"
+#include "System/PiExceptionHandle.h"
 #include <process.h>
 #include "PiString.h"
 //#include "PiRandom.h"
