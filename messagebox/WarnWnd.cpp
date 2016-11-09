@@ -29,7 +29,6 @@ void CWarnWnd::OnFinalMessage(HWND hWnd)
 		}
 	}
 	__super::OnFinalMessage(hWnd);
-	//delete this;
 }
 
 void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
@@ -58,13 +57,13 @@ void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
 void CWarnWnd::SetWndAttribute()
 {
 	SetSkinFile(_T("WarnWnd.xml"));
-	ResizeClient(335, 130);
+	ResizeClient(WND_WIDTH, WND_HEIGHT);
 
 	//RECT rc = { 0, 0, 0, -1 };
 	//m_pm.SetCaptionRect(rc);
 	RECT rcSizeBox = { 0, 0, 0, 0 };
 	m_pm.SetSizeBox(rcSizeBox);
-	m_pm.SetMaxInfo(335, 150);
+	m_pm.SetMaxInfo(WND_WIDTH, WND_HEIGHT);
 }
 
 void CWarnWnd::InitWindow()
@@ -91,25 +90,6 @@ void CWarnWnd::InitWindow()
 	RECT rt;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &rt, 0);
 
-	////有窗口存在时
-	//if (vecWnd.size()){
-	//	RECT preRc;
-	//	GetWindowRect(vecWnd.back(), &preRc);
-	//	if (preRc.left > 0){
-	//		if (preRc.top - (rc.bottom - rc.top)>0)
-	//			MoveWindow(GetHWND(), preRc.left, preRc.top - (rc.bottom - rc.top), rc.right - rc.left, rc.bottom - rc.top, true);
-	//		else{
-	//			MoveWindow(GetHWND(), preRc.left - (rc.right - rc.left), rt.bottom - rt.top - (rc.bottom - rc.top), rc.right - rc.left, rc.bottom - rc.top, true);
-	//		}
-	//	}
-	//	else{
-	//		MoveWindow(GetHWND(), rt.right - rt.left - (rc.right - rc.left), rt.bottom - rt.top - (rc.bottom - rc.top), rc.right - rc.left, rc.bottom - rc.top, true);
-	//	}
-	//}
-	//else{
-	//	MoveWindow(GetHWND(), rt.right - rt.left - (rc.right - rc.left), rt.bottom - rt.top - (rc.bottom - rc.top), rc.right - rc.left, rc.bottom - rc.top, true);
-	//}
-	//SetWindowLong(GetHWND(), GWL_EXSTYLE, GetWindowLong(GetHWND(), GWL_EXSTYLE) | WS_EX_TOPMOST | WS_EX_TOOLWINDOW & ~WS_EX_APPWINDOW);
 	//设置窗口一直在最前
 	if (vecWnd.size()){
 		RECT preRc;
@@ -134,8 +114,11 @@ void CWarnWnd::InitWindow()
 void CWarnWnd::Notify(TNotifyUI &msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK){
-		if (msg.pSender == m_pCloseBtn)
+		if (msg.pSender == m_pCloseBtn){
 			Close(MSGID_CANCEL);
+			SetWndPos();		
+		}
+			
 	}
 	return WindowImplBase::Notify(msg);
 }
@@ -171,5 +154,34 @@ void CWarnWnd::OnTimer(UINT_PTR idEvent)
 		//SetForegroundWindow(pForeground);
 		//SetFocus(pForeground);
 		//BringWindowToTop(pForeground);
+	}
+}
+
+//void CWarnWnd::OnMoveWndTimer(UINT_PTR idEvent)
+//{
+//	if (idEvent != CLOSE_TIMERID)
+//		return;
+//	KillTimer(GetHWND(), CLOSE_TIMERID);
+//
+//	RECT rc;
+//	GetWindowRect(GetHWND(), &rc);
+//	MoveWindow(GetHWND(), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, true);
+//}
+
+void CWarnWnd::SetWndPos()
+{
+	int index = 0;
+	for (auto hWnd : vecWnd){
+		if (hWnd == GetHWND())
+			break;
+		index++;
+	}
+	int iSize = vecWnd.size();
+	for (int i = iSize; i > index; i--){
+		RECT rcWnd;
+		if (i > 1){
+			GetWindowRect(vecWnd[i - 2], &rcWnd);
+			MoveWindow(vecWnd[i - 1], rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, true);
+		}
 	}
 }

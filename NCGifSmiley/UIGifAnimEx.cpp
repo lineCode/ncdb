@@ -186,13 +186,13 @@ void CGifAnimUIEx::DoInit()
 	if (m_pGifImage){
 		gifHeight = m_pGifImage->GetHeight();
 		gifWidth = m_pGifImage->GetWidth();
-		if (gifWidth < WIDTH_RECT){
+		if (gifWidth < WIDTH_RECT&&gifHeight<HEIGHT_RECT){
 			RECT rcPadding;
 			rcPadding.left = (WIDTH_RECT - gifWidth) / 2;
 			rcPadding.top = (HEIGHT_RECT - gifHeight) / 2;
 			SetPadding(rcPadding);
 		}
-		if (gifWidth>=WIDTH_RECT)
+		else
 			SetAutoSize(false);
 	}
 	CGifAnimUI::DoInit();

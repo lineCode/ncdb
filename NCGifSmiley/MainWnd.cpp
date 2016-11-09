@@ -172,8 +172,6 @@ void CMainWnd::LoadSelfGif()
 			CDuiString filePath = _T("insert\\");
 			filePath += buf;
 			filePath += _T(".gif");
-			if (i * 7 + j == 58)
-				filePath = _T("");
 			m_pGif->SetBkImage(filePath);
 			vecGif.push_back(m_pGif);
 			pHorLayout->Add(m_pContainer);
