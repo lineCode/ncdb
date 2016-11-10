@@ -2,6 +2,8 @@
 //////////////////////////////////////////////////////////////////////////
 ///
 #define ACTIVE_TIMERID	    UIMSG_USER+2  
+#define WND_HEIGHT          130
+#define WND_WIDTH           335
 class CWarnWnd : public CBaseWnd
 {
 public:
@@ -17,7 +19,9 @@ public:
 	LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void OnTimer(UINT_PTR idEvent);
+	//void OnMoveWndTimer(UINT_PTR idEvent);
 	void SetWndAttribute();
+	void SetWndPos();
 private:
 	CButtonUI* m_pCloseBtn;
 	CButtonUI* m_pBtn1;
