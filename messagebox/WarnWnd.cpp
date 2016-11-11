@@ -12,6 +12,11 @@ CWarnWnd::CWarnWnd(void)
 	, m_pBtn2(nullptr)
 	, m_pBtn3(nullptr)
 	, m_pTitle(nullptr)
+	, wndHeight(0)
+	, oneStepLength(30)
+	, wndDistance(4)
+	, overStepWnd(nullptr)
+	, closeIndex(0)
 {
 }
 
@@ -90,33 +95,53 @@ void CWarnWnd::InitWindow()
 	RECT rt;
 	SystemParametersInfo(SPI_GETWORKAREA, 0, &rt, 0);
 
-	//设置窗口一直在最前
-	if (vecWnd.size()){
-		RECT preRc;
-		GetWindowRect(vecWnd.back(), &preRc);
-		if (preRc.left > 0){
-			if (preRc.top - (rc.bottom - rc.top)>0)
-				SetWindowPos(GetHWND(), HWND_TOPMOST, preRc.left, preRc.top - (rc.bottom - rc.top) - 4, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
-			else{
-				SetWindowPos(GetHWND(), HWND_TOPMOST, preRc.left - (rc.right - rc.left) - 4, rt.bottom - rt.top - (rc.bottom - rc.top) - 4, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
-			}
-		}
-		else{
-			SetWindowPos(GetHWND(), HWND_TOPMOST, rt.right - rt.left - (rc.right - rc.left) - 4, rt.bottom - rt.top - (rc.bottom - rc.top) - 4, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
-		}
-	}
-	else{
-		SetWindowPos(GetHWND(), HWND_TOPMOST, rt.right - rt.left - (rc.right - rc.left) - 4, rt.bottom - rt.top - (rc.bottom - rc.top) - 4, rc.right - rc.left, rc.bottom - rc.top, SWP_NOACTIVATE);
-	}
+	int workAreaHeight = rt.bottom - rt.top;
+	int workAreaWidth = rt.right - rt.left;
+	int column = workAreaWidth / (WND_WIDTH + GAP_WIDTH);
+	int row = workAreaHeight / (WND_HEIGHT + GAP_HEIGHT);
+	int numWnd = vecWnd.size();
+	if (row == 0 || column == 0)
+		return;
+	int columnWnd = numWnd/row;
+	int rowWnd = numWnd%row;
 
+	SetWindowPos(GetHWND(), HWND_TOPMOST, workAreaWidth - (columnWnd + 1)*(WND_WIDTH + GAP_WIDTH), workAreaHeight - (rowWnd + 1)*(WND_HEIGHT + GAP_HEIGHT), WND_WIDTH, WND_HEIGHT, SWP_NOACTIVATE);
 }
 
 void CWarnWnd::Notify(TNotifyUI &msg)
 {
 	if (msg.sType == DUI_MSGTYPE_CLICK){
 		if (msg.pSender == m_pCloseBtn){
-			Close(MSGID_CANCEL);
-			SetWndPos();		
+			this->ShowWindow(false);
+			SetTimer(GetHWND(), MOVEWND_TIMERID, 100, NULL);
+			RECT rcWnd;
+			GetWindowRect(GetHWND(), &rcWnd);
+			wndHeight = rcWnd.bottom - rcWnd.top + wndDistance;
+
+			//获取关闭窗口索引
+			int index = 0;
+			for (auto hWnd : vecWnd){
+				if (hWnd == GetHWND())
+					break;
+				index++;
+			}
+			closeIndex = index;
+
+			//获取工作区域
+			RECT rt;
+			SystemParametersInfo(SPI_GETWORKAREA, 0, &rt, 0);
+			int row = (rt.bottom - rt.top) / (WND_HEIGHT + GAP_HEIGHT);
+			int iSize = vecWnd.size();
+			//获取点击列最上面一个窗口序号，因为动画显示的时候只有点击位置到顶部部分动画
+			if ((closeIndex + 1) % row == 0)                   
+				topIndex = ((closeIndex + 1) / row)*row;
+			else
+			{
+				topIndex = ((closeIndex + 1) / row + 1)*row;
+				if (topIndex > iSize)
+					topIndex = iSize;
+			}
+			overStepWnd = vecWnd[topIndex - 1];
 		}
 			
 	}
@@ -130,6 +155,7 @@ LRESULT CWarnWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 	}
 	else if (uMsg == WM_TIMER){
 		OnTimer((UINT_PTR)wParam);
+		OnMoveWndTimer((UINT_PTR)wParam);
 	}
 	bHandled = FALSE;
 	return 0;
@@ -157,31 +183,60 @@ void CWarnWnd::OnTimer(UINT_PTR idEvent)
 	}
 }
 
-//void CWarnWnd::OnMoveWndTimer(UINT_PTR idEvent)
-//{
-//	if (idEvent != CLOSE_TIMERID)
-//		return;
-//	KillTimer(GetHWND(), CLOSE_TIMERID);
-//
-//	RECT rc;
-//	GetWindowRect(GetHWND(), &rc);
-//	MoveWindow(GetHWND(), rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, true);
-//}
+void CWarnWnd::OnMoveWndTimer(UINT_PTR idEvent)
+{
+	if (idEvent != MOVEWND_TIMERID)
+		return;
+	KillTimer(GetHWND(), MOVEWND_TIMERID);
+
+	if (wndHeight - oneStepLength >= 0)
+		wndHeight -= oneStepLength;
+	else{
+		oneStepLength = wndHeight;
+		wndHeight = 0;
+	}	
+
+	for (int i = closeIndex; i < topIndex; i++){
+		RECT rcWnd;
+		GetWindowRect(vecWnd[i], &rcWnd);
+		MoveWindow(vecWnd[i], rcWnd.left, rcWnd.top + oneStepLength, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, true);
+	}
+	
+	if (wndHeight!=0)
+		SetTimer(GetHWND(), MOVEWND_TIMERID, 10, NULL);
+	else{
+		if (overStepWnd)
+			SetWndPos();   //动画结束后移动第一列后面的窗口
+		Close(MSGID_CANCEL);
+	}
+		
+}
 
 void CWarnWnd::SetWndPos()
 {
 	int index = 0;
 	for (auto hWnd : vecWnd){
-		if (hWnd == GetHWND())
+		if (hWnd == overStepWnd)
 			break;
 		index++;
 	}
-	int iSize = vecWnd.size();
-	for (int i = iSize; i > index; i--){
-		RECT rcWnd;
-		if (i > 1){
-			GetWindowRect(vecWnd[i - 2], &rcWnd);
-			MoveWindow(vecWnd[i - 1], rcWnd.left, rcWnd.top, rcWnd.right - rcWnd.left, rcWnd.bottom - rcWnd.top, true);
-		}
+
+	//获取工作区域
+	RECT rt;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &rt, 0);
+
+	int workAreaHeight = rt.bottom - rt.top;
+	int workAreaWidth = rt.right - rt.left;
+	int column = workAreaWidth / (WND_WIDTH + GAP_WIDTH);
+	int row = workAreaHeight / (WND_HEIGHT + GAP_HEIGHT);
+	int numWnd = vecWnd.size();
+	if (row == 0 || column == 0)
+		return;
+	for (int i = index; i < numWnd; i++){
+		int columnWnd = i / row;
+		int rowWnd = i%row;
+		if (i + 1 == numWnd)
+			return;
+		SetWindowPos(vecWnd[i+1], HWND_TOPMOST, workAreaWidth - (columnWnd + 1)*(WND_WIDTH + GAP_WIDTH), workAreaHeight - (rowWnd + 1)*(WND_HEIGHT + GAP_HEIGHT), WND_WIDTH, WND_HEIGHT, SWP_NOACTIVATE);
 	}
 }
