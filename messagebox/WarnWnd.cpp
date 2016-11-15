@@ -6,6 +6,9 @@ vector<HWND> vecWnd;
 CDuiString strTitle;
 HWND pForeground = NULL;
 
+
+#define NUM_TIMER_ENABLE_SELF		200
+
 CWarnWnd::CWarnWnd(void)
 	: m_pCloseBtn(nullptr)
 	, m_pBtn1(nullptr)
@@ -42,7 +45,8 @@ void CWarnWnd::LvWarnWnd(LPCTSTR pTitle)
 	pForeground = GetForegroundWindow();
 	strTitle = pTitle;
 	CWarnWnd *s_pInstance = new CWarnWnd();
-	s_pInstance->Create(NULL, _T(""), UI_WNDSTYLE_FRAME, WS_EX_TOOLWINDOW , 0, 0, 0, 0);
+	s_pInstance->Create(NULL, _T(""), UI_WNDSTYLE_FRAME &~WS_VISIBLE | WS_DISABLED, WS_EX_TOOLWINDOW, 0, 0, 0, 0);
+
 	//HWND pWnd = s_pInstance->Create(NULL, _T(""), WS_CAPTION | WS_POPUPWINDOW | WS_SYSMENU, WS_EX_NOACTIVATE, 0, 0, 0, 0);
 	//::ShowWindow(pWnd, SW_SHOWNOACTIVATE);
 	//s_pInstance->ShowWindow(true, false);
@@ -76,8 +80,6 @@ void CWarnWnd::InitWindow()
 	SetWndAttribute();
 	//设置窗口靠近屏幕边缘不最大化
 	SetWindowLong(m_hWnd, GWL_STYLE, GetWindowLong(m_hWnd, GWL_STYLE) & ~WS_MAXIMIZEBOX & ~WS_THICKFRAME);
-
-	SetTimer(GetHWND(), ACTIVE_TIMERID, 10, NULL);
 	
 	m_pCloseBtn = static_cast<CButtonUI*>(m_pm.FindControl(_T("close")));
 	m_pBtn1 = static_cast<CButtonUI*>(m_pm.FindControl(_T("btn1")));
@@ -106,6 +108,9 @@ void CWarnWnd::InitWindow()
 	int rowWnd = numWnd%row;
 
 	SetWindowPos(GetHWND(), HWND_TOPMOST, workAreaWidth - (columnWnd + 1)*(WND_WIDTH + GAP_WIDTH), workAreaHeight - (rowWnd + 1)*(WND_HEIGHT + GAP_HEIGHT), WND_WIDTH, WND_HEIGHT, SWP_NOACTIVATE);
+
+	::ShowWindow(m_hWnd, SW_SHOWNOACTIVATE);
+	SetTimer(m_hWnd, NUM_TIMER_ENABLE_SELF, 100, NULL);
 }
 
 void CWarnWnd::Notify(TNotifyUI &msg)
@@ -171,16 +176,13 @@ LRESULT CWarnWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void CWarnWnd::OnTimer(UINT_PTR idEvent)
 {
-	if (idEvent != ACTIVE_TIMERID)
+	if (idEvent != NUM_TIMER_ENABLE_SELF)
+	{
 		return;
-	KillTimer(GetHWND(), ACTIVE_TIMERID);
-	
-	if (pForeground){
-		SetActiveWindow(pForeground);
-		//SetForegroundWindow(pForeground);
-		//SetFocus(pForeground);
-		//BringWindowToTop(pForeground);
 	}
+	KillTimer(m_hWnd, idEvent);
+	EnableWindow(m_hWnd, TRUE);
+	return;
 }
 
 void CWarnWnd::OnMoveWndTimer(UINT_PTR idEvent)
@@ -239,4 +241,10 @@ void CWarnWnd::SetWndPos()
 			return;
 		SetWindowPos(vecWnd[i+1], HWND_TOPMOST, workAreaWidth - (columnWnd + 1)*(WND_WIDTH + GAP_WIDTH), workAreaHeight - (rowWnd + 1)*(WND_HEIGHT + GAP_HEIGHT), WND_WIDTH, WND_HEIGHT, SWP_NOACTIVATE);
 	}
+}
+
+LRESULT CWarnWnd::OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	bHandled = FALSE;
+	return 1;
 }

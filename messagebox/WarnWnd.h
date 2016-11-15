@@ -21,6 +21,7 @@ public:
 	static void LvWarnWnd(LPCTSTR pTitle);
 	LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMouseMove(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 	void OnTimer(UINT_PTR idEvent);
 	void OnMoveWndTimer(UINT_PTR idEvent);
 	void SetWndAttribute();
