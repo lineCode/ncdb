@@ -15,6 +15,7 @@ CMainWnd::CMainWnd(void)
 , m_pGifLayout(nullptr)
 , m_pSelfLayout(nullptr)
 , m_pList(nullptr)
+, m_pMenu(nullptr)
 {
 }
 
@@ -155,7 +156,7 @@ void CMainWnd::Notify( TNotifyUI &msg )
 void CMainWnd::LoadSelfGif()
 {
 	WCHAR buf[16];
-	for (int i = 0; i < 4; i++){
+	for (int i = 0; i < 10; i++){
 		CHorizontalLayoutUI* pHorLayout = new CHorizontalLayoutUI();
 		pHorLayout->SetFixedHeight(64);
 		pHorLayout->SetPadding({ 0, -1, 0, 0 });

@@ -57,7 +57,7 @@ void CGifContainerUI::MouseInTimer(UINT_PTR idEvent)
 	else 
 		event.Type = UIEVENT_MOUSELEAVE;
 	event.wParam = 1;
-	if (pSubCtrl->gifHeight < HEIGHT_RECT || pSubCtrl->gifWidth < WIDTH_RECT)
-		pSubCtrl->Event(event);
+	//if (pSubCtrl->gifHeight < HEIGHT_RECT || pSubCtrl->gifWidth < WIDTH_RECT)
+	pSubCtrl->Event(event);
 
 }

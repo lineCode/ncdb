@@ -9,11 +9,21 @@ CGifAnimUIEx::CGifAnimUIEx(void)
 	m_pGifImage = NULL;
 	gifHeight = 0;
 	gifWidth = 0;
+
+	m_pPropertyItem = NULL;
+	m_nFrameCount = 0;
+	m_nFramePosition = 0;
+	m_bIsAutoPlay = true;
+	m_bIsAutoSize = false;
+	m_bIsPlaying = false;
+	pStm = NULL;
 }
 
 
 CGifAnimUIEx::~CGifAnimUIEx(void)
 {
+	DeleteGif();
+	m_pManager->KillTimer(this, EVENT_TIEM_ID);
 }
 
 void CGifAnimUIEx::DoEvent(TEventUI& event)
@@ -74,6 +84,8 @@ void CGifAnimUIEx::DoEvent(TEventUI& event)
 			else{
 			//	LOG(INFO) << "rc.left:" << rc.left << "  rc.top:" << rc.top << "  rc.right:" << rc.right << "  rc.bottom:" << rc.bottom;
 				CRenderEngine::DrawRect(hdc, rc, 1, HOT_BORDER_COLOR, m_nBorderStyle);
+				if (gifHeight >= HEIGHT_RECT || gifWidth >= WIDTH_RECT)
+					m_pManager->SetTimer(this, ENTER_TIMER, 100);
 			}
 			PlayGif();
 		}
@@ -133,9 +145,9 @@ void CGifAnimUIEx::DoEvent(TEventUI& event)
 			else {
 				CRenderEngine::DrawRect(hdc, rc, 1, NORMAL_BORDER_COLOR, m_nBorderStyle);
 			}
-				
+
+			PlayGif();  //返回到第一帧状态
 			StopGif();
-			DoInit();
 		}
 	}
 	if (event.Type == UIEVENT_BUTTONUP){
@@ -155,7 +167,14 @@ void CGifAnimUIEx::DoEvent(TEventUI& event)
 			m_pManager->SendNotify(msg);
 		}
 	}
-	CGifAnimUI::DoEvent(event);
+	if (event.Type == UIEVENT_TIMER)
+	{
+		if ((UINT_PTR)event.wParam == ENTER_TIMER)
+			OnMouseInTimer((UINT_PTR)event.wParam);
+		if ((UINT_PTR)event.wParam == EVENT_TIEM_ID)
+			OnTimer((UINT_PTR)event.wParam);
+	}
+	//CControlUI::DoEvent(event);
 }
 
 void CGifAnimUIEx::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
@@ -173,29 +192,37 @@ void CGifAnimUIEx::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CGifAnimUIEx::DoPaint(HDC hDC, const RECT& rcPaint)
 {
-	CGifAnimUI::DoPaint(hDC, rcPaint);	
+	//CGifAnimUI::DoPaint(hDC, rcPaint);	
 	//if (!bFirstPaint){
 	//	m_pManager->SetTimer(this, SHOWLINE_TIME_ID, 100);
 	//	bFirstPaint = true;
 	//}
+	if (!::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem)) return;
+	if (NULL == m_pGifImage)
+	{
+		InitGifImage();
+	}
+	DrawFrame(hDC);
 }
 
 void CGifAnimUIEx::DoInit()
 {
-	m_pGifImage = LoadGifFromFile(GetBkImage());
-	if (m_pGifImage){
-		gifHeight = m_pGifImage->GetHeight();
-		gifWidth = m_pGifImage->GetWidth();
-		if (gifWidth < WIDTH_RECT&&gifHeight<HEIGHT_RECT){
-			RECT rcPadding;
-			rcPadding.left = (WIDTH_RECT - gifWidth) / 2;
-			rcPadding.top = (HEIGHT_RECT - gifHeight) / 2;
-			SetPadding(rcPadding);
-		}
-		else
-			SetAutoSize(false);
-	}
-	CGifAnimUI::DoInit();
+	//if (!m_pGifImage)
+	//	m_pGifImage = LoadGifFromFile(GetBkImage());
+	//if (m_pGifImage){
+	//	gifHeight = m_pGifImage->GetHeight();
+	//	gifWidth = m_pGifImage->GetWidth();
+	//	if (gifWidth < WIDTH_RECT&&gifHeight<HEIGHT_RECT){
+	//		RECT rcPadding;
+	//		rcPadding.left = (WIDTH_RECT - gifWidth) / 2;
+	//		rcPadding.top = (HEIGHT_RECT - gifHeight) / 2;
+	//		SetPadding(rcPadding);
+	//	}
+	//	else
+	//		SetAutoSize(false);
+	//}
+	//CGifAnimUI::DoInit();
+	InitGifImage();
 }
 
 Gdiplus::Image* CGifAnimUIEx::LoadGifFromFile(LPCTSTR pstrGifPath)
@@ -254,19 +281,19 @@ Gdiplus::Image* CGifAnimUIEx::LoadGifFromFile(LPCTSTR pstrGifPath)
 	}
 
 	Gdiplus::Image* pImage = LoadGifFromMemory(pData, dwSize);
-	delete pData;
+	delete[] pData;
 	return pImage;
 }
 
 
 Gdiplus::Image* CGifAnimUIEx::LoadGifFromMemory(LPVOID pBuf, size_t dwSize)
 {
-	HGLOBAL hMem = ::GlobalAlloc(GMEM_FIXED, dwSize);
+	hMem = ::GlobalAlloc(GMEM_FIXED, dwSize);
 	BYTE* pMem = (BYTE*)::GlobalLock(hMem);
 
 	memcpy(pMem, pBuf, dwSize);
 
-	IStream* pStm = NULL;
+	//IStream* pStm = NULL;
 	::CreateStreamOnHGlobal(hMem, TRUE, &pStm);
 	Gdiplus::Image *pImg = Gdiplus::Image::FromStream(pStm);
 	if (!pImg || pImg->GetLastStatus() != Gdiplus::Ok)
@@ -277,21 +304,192 @@ Gdiplus::Image* CGifAnimUIEx::LoadGifFromMemory(LPVOID pBuf, size_t dwSize)
 	}
 	return pImg;
 }
-//void CGifAnimUIEx::OnLineTimer(UINT_PTR idEvent)
-//{
-//	if (idEvent != SHOWLINE_TIME_ID)
-//		return;
-//	m_pManager->KillTimer(this, SHOWLINE_TIME_ID);
-//	//this->Invalidate();
-//	RECT rc = GetPos();
-//	rc.bottom += 3;
-//	rc.left -= 1;
-//	rc.right += 3;
-//	rc.top -= 1;
-//	SIZE sizeClient = GetManager()->GetClientSize();                      //获取窗口大小
-//	if (rc.bottom > sizeClient.cy - 40){
-//		rc.bottom = sizeClient.cy - 40;
-//	}
-//	HDC hdc = this->GetManager()->GetPaintDC();
-//	CRenderEngine::DrawRect(hdc, rc, 1, 0xFFCCCCCC, m_nBorderStyle);
-//}
+void CGifAnimUIEx::OnMouseInTimer(UINT_PTR idEvent)
+{
+	if (idEvent != ENTER_TIMER)
+		return;
+	m_pManager->KillTimer(this, ENTER_TIMER);
+
+	CDuiPoint pt;
+	::GetCursorPos(&pt);
+	ScreenToClient(GetManager()->GetPaintWindow(), &pt);
+	pt.x -= 4;
+	pt.y -= 4;
+	RECT rc = GetPos();
+
+	TEventUI event = { 0 };
+	if (pt.x > rc.left&&pt.x<rc.right&&pt.y>rc.top&&pt.y < rc.bottom){
+		event.Type = UIEVENT_MOUSEENTER;
+	}
+	else
+		event.Type = UIEVENT_MOUSELEAVE;
+	this->Event(event);
+}
+
+void CGifAnimUIEx::InitGifImage()
+{
+	m_pGifImage = LoadGifFromFile(GetBkImage());
+	if (NULL == m_pGifImage) return;
+	UINT nCount = 0;
+	nCount = m_pGifImage->GetFrameDimensionsCount();
+	GUID* pDimensionIDs = new GUID[nCount];
+	m_pGifImage->GetFrameDimensionsList(pDimensionIDs, nCount);
+	m_nFrameCount = m_pGifImage->GetFrameCount(&pDimensionIDs[0]);
+	int nSize = m_pGifImage->GetPropertyItemSize(PropertyTagFrameDelay);
+	m_pPropertyItem = (Gdiplus::PropertyItem*) malloc(nSize);
+	m_pGifImage->GetPropertyItem(PropertyTagFrameDelay, nSize, m_pPropertyItem);
+	delete  pDimensionIDs;
+	pDimensionIDs = NULL;
+
+	if (m_pGifImage){
+		gifHeight = m_pGifImage->GetHeight();
+		gifWidth = m_pGifImage->GetWidth();
+		if (gifWidth < WIDTH_RECT&&gifHeight<HEIGHT_RECT){
+			RECT rcPadding;
+			rcPadding.left = (WIDTH_RECT - gifWidth) / 2;
+			rcPadding.top = (HEIGHT_RECT - gifHeight) / 2;
+			SetPadding(rcPadding);
+		}
+		else
+			SetAutoSize(false);
+	}
+
+	if (m_bIsAutoSize)
+	{
+		SetFixedWidth(m_pGifImage->GetWidth());
+		SetFixedHeight(m_pGifImage->GetHeight());
+	}
+	if (m_bIsAutoPlay)
+	{
+		PlayGif();
+	}
+
+}
+
+void CGifAnimUIEx::DrawFrame(HDC hDC)
+{
+	if (NULL == hDC || NULL == m_pGifImage) return;
+	GUID pageGuid = Gdiplus::FrameDimensionTime;
+	Gdiplus::Graphics graphics(hDC);
+	graphics.DrawImage(m_pGifImage, m_rcItem.left, m_rcItem.top, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top);
+	m_pGifImage->SelectActiveFrame(&pageGuid, m_nFramePosition);
+}
+
+void CGifAnimUIEx::SetBkImage(LPCTSTR pStrImage)
+{
+	if (m_sBkImage == pStrImage || NULL == pStrImage) return;
+
+	m_sBkImage = pStrImage;
+
+	StopGif();
+	DeleteGif();
+
+	Invalidate();
+
+}
+
+LPCTSTR CGifAnimUIEx::GetBkImage()
+{
+	return m_sBkImage.GetData();
+}
+
+void CGifAnimUIEx::SetAutoPlay(bool bIsAuto)
+{
+	m_bIsAutoPlay = bIsAuto;
+}
+
+bool CGifAnimUIEx::IsAutoPlay() const
+{
+	return m_bIsAutoPlay;
+}
+
+void CGifAnimUIEx::SetAutoSize(bool bIsAuto)
+{
+	m_bIsAutoSize = bIsAuto;
+}
+
+bool CGifAnimUIEx::IsAutoSize() const
+{
+	return m_bIsAutoSize;
+}
+
+void CGifAnimUIEx::PlayGif()
+{
+	if (m_bIsPlaying || m_pGifImage == NULL)
+	{
+		return;
+	}
+
+	long lPause = ((long*)m_pPropertyItem->value)[m_nFramePosition] * 10;
+	if (lPause == 0) lPause = 100;
+	m_pManager->SetTimer(this, EVENT_TIEM_ID, lPause);
+
+	m_bIsPlaying = true;
+}
+
+void CGifAnimUIEx::PauseGif()
+{
+	if (!m_bIsPlaying || m_pGifImage == NULL)
+	{
+		return;
+	}
+
+	m_pManager->KillTimer(this, EVENT_TIEM_ID);
+	this->Invalidate();
+	m_bIsPlaying = false;
+}
+
+void CGifAnimUIEx::StopGif()
+{
+	if (!m_bIsPlaying)
+	{
+		return;
+	}
+
+	m_pManager->KillTimer(this, EVENT_TIEM_ID);
+	m_nFramePosition = 0;
+	this->Invalidate();
+	m_bIsPlaying = false;
+}
+
+void CGifAnimUIEx::DeleteGif()
+{
+	if (m_pGifImage != NULL)
+	{
+		pStm->Release();
+		::GlobalUnlock(hMem);
+		delete m_pGifImage;
+		m_pGifImage = NULL;
+	}
+
+	if (m_pPropertyItem != NULL)
+	{
+		free(m_pPropertyItem);
+		m_pPropertyItem = NULL;
+	}
+	m_nFrameCount = 0;
+	m_nFramePosition = 0;
+}
+
+void CGifAnimUIEx::OnTimer(UINT_PTR idEvent)
+{
+	if (idEvent != EVENT_TIEM_ID)
+		return;
+	m_pManager->KillTimer(this, EVENT_TIEM_ID);
+	this->Invalidate();
+
+	m_nFramePosition = (++m_nFramePosition) % m_nFrameCount;
+
+	long lPause = ((long*)m_pPropertyItem->value)[m_nFramePosition] * 10;
+	if (lPause == 0) lPause = 100;
+	m_pManager->SetTimer(this, EVENT_TIEM_ID, lPause);
+}
+
+void CGifAnimUIEx::SetVisible(bool bVisible /* = true */)
+{
+	CControlUI::SetVisible(bVisible);
+	if (bVisible)
+		PlayGif();
+	else
+		StopGif();
+}
