@@ -225,6 +225,20 @@ tstring CPiWindowPack::GetOneDragFilePath( const HDROP& hd, bool bDropFinish /*=
 	return strName.c_str();
 }
 
+tstring CPiWindowPack::GetOneDragFilePath(const HDROP& hd)
+{
+	tstring strName;
+	strName.resize(FILENAME_MAX);
+
+	int nTotal = DragQueryFile(hd, 0xFFFFFFFF, 0, 0);
+	if (!nTotal)
+	{
+		return strName;
+	}
+	DragQueryFile(hd, 0, &strName.at(0), FILENAME_MAX);
+	return strName.c_str();
+}
+
 LST_STRING CPiWindowPack::GetDragFilePathList( const HDROP& hd, bool bDropFinish /*= true*/ )
 {
 	LST_STRING lstPath;
@@ -315,5 +329,20 @@ int CPiWindowPack::CenterPosX( ARR_RECT& lstRect, int nSpace, int nAreaWidth )
 	}
 
 	return nAreaWidth;
+}
+
+RECT CPiWindowPack::GetClientRectToParent(HWND hWnd)
+{
+	RECT rtTemp = { 0 };
+	RECT rt = { 0 };
+	::GetWindowRect(hWnd, &rtTemp);
+	rtTemp;
+	POINT pt = { rtTemp.left, rtTemp.top };
+	ScreenToClient(::GetParent(hWnd), &pt);
+	rt.left = pt.x;
+	rt.top = pt.y;
+	rt.right = rt.left + rtTemp.right - rtTemp.left;
+	rt.bottom = rt.top + (rtTemp.bottom - rtTemp.top);
+	return rt;
 }
 

@@ -59,7 +59,8 @@ public:
 	------------------------------------------------------------*/
 	static bool EnableDrawFile( HWND hWnd, bool bAccept = true);
 	static tstring GetOneDragFilePath(const HDROP& hd, bool bDropFinish = true);
-	static LST_STRING GetDragFilePathList( const HDROP& hd, bool bDropFinish = true);
+	static tstring GetOneDragFilePath(const HDROP& hd);
+	static LST_STRING GetDragFilePathList(const HDROP& hd, bool bDropFinish = true);
 
 	static bool IsOwnerWindow(HWND hParent, HWND hFind);
 	static bool CenterWindow( HWND hWnd, HWND hWndBase );

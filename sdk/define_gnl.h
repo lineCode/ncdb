@@ -15,17 +15,38 @@ using std::wstring;
 #define DEBUG_INFO(a)   OutputDebugStringA(string(string(INFO_NORMAL)   + a + "\n").c_str())
 
 //stl
+
+
+#ifdef M_PI_CPP11
+#define FOR_EACH_ITER_C11(CtnObj, IterPtr)\
+    for (auto IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
+#endif
 #define FOR_EACH_ITER(CtnType, CtnObj, IterPtr)\
     for (CtnType::iterator IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
+
+#ifdef M_PI_CPP11
+#define FOR_EACH_ITER_CONST_C11(CtnObj, IterPtr)\
+    for (auto IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
+#endif
 
 #define FOR_EACH_ITER_CONST(CtnType, CtnObj, IterPtr)\
     for (CtnType::const_iterator IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
 
+#ifdef M_PI_CPP11
+#define FOR_EACH_ITER_NO_ADD_C11(CtnObj, IterPtr)\
+    for (auto IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end();)
+#endif
 #define FOR_EACH_ITER_NO_ADD(CtnType, CtnObj, IterPtr)\
     for (CtnType::iterator IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end();)
-#define FOR_EACH_ITER_NO_DESC(CtnType, CtnObj, IterPtr)\
+
+
+#define FOR_EACH_ITER_NO_DESC(CtnObj, IterPtr)\
 	for (IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
 
+#ifdef M_PI_CPP11
+#define FOR_EACH_STRING_C11(CtnObj, IterPtr)\
+	for (auto IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
+#endif
 #define FOR_EACH_STRING(CtnObj, IterPtr)\
 	for (LST_STRING::iterator IterPtr = (CtnObj).begin(); IterPtr != (CtnObj).end(); ++IterPtr)
 
