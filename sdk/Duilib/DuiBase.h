@@ -1,7 +1,7 @@
 #pragma once
 #include "DuiHeader.h"
 #include "DuiCommon.h"
-#include "WndShadow.h"
+//#include "WndShadow.h"
 
 
 class CDuiBase;
@@ -105,7 +105,9 @@ public:
 	virtual LPCTSTR GetWindowClassName( void ) const;
 	virtual CDuiString GetSkinFolder();
 	virtual CDuiString GetSkinFile();
+#ifdef M_DUI_TYPE_STD
 	virtual UILIB_RESOURCETYPE GetResourceType() const;
+#endif
 	virtual LPCTSTR GetResourceID() const;
 
 	virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -129,7 +131,7 @@ public:
 	CDuiString GetDuiWindowText(LPCTSTR szCt);
 	bool SetDuiWindowVisible(LPCTSTR szCt, bool bShow);
 	bool SetDuiWindowBkImage(LPCTSTR szCt, LPCTSTR szPic);
-	bool SetDuiCtPos(LPCTSTR szCt, const DuiLib::CSize& pt);
+	bool SetDuiCtPos(LPCTSTR szCt, const DuiLib::CDuiSize& pt);
 	void SetWndowSize(SIZE szSize);
 	void MoveWindow(int x, int y);
 	CControlUI* FindControl(LPCTSTR szCt);
@@ -148,11 +150,12 @@ protected:
 	CDuiString				m_SkinFolder;			
 	CDuiString				m_SkinFile;			
 	CDuiString				m_WndClassName;			
-	CDuiString				m_strResID;			
+	CDuiString				m_strResID;		
+#ifdef M_DUI_TYPE_STD
 	UILIB_RESOURCETYPE		m_ResType;
-
+#endif
 private:
-	CWndShadow				m_WndShadow;	//阴影边框
+	//CWndShadow				m_WndShadow;	//阴影边框
 	bool					m_bCenterToParent;	//相对于父窗口居中
 	HWND					m_hParent;
 };

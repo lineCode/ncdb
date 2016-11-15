@@ -2,8 +2,19 @@
 #include "DuiBase.h"
 #include "PiWindowPack.h"
 
-CDuiBase::CDuiBase( HWND hParent /*= NULL*/ ) :m_ResType(UILIB_FILE)
+#ifdef M_DUI_TYPE_STD
+#define NAME_PM		m_PaintManager
+#else
+#define NAME_PM		m_pm
+#endif
+
+CDuiBase::CDuiBase( HWND hParent /*= NULL*/ ) 
+#ifdef M_DUI_TYPE_STD
+:m_ResType(UILIB_FILE)
 ,m_bCenterToParent(true)
+#else
+	: m_bCenterToParent(true)
+#endif
 ,m_hParent(hParent)
 {
 	m_WndClassName =  _T("DuiWnd");
@@ -29,10 +40,11 @@ DuiLib::CDuiString CDuiBase::GetSkinFile()
 	return m_SkinFile;
 }
 
+/*
 DuiLib::UILIB_RESOURCETYPE CDuiBase::GetResourceType() const
 {
 	return m_ResType;
-}
+}*/
 
 LPCTSTR CDuiBase::GetResourceID() const
 {
@@ -144,7 +156,7 @@ LRESULT CDuiBase::HandleMessageChild( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 CControlUI* CDuiBase::FindControl( LPCTSTR szCt )
 {
-	return m_PaintManager.FindControl(szCt);
+	return NAME_PM.FindControl(szCt);
 }
 
 void CDuiBase::OnShow(BOOL bShow, int nState)
@@ -157,7 +169,7 @@ void CDuiBase::OnShow(BOOL bShow, int nState)
 
 bool CDuiBase::SetDuiWindowText( LPCTSTR szCt, LPCTSTR szText )
 {
-	CControlUI* pCt = m_PaintManager.FindControl(szCt);
+	CControlUI* pCt = NAME_PM.FindControl(szCt);
 	if (pCt)
 	{
 		pCt->SetText(szText);
@@ -167,7 +179,7 @@ bool CDuiBase::SetDuiWindowText( LPCTSTR szCt, LPCTSTR szText )
 
 CDuiString CDuiBase::GetDuiWindowText( LPCTSTR szCt )
 {
-	CControlUI* pCt = m_PaintManager.FindControl(szCt);
+	CControlUI* pCt = NAME_PM.FindControl(szCt);
 	if (pCt)
 	{
 		return pCt->GetText();
@@ -177,7 +189,7 @@ CDuiString CDuiBase::GetDuiWindowText( LPCTSTR szCt )
 
 bool CDuiBase::SetDuiWindowVisible( LPCTSTR szCt, bool bShow )
 {
-	CControlUI* pCt = m_PaintManager.FindControl(szCt);
+	CControlUI* pCt = NAME_PM.FindControl(szCt);
 	if (pCt)
 	{
 		pCt->SetVisible(bShow);
@@ -189,7 +201,7 @@ bool CDuiBase::SetDuiWindowVisible( LPCTSTR szCt, bool bShow )
 
 bool CDuiBase::SetDuiWindowBkImage( LPCTSTR szCt, LPCTSTR szPic )
 {
-	CControlUI* pCt = m_PaintManager.FindControl(szCt);
+	CControlUI* pCt = NAME_PM.FindControl(szCt);
 	if (pCt)
 	{
 		pCt->SetBkImage(szPic);
@@ -199,11 +211,12 @@ bool CDuiBase::SetDuiWindowBkImage( LPCTSTR szCt, LPCTSTR szPic )
 
 LRESULT CDuiBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	/* 新版自带支持阴影功能
 	m_WndShadow.SetSize(6);
 	m_WndShadow.SetPosition(0,0);
 	m_WndShadow.SetSharpness(10);
 	m_WndShadow.SetDarkness(121);
-	m_WndShadow.Create(m_hWnd);
+	m_WndShadow.Create(m_hWnd);*/
 	return __super::OnCreate(uMsg, wParam, lParam,bHandled);
 }
 
@@ -241,7 +254,7 @@ bool CDuiBase::CreateChild(UINT* pRet /*= NULL*/)
 
 bool CDuiBase::ShowFilter( LPCTSTR szContainter, const LST_STRING& lstFilter )
 {
-	CContainerUI* pCtn = static_cast<CContainerUI*>(m_PaintManager.FindControl(szContainter));
+	CContainerUI* pCtn = static_cast<CContainerUI*>(NAME_PM.FindControl(szContainter));
 	int nCount = pCtn->GetCount();
 	CControlUI* pct = NULL;
 	for (int i = 0; i < nCount; ++i)
@@ -260,7 +273,7 @@ bool CDuiBase::ShowFilter( LPCTSTR szContainter, const LST_STRING& lstFilter )
 int CDuiBase::CenterPosX( ARR_CONTROL& lstCt, int nSpace, int nAreaWidth )
 {
 	ARR_RECT lstRt;
-	for (int i = 0; i < lstCt.size(); ++i)
+	for (UINT i = 0; i < lstCt.size(); ++i)
 	{
 		CControlUI* pCt = lstCt[i];
 		if(!pCt)
@@ -273,7 +286,7 @@ int CDuiBase::CenterPosX( ARR_CONTROL& lstCt, int nSpace, int nAreaWidth )
 	int nWidthNeed = CPiWindowPack::CenterPosX(lstRt, nSpace, nAreaWidth);
 
 	SIZE sz = {0};
-	for (int i = 0; i < lstRt.size(); ++i)
+	for (UINT i = 0; i < lstRt.size(); ++i)
 	{
 		sz.cx = lstRt[i].GetPos().x;
 		sz.cy = lstRt[i].GetPos().y;
@@ -294,7 +307,7 @@ int CDuiBase::CenterPosX( LPCTSTR szControlName, int nSpace, int nAreaWidth )
 int CDuiBase::CenterPosX( ARR_CONTROL_NAME& lstCt, int nSpace, int nAreaWidth )
 {
 	ARR_CONTROL arrCt;
-	for (int i = 0; i < lstCt.size(); ++i)
+	for (UINT i = 0; i < lstCt.size(); ++i)
 	{
 		arrCt.push_back(FindControl(lstCt[i]));
 	}
@@ -306,9 +319,9 @@ SIZE CDuiBase::GetWindowSize()
 	return CPiWindowPack::GetWindowSize(m_hWnd);
 }
 
-bool CDuiBase::SetDuiCtPos( LPCTSTR szCt, const DuiLib::CSize& pt )
+bool CDuiBase::SetDuiCtPos(LPCTSTR szCt, const DuiLib::CDuiSize& pt)
 {
-	CControlUI* pCt = m_PaintManager.FindControl(szCt);
+	CControlUI* pCt = NAME_PM.FindControl(szCt);
 	if (pCt)
 	{
 		pCt->SetFixedXY(pt);
