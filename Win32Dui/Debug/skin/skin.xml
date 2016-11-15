@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+     file='aaa.jpg' res='' restype='0' dest='0,0,0,0' source='0,0,0,0' corner='0,0,0,0' 
+		// mask='#FF0000' fade='255' hole='false' xtiled='false' ytiled='false'
+     -->
+<Window size="500, 500" caption="0,0,-1,30" >
+    <VerticalLayout width="9999" height="30" bkcolor="#FFFFFFFF" bordercolor="#FFFF0000" bordersize="1" >
+    <!--VerticalLayout/-->
+        <HorizontalLayout height="30" bkcolor="#FF007ACC" >
+            <Button name="closebtn" width="30" height="28" normalimage="file='btn_close.png' dest='0,0,30,28' source='0,0,30,28'" hotimage="file='btn_close.png' dest='0,0,30,28' source='30,0,60,28'" />
+        </HorizontalLayout> 
+          <RichEdit name="richSend" multiline="true" vscrollbar="true" autovscroll="true" enabled="true" rich="true" readonly="false" wantreturn="true" wantctrlreturn="false" menu="true"/>
+        
+            <RichEdit width="600" height="400" rich="true" multiline="true" tipvalue="这是富文本框" bordervisible="true" bordersize="1" bordercolor="#FF000000" focusbordercolor="#FF00FF00" menu="true" />
+            <Button name="btn_test" text="test" width="30" height="28"  />
+        
+    </VerticalLayout> 
+</Window>
+
