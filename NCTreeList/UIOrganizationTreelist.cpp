@@ -1,6 +1,6 @@
 /******************************************************************************* 
- *  @file      UIGroupsTreelist.cpp 2014\8\7 15:45:20 $
- *  @author    ¿ìµ¶<kuaidao@mogujie.com>
+ *  @file      UIOriganzationTreelist.cpp 2016-11-18 15:18:16
+ *  @author    ´Þ¹â»Ô<cuiguanghui@naycent.com>
  *  @brief     
  ******************************************************************************/
 

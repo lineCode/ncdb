@@ -12,6 +12,8 @@ CMainWnd::CMainWnd(void)
 , m_pGroupList(nullptr)
 , m_pMenu(nullptr)
 , m_pOrganizationList(nullptr)
+, m_pStartOpt(nullptr)
+, m_pStopOpt(nullptr)
 {
 }
 
@@ -52,6 +54,8 @@ void CMainWnd::InitWindow()
 	m_pCloseBtn = static_cast<CButtonUI*>(m_pm.FindControl(_T("close")));
 	m_pGroupList = static_cast<CGroupsTreelistUI*>(m_pm.FindControl(_T("groupsList")));
 	m_pOrganizationList = static_cast<COrganizationTreelistUI*>(m_pm.FindControl(_T("organizationList")));
+	m_pStartOpt = static_cast<COptionUI*>(m_pm.FindControl(_T("flashOn")));
+	m_pStopOpt = static_cast<COptionUI*>(m_pm.FindControl(_T("flashOff")));
 	LoadGroup();
 	LoadOriganization();
 }
@@ -95,6 +99,14 @@ void CMainWnd::Notify( TNotifyUI &msg )
 	else if (msg.sType == DUI_MSGTYPE_CLICK){
 		if (msg.pSender == m_pCloseBtn){
 			this->Close();
+		}
+		else if (msg.pSender == m_pStartOpt){
+			m_pGroupList->FlashAvatar(2);
+			m_pGroupList->FlashAvatar(4);
+		}
+		else if (msg.pSender == m_pStopOpt){
+			m_pGroupList->StopFlashAvatar(2);
+			m_pGroupList->StopFlashAvatar(4);
 		}
 	}
 	else if (msg.sType == DUI_MSGTYPE_ITEMCLICK){

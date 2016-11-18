@@ -1,8 +1,8 @@
-/******************************************************************************* 
- *  @file      UIGroupsTreelist.cpp 2014\8\7 15:45:20 $
- *  @author    ¿ìµ¶<kuaidao@mogujie.com>
- *  @brief     
- ******************************************************************************/
+/*******************************************************************************
+*  @file      UIGroupsTreelist.cpp 2016-11-18 15:18:16
+*  @author    ´Þ¹â»Ô<cuiguanghui@naycent.com>
+*  @brief
+******************************************************************************/
 
 #include "stdafx.h"
 #include "UIGroupsTreelist.h"
@@ -27,6 +27,46 @@ CGroupsTreelistUI::CGroupsTreelistUI(CPaintManagerUI& paint_manager)
 {
 }
 
+static bool OnButtonEvent(void* event) {
+	if (((TEventUI*)event)->Type == UIEVENT_BUTTONDOWN) {
+		CControlUI* pButton = ((TEventUI*)event)->pSender;
+		if (pButton != NULL) {
+			CListContainerElementUI* pListElement = (CListContainerElementUI*)(pButton->GetTag());
+		}
+	}
+	else if (((TEventUI*)event)->Type == UIEVENT_TIMER){
+		if (((TEventUI*)event)->wParam == FLASH_AVATAR_TIMER){
+			CControlUI* pLogo = ((TEventUI*)event)->pSender;
+			if (pLogo != NULL) {
+				RECT rc = pLogo->GetPadding();
+				CDuiString sPos = pLogo->GetUserData();
+				if (rc.left == 1){
+					if (sPos == _T("right")){
+						rc.left = 0;
+						rc.top = 1;
+					}
+					if (sPos == _T("left")){
+						rc.left = 2;
+						rc.top = 1;
+					}
+				}
+				else if (rc.left == 2){
+					rc.left = 1;
+					rc.top = 0;
+					pLogo->SetUserData(_T("right"));
+				}
+				else if (rc.left == 0){
+					rc.left = 1;
+					rc.top = 0;
+					pLogo->SetUserData(_T("left"));
+				}
+				pLogo->SetPadding(rc);
+			}
+		}
+
+	}
+	return true;
+}
 
 Node* CGroupsTreelistUI::AddNode(const GroupsListItemInfo& item, Node* parent)
 {
@@ -88,7 +128,7 @@ Node* CGroupsTreelistUI::AddNode(const GroupsListItemInfo& item, Node* parent)
 				logo_container->SetVisible(false);
 		}
         log_button->SetTag((UINT_PTR)pListElement);
-        //log_button->OnEvent += MakeDelegate(&OnButtonEvent);
+        log_button->OnEvent += MakeDelegate(&OnButtonEvent);
 	}
 
 	CDuiString html_text;
@@ -181,4 +221,24 @@ BOOL CGroupsTreelistUI::UpdateItemBySId(const std::string& sId)
 	return TRUE;
 }
 
+void CGroupsTreelistUI::FlashAvatar(IN const int sId)
+{
+	Node* node = GetItemBySId(sId);
+	if (node){
+		CListContainerElementUI* plistElmen = node->data().list_elment_;
+		CControlUI* logoBtn = static_cast<CControlUI*>(UIIMList::paint_manager_.FindSubControlByName(plistElmen, kLogoButtonControlName));
+		logoBtn->SetTimer(FLASH_AVATAR_TIMER, 260);
+	}
+}
+
+void CGroupsTreelistUI::StopFlashAvatar(IN const int sId)
+{
+	Node* node = GetItemBySId(sId);
+	if (node){
+		CListContainerElementUI* plistElmen = node->data().list_elment_;
+		CControlUI* logoBtn = static_cast<CControlUI*>(UIIMList::paint_manager_.FindSubControlByName(plistElmen, kLogoButtonControlName));
+		logoBtn->KillTimer(FLASH_AVATAR_TIMER);
+		logoBtn->SetPadding({0,0,0,0});
+	}
+}
 /******************************************************************************/

@@ -37,4 +37,6 @@ private:
 	vector<GroupsListItemInfo> vecListInfo;
 	vector<OrganizationListItemInfo> vecOrganizationInfo;
 	CMenuWnd*  m_pMenu;
+	COptionUI* m_pStartOpt;
+	COptionUI* m_pStopOpt;
 };
