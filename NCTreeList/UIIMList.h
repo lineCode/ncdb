@@ -71,6 +71,7 @@ public:
 	 */	
 	std::vector<std::string> GetAllItemsSId();
 	Node* GetItemBySId(IN const int sId);
+	Node* GetItemBySIdRecursion(IN const int sId, IN Node *node);
 	//@}
 
 	/**

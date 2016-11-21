@@ -35,7 +35,7 @@ UIIMList::UIIMList(CPaintManagerUI& paint_manager)
 ,delay_left_(0)
 ,level_expand_image_(_T("<i list_icon_b.png>"))
 ,level_collapse_image_(_T("<i list_icon_a.png>"))
-,level_text_start_pos_(3)
+,level_text_start_pos_(5)
 ,text_padding_(0, 0, 0, 0)
 {
 	SetItemShowHtml(true);
@@ -445,29 +445,46 @@ Node* UIIMList::GetItemBySId(IN const int sId)
 {
 	if (!root_node_)
 		return 0;
-	for (int i = 0; i < root_node_->num_children(); ++i)
-	{
-		Node* child = root_node_->child(i);
-		if (child)
-		{
-			int strID = child->data().sId;
-			if (strID == sId)
-			{
-				return child;
-			}
-			if (child->has_children())
-			{
-				Node*	subRoot = child;
-				for (int p = 0; p < subRoot->num_children(); ++p)	//只有两层，多层要用递归
-				{
-					child = subRoot->child(p);
-					int strID = child->data().sId;
-					if (strID == sId)
-					{
-						return child;
-					}
-				}
-			}
+	return GetItemBySIdRecursion(sId, root_node_);
+	//for (int i = 0; i < root_node_->num_children(); ++i)
+	//{
+	//	Node* child = root_node_->child(i);
+	//	if (child)
+	//	{
+	//		int strID = child->data().sId;
+	//		if (strID == sId)
+	//		{
+	//			return child;
+	//		}
+	//		if (child->has_children())
+	//		{
+	//			Node*	subRoot = child;
+	//			for (int p = 0; p < subRoot->num_children(); ++p)	//只有两层，多层要用递归
+	//			{
+	//				child = subRoot->child(p);
+	//				int strID = child->data().sId;
+	//				if (strID == sId)
+	//				{
+	//					return child;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//return 0;
+}
+
+Node* UIIMList::GetItemBySIdRecursion(IN const int sId, IN Node *node)
+{
+	if (sId == node->data().sId)
+		return node;
+	if (node->has_children()){
+		Node* subNode = node;
+		for (int i = 0; i < subNode->num_children(); i++){
+			Node* child = subNode->child(i);
+			Node* ret = GetItemBySIdRecursion(sId, child);
+			if (ret)
+				return ret;
 		}
 	}
 	return 0;
