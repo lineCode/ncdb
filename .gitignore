@@ -16,8 +16,9 @@ Cache/
 *.tlog
 *.pdb
 *.idb
-
-PressTest.exe
+*.log
+*.pch
+debug/*.exe
+release/*.exe
 
 log/*
-T2DPaper.exe

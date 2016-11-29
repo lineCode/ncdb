@@ -168,22 +168,26 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	{
-		typedef void(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath);
-
-		HMODULE hD = LoadLibraryA("DllCommon.dll");
-		FuncSelectFileOrDir pFun = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
-
-
+		typedef bool(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath);
+		static FuncSelectFileOrDir pFun = nullptr;
+		if (!pFun)
+		{
+			HMODULE hD = LoadLibraryA("DllCommon.dll");
+			pFun = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
+		}
+		
 		tagSELECT_FILE_DIR tagS;
 		tagS.hParent = m_hWnd;
 		tagS.szBtnOkName = _T("发送");
 		tagS.szTitle = _T("随便选择一个目录");
 		tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
-		tagS.bCenterToParent = false;
+		tagS.bCenterToParent = true;
 
 		tstring strSelect(1024, 0);
-		(*pFun)(&tagS, &strSelect.at(0));
-		FreeLibrary(hD);
-		AfxMessageBox(strSelect.c_str());
+		if ((*pFun)(&tagS, &strSelect.at(0)))
+		{
+			AfxMessageBox(strSelect.c_str());
+		}
+		//FreeLibrary(hD);
 	}
 }

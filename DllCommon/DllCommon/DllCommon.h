@@ -45,5 +45,5 @@ struct tagSELECT_FILE_DIR
 	param:	
 	memo:	szSelectPath保存选择的路径， 最大1024字节, 需要外部分配
 ************************************************************************/
-NCCOMMON_API void NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath);
+NCCOMMON_API bool NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath);
 

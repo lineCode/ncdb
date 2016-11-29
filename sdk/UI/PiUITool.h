@@ -37,5 +37,5 @@ public:
 		memo:	
 	************************************************************************/
 	//static tstring SelectFileOrDir(HWND hParent, tcpchar szBeginDir, tcpchar szTitle, tcpchar szBtnOkName);
-	static tstring SelectFileOrDir(tagSELECT_FILE_DIR* pTag);
+	static bool SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath);
 };
