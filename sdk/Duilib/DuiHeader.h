@@ -32,6 +32,6 @@ using namespace DuiLib;
 #define UM_CHILD_MOUSE_ENTER	WM_USER + 200
 
 
-typedef std::list<CControlUI*> LST_CONTROL;
-typedef std::vector<CControlUI*> ARR_CONTROL;
-typedef std::vector<CDuiString> ARR_CONTROL_NAME;
+typedef std::list<DuiLib::CControlUI*> LST_CONTROL;
+typedef std::vector<DuiLib::CControlUI*> ARR_CONTROL;
+typedef std::vector<DuiLib::CDuiString> ARR_CONTROL_NAME;
