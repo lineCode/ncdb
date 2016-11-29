@@ -1,6 +1,11 @@
 #include "StdAfx.h"
 #include "PiUITool.h"
+#include <shlobj.h>
+#include "PiWindowPack.h"
+#pragma comment(lib, "shell32.lib")
 
+#define STRING_PROP_NAME _T("OPENFILENAME")
+typedef CPIUITool::tagSELECT_FILE_DIR tagSELECT_FILE_DIR;
 tstring CPIUITool::GetOneDragFilePath(const HDROP& hd)
 {
 	tstring strName;
@@ -41,6 +46,10 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 {
 	switch (uMsg)
 	{
+	case WM_SHOWWINDOW:
+		//窗口即将显示， 可调整位置
+		//OutputDebugString(_T("dlg init\n"));
+		break;
 	case WM_COMMAND:
 	{
 		if (wParam == IDOK)
@@ -58,12 +67,12 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 			DWORD dwAttr = GetFileAttributes(wcDirPath);
 			if (dwAttr != -1 && (FILE_ATTRIBUTE_DIRECTORY & dwAttr))
 			{
-				LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, L"OPENFILENAME");
+				LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, STRING_PROP_NAME);
 				if (oFn)
 				{
 					int size = oFn->nMaxFile > MAX_PATH ? MAX_PATH : oFn->nMaxFile;
 					memcpy(oFn->lpstrFile, wcDirPath, size * sizeof(wchar_t));
-					RemoveProp(hwnd, L"OPENFILENAME");
+					RemoveProp(hwnd, STRING_PROP_NAME);
 					EndDialog(hwnd, 1);
 				}
 				else
@@ -100,13 +109,23 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 	//OK，CANCEL按钮等控件的消息在父窗口处理。
 	if (uiMsg == WM_NOTIFY)
 	{
+		HWND hDlgCommon = ::GetParent(hdlg);
 		LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
-		if (lpOfNotify->hdr.code == CDN_INITDONE)
+		if (lpOfNotify->hdr.code == CDN_INITDONE
+			&& !g_lOriWndProc)
 		{
-			tcpchar szBtnName = (tcpchar)lpOfNotify->lpOFN->lCustData;
-			::SetDlgItemText(::GetParent(hdlg), IDOK, szBtnName);
-			SetPropW(GetParent(hdlg), L"OPENFILENAME", (HANDLE)(lpOfNotify->lpOFN));
-			g_lOriWndProc = ::SetWindowLongW(::GetParent(hdlg), GWL_WNDPROC, (LONG)_WndProc);
+			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
+			::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
+			SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(lpOfNotify->lpOFN));
+			g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+
+			//居中显示
+			HWND hParentToCenter = ::GetDesktopWindow();
+			if (pTag->bCenterToParent && lpOfNotify->lpOFN->hwndOwner)
+			{
+				hParentToCenter = lpOfNotify->lpOFN->hwndOwner;
+			}
+			CPiWindowPack::CenterWindow(hDlgCommon, hParentToCenter);
 		}
 		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
 		{
@@ -143,19 +162,19 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 	}
 	return 1;
 }
-tstring CPIUITool::SelectFileOrDir(HWND hParent, tcpchar szBeginDir, tcpchar szTitle, tcpchar szBtnOkName)
+tstring CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 {
 	setlocale(LC_ALL, "chs");
 	tstring strTitle(_T("选择一个文件(目录)"));
 	tstring strBtnOkName(_T("确定"));
-	if (szTitle && *szTitle)
+	if (pTag->szTitle && *pTag->szTitle)
 	{
-		strTitle = szTitle;
+		strTitle = pTag->szTitle;
 	}
 
-	if (szBtnOkName && *szBtnOkName)
+	if (pTag->szBtnOkName && *pTag->szBtnOkName)
 	{
-		strBtnOkName = szBtnOkName;
+		pTag->szBtnOkName = strBtnOkName.c_str();
 	}
 	OPENFILENAMEW openFile;
 	memset(&openFile, 0, sizeof(openFile));
@@ -172,9 +191,10 @@ tstring CPIUITool::SelectFileOrDir(HWND hParent, tcpchar szBeginDir, tcpchar szT
 	openFile.hInstance = (HMODULE)GetCurrentProcess();
 	openFile.lpfnHook = MyFolderProc;
 	openFile.lpstrTitle = strTitle.c_str();
-	openFile.lpstrInitialDir = szBeginDir;
+	openFile.lpstrInitialDir = pTag->szBeginDir;
+	openFile.hwndOwner = pTag->hParent;
 	//string strBtnName = 
-	openFile.lCustData = (LPARAM)strBtnOkName.c_str();
+	openFile.lCustData = (LPARAM)pTag;
 	BOOL b = GetOpenFileNameW(&openFile);
 	return openFile.lpstrFile;
 }

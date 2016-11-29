@@ -96,15 +96,15 @@ struct PIMSGMAP
 }
 
 class CDuiBase :
-	public WindowImplBase
+	public DuiLib::WindowImplBase
 {
 public:
 	CDuiBase(HWND hParent = NULL);
 	~CDuiBase(void);
 public:
 	virtual LPCTSTR GetWindowClassName( void ) const;
-	virtual CDuiString GetSkinFolder();
-	virtual CDuiString GetSkinFile();
+	virtual DuiLib::CDuiString GetSkinFolder();
+	virtual DuiLib::CDuiString GetSkinFile();
 #ifdef M_DUI_TYPE_STD
 	virtual UILIB_RESOURCETYPE GetResourceType() const;
 #endif
@@ -128,13 +128,13 @@ public:
 	bool CreateModalShow(UINT* pRet = NULL);
 	bool CreateChild(UINT* pRet = NULL);
 	bool SetDuiWindowText(LPCTSTR szCt, LPCTSTR szText);
-	CDuiString GetDuiWindowText(LPCTSTR szCt);
+	DuiLib::CDuiString GetDuiWindowText(LPCTSTR szCt);
 	bool SetDuiWindowVisible(LPCTSTR szCt, bool bShow);
 	bool SetDuiWindowBkImage(LPCTSTR szCt, LPCTSTR szPic);
 	bool SetDuiCtPos(LPCTSTR szCt, const DuiLib::CDuiSize& pt);
 	void SetWndowSize(SIZE szSize);
 	void MoveWindow(int x, int y);
-	CControlUI* FindControl(LPCTSTR szCt);
+	DuiLib::CControlUI* FindControl(LPCTSTR szCt);
 	/*------------------------------------------------------------
 			fun:	显示指定容器里的一组控件
 			ret:	
@@ -147,10 +147,10 @@ public:
 	int CenterPosX( ARR_CONTROL_NAME& lstCt, int nSpace, int nAreaWidth);
 	SIZE GetWindowSize();
 protected:
-	CDuiString				m_SkinFolder;			
-	CDuiString				m_SkinFile;			
-	CDuiString				m_WndClassName;			
-	CDuiString				m_strResID;		
+	DuiLib::CDuiString				m_SkinFolder;
+	DuiLib::CDuiString				m_SkinFile;
+	DuiLib::CDuiString				m_WndClassName;
+	DuiLib::CDuiString				m_strResID;
 #ifdef M_DUI_TYPE_STD
 	UILIB_RESOURCETYPE		m_ResType;
 #endif

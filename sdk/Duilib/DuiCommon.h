@@ -3,13 +3,13 @@
 class CDuiCommon
 {
 public:
-	CDuiCommon(CPaintManagerUI* pPaintManager = NULL);
+	CDuiCommon(DuiLib::CPaintManagerUI* pPaintManager = NULL);
 	~CDuiCommon(void);
 public:
-	static bool IsStaticControl( CControlUI* pControl );
-	static bool IsControl( CControlUI* pSender, tcpchar szName );
+	static bool IsStaticControl(DuiLib::CControlUI* pControl);
+	static bool IsControl(DuiLib::CControlUI* pSender, tcpchar szName);
 	void SetVisible( LPCTSTR param1, bool bShow);
 public:
 	//static 
-	CPaintManagerUI*				m_pPaintManager;
+	DuiLib::CPaintManagerUI*				m_pPaintManager;
 };
