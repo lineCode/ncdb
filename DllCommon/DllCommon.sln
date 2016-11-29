@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllCommon", "DllCommon\DllCommon.vcxproj", "{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testDllCommon", "testDllCommon\testDllCommon.vcxproj", "{E551770A-7603-4DE0-AACC-96BBC87FD36A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA} = {AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}.Debug|Win32.Build.0 = Debug|Win32
+		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}.Release|Win32.ActiveCfg = Release|Win32
+		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}.Release|Win32.Build.0 = Release|Win32
+		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Debug|Win32.Build.0 = Debug|Win32
+		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Release|Win32.ActiveCfg = Release|Win32
+		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
