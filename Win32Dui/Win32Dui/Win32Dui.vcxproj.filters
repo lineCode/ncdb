@@ -19,6 +19,9 @@
     <Filter Include="sdk\duilib">
       <UniqueIdentifier>{8a087db0-16f3-4780-ae04-db17949be67f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cef">
+      <UniqueIdentifier>{6d2f7c87-d9c5-4d55-a2cf-4bd9b108bbd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +68,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\nc\src\common\sdk\UI\PiUITool.cpp">
       <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCApp.cpp">
+      <Filter>cef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCCef.cpp">
+      <Filter>cef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.cpp">
+      <Filter>cef</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,8 +131,25 @@
     <ClInclude Include="..\..\..\nc\src\common\sdk\UI\PiUITool.h">
       <Filter>sdk</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCApp.h">
+      <Filter>cef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCCef.h">
+      <Filter>cef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.h">
+      <Filter>cef</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Win32Dui.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

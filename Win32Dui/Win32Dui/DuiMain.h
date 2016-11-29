@@ -1,5 +1,6 @@
 #pragma once
 #include "Duilib\DuiBase.h"
+class CNCCef;
 class CDuiMain :
 	public CDuiBase
 {
@@ -9,9 +10,9 @@ public:
 private:
 	virtual void InitWindow();
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	virtual void OnClick(TNotifyUI& msg);
-
-	CRichEditUI* m_pSendEdit;
-
+	virtual void OnClick(DuiLib::TNotifyUI& msg);
+	bool TestCef();
+	DuiLib::CRichEditUI*		m_pSendEdit;
+	CNCCef*				m_pCef;
 };
 

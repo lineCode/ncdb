@@ -175,10 +175,12 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 
 
 		tagSELECT_FILE_DIR tagS;
-		tagS.hParent = NULL;
+		tagS.hParent = m_hWnd;
 		tagS.szBtnOkName = _T("发送");
 		tagS.szTitle = _T("随便选择一个目录");
 		tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
+		tagS.bCenterToParent = false;
+
 		tstring strSelect(1024, 0);
 		(*pFun)(&tagS, &strSelect.at(0));
 		FreeLibrary(hD);

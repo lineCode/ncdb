@@ -11,11 +11,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HRESULT Hr = ::CoInitialize(NULL);
 	if (FAILED(Hr)) return 0;
 	// 初始化UI管理器
-	CPaintManagerUI::SetInstance(hInstance);
+	DuiLib::CPaintManagerUI::SetInstance(hInstance);
+	
 	// 初始化资源
-	CDuiString strResourcePath = CPaintManagerUI::GetInstancePath();
+	DuiLib::CDuiString strResourcePath = DuiLib::CPaintManagerUI::GetInstancePath();
 	strResourcePath += _T("skin\\");
-	CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
+	DuiLib::CPaintManagerUI::SetResourcePath(strResourcePath.GetData());
 	CDuiMain* pMain = new CDuiMain;
 	pMain->Create(NULL, _T("LogIn"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 0, 0);
 	pMain->ShowModal();
