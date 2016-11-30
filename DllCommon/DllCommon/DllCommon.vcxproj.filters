@@ -33,6 +33,18 @@
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h">
       <Filter>sdk</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\TextStringCut.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\PiString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\sdk\UI\PiUITool.cpp">
@@ -45,6 +57,18 @@
       <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\TextStringCut.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\PiString.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>

@@ -109,7 +109,6 @@ BOOL CtestDllCommonDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化代码
 	
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -168,12 +167,17 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	{
-		typedef bool(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath);
-		static FuncSelectFileOrDir pFun = nullptr;
-		if (!pFun)
+		typedef bool(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
+		typedef const wchar_t* (*FuncQueryFile)(int nInDex);
+		 ;
+
+		 static FuncSelectFileOrDir pFunSelect = nullptr;
+		 static FuncQueryFile pFunQuery = nullptr;
+		if (!pFunSelect)
 		{
 			HMODULE hD = LoadLibraryA("DllCommon.dll");
-			pFun = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
+			pFunSelect = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
+			pFunQuery = (FuncQueryFile)GetProcAddress(hD, "QuerySelectFile");
 		}
 		
 		tagSELECT_FILE_DIR tagS;
@@ -181,12 +185,19 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 		tagS.szBtnOkName = _T("发送");
 		tagS.szTitle = _T("随便选择一个目录");
 		tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
+		tagS.szFilter = _T("All\0*.*\0图片\0*.jpg;*.png\0\0\0");
 		tagS.bCenterToParent = true;
-
+		tagS.bSelectMulti = false;
 		tstring strSelect(1024, 0);
-		if ((*pFun)(&tagS, &strSelect.at(0)))
+		int nSel = (*pFunSelect)(&tagS);
+		if (!nSel)
 		{
-			AfxMessageBox(strSelect.c_str());
+			return;
+		}
+		FOR_COUNT((UINT)nSel, i)
+		{
+			tcpchar szPath = (*pFunQuery)(i);
+			OutInfo(szPath, _T(""));
 		}
 		//FreeLibrary(hD);
 	}

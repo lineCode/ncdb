@@ -8,7 +8,7 @@ public:
 	CPiDebugUnit(void);
 	~CPiDebugUnit(void);
 public:
-	static void OutTime(tcpchar szS);
+	static void OutTime(tcpchar szMsg);
 	static void OutFormat(const TCHAR* format,...);
 	static bool SetDumpUnhandledException();
 private:

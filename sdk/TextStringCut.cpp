@@ -41,6 +41,16 @@ bool CTextStringCut::GetInDQM( tstring& strDist )
     return m_nPosCurrent != tstring::npos;
 }
 
+bool CTextStringCut::GetInDQM(ARR_STRING& arrString)
+{
+	tstring strDist;
+	while (GetInDQM(strDist))
+	{
+		arrString.push_back(strDist);
+	}
+	return true;
+}
+
 bool CTextStringCut::GoForward( tcpchar szSignAnPostLink )
 {
     int nPos = GetCharPos(m_strText, szSignAnPostLink, 1, NextPos(m_nPosCurrent)); //定位到作者首页url标识

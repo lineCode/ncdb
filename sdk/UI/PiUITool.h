@@ -15,13 +15,21 @@ public:
 		const wchar_t*	szBeginDir;			//初始显示目录, 可为空
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szBtnOkName;		//ok按钮要替换成的名字，  如果为空则显示为"确定"
+		const wchar_t*	szFilter;			//过滤字符串
 		bool			bCenterToParent;	//true相对父窗口居中， 否则屏幕居中
+		bool			bSelectMulti;		//true为允许选择多个文件
+		
+		//以下成员属性内部使用
+		//int				nSelectCount;		
+		//int				pFileLst;			
+
 		tagSELECT_FILE_DIR()
 			:hParent(NULL)
 			, szBeginDir(NULL)
 			, szTitle(NULL)
 			, szBtnOkName(NULL)
 			, bCenterToParent(true)
+			, bSelectMulti(false)
 		{
 
 		}
@@ -31,11 +39,16 @@ public:
 	/************************************************************************/
 	static tstring GetOneDragFilePath(const HDROP& hd);
 	static tstring SelectDirectory(HWND hParent, tcpchar szBeginDir, tcpchar szTitle);
+
 	/************************************************************************
 		fun:	弹出选择对话框，  可选择文件或目录
 		param:	szBeginDir, 弹窗后显示的起始目录， 如果目录不存在则显示上次的目录
 		memo:	
 	************************************************************************/
-	//static tstring SelectFileOrDir(HWND hParent, tcpchar szBeginDir, tcpchar szTitle, tcpchar szBtnOkName);
-	static bool SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath);
+	static int SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath);
+	static ARR_STRING& GetFileList();
+	static void AlterPath();
+	static const wchar_t* QuerySelectFile(UNINT nIndex);
+private:
+	static		ARR_STRING		m_FileList;
 };

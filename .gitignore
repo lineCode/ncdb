@@ -18,6 +18,9 @@ Cache/
 *.idb
 *.log
 *.pch
+*.opensdf
+*.exp
+*.exp
 debug/*.exe
 release/*.exe
 

@@ -1,10 +1,19 @@
 #include "StdAfx.h"
 #include "PiUITool.h"
 #include <shlobj.h>
+#include <shlwapi.h>
 #include "PiWindowPack.h"
+#include "PiString.h"
+#include "..\..\nc\src\common\sdk\TextStringCut.h"
 #pragma comment(lib, "shell32.lib")
+#pragma comment(lib, "shlwapi.lib")
+
+Pi_NameSpace_Using
 
 #define STRING_PROP_NAME _T("OPENFILENAME")
+
+ARR_STRING		CPIUITool::m_FileList;
+
 typedef CPIUITool::tagSELECT_FILE_DIR tagSELECT_FILE_DIR;
 tstring CPIUITool::GetOneDragFilePath(const HDROP& hd)
 {
@@ -44,40 +53,95 @@ LONG g_lOriWndProc = NULL;
 #define  ID_LEFT_TOOBAR 0x4A0
 LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	
 	switch (uMsg)
 	{
 	case WM_COMMAND:
 	{
 		if (wParam == IDOK)
 		{
-			wchar_t wcDirPath[MAX_PATH] = { 0 };
-			HWND hComboAddr = GetDlgItem(hwnd, ID_COMBO_ADDR);
-			if (hComboAddr != NULL)
+			/*EndDialog(hwnd, 1);
+			break;*/
+			
+			//TODO:如果选择多个， 标志给外部
+			LPOPENFILENAMEW pOFn = (LPOPENFILENAME)GetProp(hwnd, STRING_PROP_NAME);
+			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pOFn->lCustData;
+			ARR_STRING& arr = CPIUITool::GetFileList();
+			arr.clear();
 			{
-				GetWindowText(hComboAddr, wcDirPath, MAX_PATH);
+				wchar_t wcDirP[MAX_PATH] = { 0 };
+				CommDlg_OpenSave_GetFolderPath(hwnd, wcDirP, sizeof(wcDirP));//多选模式下， 如果只选择一个文件， 文件列表没有双引号
+				::PathAddBackslash(wcDirP);
+				arr.push_back(wcDirP);
 			}
-			if (!wcslen(wcDirPath))
+
+			if (pTag->bSelectMulti)
 			{
-				break;
-			}
-			DWORD dwAttr = GetFileAttributes(wcDirPath);
-			if (dwAttr != -1 && (FILE_ATTRIBUTE_DIRECTORY & dwAttr))
-			{
-				LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, STRING_PROP_NAME);
-				if (oFn)
+				tchar szBuf[MAX_PATH + 1] = { 0 };
+				CommDlg_OpenSave_GetSpec(hwnd, szBuf, MAX_PATH);
+
+				
+				CPiString strTemp(szBuf);
+				;
+				if (!strTemp.Exist(_T("\"")))
 				{
-					int size = oFn->nMaxFile > MAX_PATH ? MAX_PATH : oFn->nMaxFile;
-					memcpy(oFn->lpstrFile, wcDirPath, size * sizeof(wchar_t));
-					RemoveProp(hwnd, STRING_PROP_NAME);
-					RemoveProp(hwnd, STRING_PROP_NAME);
-					EndDialog(hwnd, 1);
+					arr.push_back(szBuf);
 				}
 				else
 				{
-					EndDialog(hwnd, 0);
+					wstring strDist;
+					CTextStringCut text(szBuf);
+
+					text.GetInDQM(arr);
 				}
+				/*if (arr.size() > 1)
+				{
+					
+					pTag->szSelectDir = wcDirPath;
+					//arr.insert(arr.begin(), wcDirPath);
+				}*/
+				//ARR_STRING arr = CPiString::SpilitStrToArray(tstring(szBuf), _T("\""));
+				//pTag->nSelectCount = arr.size();/*个数*/
+				//pTag->pFileLst = (int)arr;
+			}
+			else
+			{
+				tchar szBuf[MAX_PATH + 1] = { 0 };
+				CommDlg_OpenSave_GetFilePath(hwnd, szBuf, MAX_PATH);
+				arr.push_back(szBuf);
+
+				wchar_t wcDirPath[MAX_PATH] = { 0 };
+				HWND hComboAddr = GetDlgItem(hwnd, ID_COMBO_ADDR);
+				if (hComboAddr != NULL)
+				{
+					GetWindowText(hComboAddr, wcDirPath, MAX_PATH);
+				}
+				if (!wcslen(wcDirPath))
+				{
+					break;
+				}
+				DWORD dwAttr = GetFileAttributes(wcDirPath);
+				if (dwAttr != -1 && (FILE_ATTRIBUTE_DIRECTORY & dwAttr))
+				{
+					LPOPENFILENAMEW oFn = (LPOPENFILENAME)GetProp(hwnd, STRING_PROP_NAME);
+					if (oFn)
+					{
+						int size = oFn->nMaxFile > MAX_PATH ? MAX_PATH : oFn->nMaxFile;
+						memcpy(oFn->lpstrFile, wcDirPath, size * sizeof(wchar_t));
+						RemoveProp(hwnd, STRING_PROP_NAME);
+						EndDialog(hwnd, 1);
+					}
+					else
+					{
+						EndDialog(hwnd, 0);
+					}
+					RemoveProp(hwnd, STRING_PROP_NAME);
+				}
+				break;
 			}
 			break;
+
+			
 		}
 		//////////////////////////////////////////////////////////////////////////
 		//如果是左边toolbar发出的WM_COMMOND消息（即点击左边的toolbar）, 则清空OK按钮旁的组合框。
@@ -103,6 +167,8 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 }
 UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
+	//return 0;
+
 	//OK，CANCEL按钮等控件的消息在父窗口处理。
 	int nRet = 0;	//return to default dialog box procedure
 	switch (uiMsg)
@@ -110,7 +176,11 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 	case WM_INITDIALOG:
 	{
 		OutputDebugString(_T("hook WM_INITDIALOG \n"));
+		//break;
 
+		/*
+		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+		break;*/
 		HWND hDlgCommon = ::GetParent(hdlg);
 		LPOPENFILENAME pON = (LPOPENFILENAME)lParam;
 		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pON->lCustData;
@@ -132,14 +202,13 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 	}
 	if (uiMsg == WM_NOTIFY)
 	{
-		nRet = true;
 		HWND hDlgCommon = ::GetParent(hdlg);
 		LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
 		if (lpOfNotify->hdr.code == CDN_INITDONE
 			&& !g_lOriWndProc)
 		{
 			OutputDebugString(_T("dlg CDN_INITDONE\n"));
-			nRet = 1;
+			nRet = 0;
 
 			/*tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
 			::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
@@ -156,9 +225,20 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 		}
 		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
 		{
-			nRet = 1;
+			//return 0;
+			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
+			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
+			if (pTag->bSelectMulti)
+			{
+				return 0;	//允许选择多个， 采用系统默认的， 会过滤掉目录
+			}
+
+			nRet = 0;
 			wchar_t wcDirPath[MAX_PATH] = { 0 };
 			CommDlg_OpenSave_GetFilePathW(GetParent(hdlg), wcDirPath, sizeof(wcDirPath));
+			//OutputDebugString(wcDirPath);
+			//return 0;
+
 			HWND hComboAddr = GetDlgItem(GetParent(hdlg), ID_COMBO_ADDR);
 			if (hComboAddr != NULL)
 			{
@@ -178,7 +258,7 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 						}
 						}*/
 					}
-
+					//
 					SetWindowTextW(hComboAddr, wcDirPath);
 				}
 				else
@@ -191,7 +271,7 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 	}
 	return nRet;	//return to default;
 }
-bool CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
+int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
 {
 	//setlocale(LC_ALL, "chs");
 	tstring strTitle(_T("选择一个文件(目录)"));
@@ -205,6 +285,10 @@ bool CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
 	{
 		pTag->szBtnOkName = strBtnOkName.c_str();
 	}
+	if (!pTag->szFilter || !*pTag->szFilter)
+	{
+		pTag->szFilter = _T("All(*.*)\0 * .*\0\0");
+	}
 	OPENFILENAMEW openFile;
 	memset(&openFile, 0, sizeof(openFile));
 	openFile.lStructSize = sizeof(openFile);
@@ -213,18 +297,60 @@ bool CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
 	OPENFILENAME openFileName = { 0 };
 	openFile.lStructSize = sizeof(OPENFILENAME);
 	openFile.nMaxFile = MAX_PATH;
-	openFile.lpstrFilter = L"All(*.*)\0*.*\0\0";
-	openFile.lpstrFile = szFileName;
+	openFile.lpstrFilter = pTag->szFilter;	//第一对为1
+	openFile.lpstrFile = szFileName;	//TODO:选择多个， 如果buf太小， GetOpenFileName会返回false,  CommDlgExtendedError 返回FNERR_BUFFERTOOSMALL.， openFile.lpstrFile前两个字节为请求大小
 	openFile.nFilterIndex = 1;
 	openFile.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLEHOOK | OFN_HIDEREADONLY;
+	
 	openFile.hInstance = (HMODULE)GetCurrentProcess();
 	openFile.lpfnHook = MyFolderProc;
 	openFile.lpstrTitle = strTitle.c_str();
 	openFile.lpstrInitialDir = pTag->szBeginDir;
 	openFile.hwndOwner = pTag->hParent;
-	//string strBtnName = 
 	openFile.lCustData = (LPARAM)pTag;
+
+	if (pTag->bSelectMulti)
+	{
+		openFile.Flags |= OFN_ALLOWMULTISELECT;
+	}
 	BOOL b = GetOpenFileName(&openFile);
 	strPath = openFile.lpstrFile;
-	return b == TRUE;
+	int nSel = 1;
+	if (pTag->bSelectMulti)
+	{
+		CPIUITool::AlterPath();
+		nSel = CPIUITool::GetFileList().size() - 1;
+	}
+	return nSel; ;
+}
+
+ARR_STRING& CPIUITool::GetFileList()
+{
+	return m_FileList;
+}
+
+void CPIUITool::AlterPath()
+{
+	if (m_FileList.size() < 2)	//	1个元素， 是单选模式,元素为绝对路径， 2个元素， 多选模式下选择1个， >=3个元素, 多选， 选择一个文件(目录),是否选择多个文件， 第一个元素为文件列表所在的目录路径,第二个开始是文件名
+	{
+		return;
+	}
+	tstring& strDir{ m_FileList[0] };
+	for (UINT i = 1; i < m_FileList.size(); ++i)
+	{
+		m_FileList[i] = strDir + m_FileList[i];
+	}
+	
+	
+}
+
+const wchar_t* CPIUITool::QuerySelectFile(UNINT nIndex)
+{
+	ARR_STRING& arr = CPIUITool::GetFileList();
+	if (nIndex >= arr.size() - 1)
+	{
+		return _T("");
+	}
+
+	return arr[nIndex + 1].c_str();
 }

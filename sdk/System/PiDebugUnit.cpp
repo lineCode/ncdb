@@ -13,9 +13,9 @@ CPiDebugUnit::~CPiDebugUnit(void)
 {
 }
 
-void CPiDebugUnit::OutTime(tcpchar szS)
+void CPiDebugUnit::OutTime(tcpchar szMsg)
 {
-	OutInfo(CPiTime::GetSysTime().c_str(), tstring(_T(" ")) + szS);
+	OutInfo(CPiTime::GetSysTime().c_str(), tstring(_T(" ")) + szMsg);
 }
 
 

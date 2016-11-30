@@ -9,7 +9,8 @@ public:
     ~CTextStringCut(void);
 public:
 
-    bool GetInDQM(tstring& strDist);           //双引号
+	bool GetInDQM(tstring& strDist);           //双引号
+	bool GetInDQM(ARR_STRING& arrString);           //双引号
     bool GetInSQM(tstring strDist);           //单引号
 	bool GetContent(tcpchar szAnchorLeft, tcpchar szAnchorRight, tstring& strDist);           //单引号
     bool GetContent(tcpchar szAnchorLeft, tcpchar szAnchorRight, int& Dist);           //单引号

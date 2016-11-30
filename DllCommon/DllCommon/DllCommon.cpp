@@ -1,16 +1,19 @@
 #include "DllCommon.h"
 #include <tchar.h>
 #include "UI\PiUITool.h"
+//ARR_STRING* g_pFileLst = NULL;	//选择多个文件的列表， 第一个为目录， 第二个开始为文件
 
-
-NCCOMMON_API bool NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag, OUT wchar_t* szSelectPath)
+NCCOMMON_API int NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 {
 	tstring  strSelectPath;
-	bool bRet = false;
-	if (bRet = CPIUITool::SelectFileOrDir(pTag, strSelectPath))
-	{
-		_tcscpy_s(szSelectPath, 1024, strSelectPath.c_str());
-	}
-	return bRet;
+	int nSelect = CPIUITool::SelectFileOrDir(pTag, strSelectPath);
+	//g_pFileLst = pTag->pFileLst;
+	return nSelect;
+}
+
+NCCOMMON_API const wchar_t* QuerySelectFile(int nIndex)
+{
+	return CPIUITool::QuerySelectFile((UINT)nIndex);
+	
 }
 
