@@ -302,14 +302,14 @@ int CPiWindowPack::CenterPosX( ARR_RECT& lstRect, int nSpace, int nAreaWidth )
 	int nAllBtnWidth = 0;	
 	const int nPadding = 5;
 
-	for (int i = 0; i < lstRect.size(); ++i)
+	for (size_t i = 0; i < lstRect.size(); ++i)
 	{
 		nAllBtnWidth += lstRect[i].GetWidth();
 	}
 	int nTotalWidth = (nAllBtnWidth + (((int)lstRect.size() - 1) * nSpace));
 	nAreaWidth = max(nAreaWidth, nTotalWidth + nPadding * 2);
 
-	for (int i = 0; i < lstRect.size(); ++i)
+	for (size_t i = 0; i < lstRect.size(); ++i)
 	{
 		int nNewX = 0;
 		long nYOrigion = lstRect[i].m_rt.top;

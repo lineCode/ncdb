@@ -93,7 +93,7 @@ int GetContentBetweenTwoChar(const tstring& strSource,
 		return end;
 	}
 
-	for (int i = 2;i <= cTimes1;i++)
+	for (UINT i = 2;i <= cTimes1;i++)
 	{
 		pos = strSource.find(c1 ,pos + 1);
 

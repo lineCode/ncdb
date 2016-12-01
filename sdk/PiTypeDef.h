@@ -88,3 +88,22 @@ typedef __time64_t      TimeType;
 #define Pi_NameSpace_Begin namespace ns_PiPi{
 #define Pi_NameSpace_End }
 #define Pi_NameSpace_Using using namespace ns_PiPi;
+
+/****************** dll 项目导出宏************************************
+		
+#if defined(__cplusplus)
+#define NCCOMMON_EXTERN_C extern "C"
+#else
+#define NCCOMMON_EXTERN_C
+#endif
+
+#ifdef DLLCOMMON_EXPORTS
+#define NCCOMMON_SYMBOL __declspec(dllexport)
+#else
+#define NCCOMMON_SYMBOL __declspec(dllimport)
+#endif // DLLCOMMON_EXPORTS
+
+#define NCCOMMON_API NCCOMMON_EXTERN_C NCCOMMON_SYMBOL
+#define NCCOMMON_CALL _cdecl
+
+************************************************************************/

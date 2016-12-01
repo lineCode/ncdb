@@ -85,21 +85,21 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h" />
     <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\TextStringCut.h" />
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
     <ClInclude Include="..\..\sdk\PiString.h" />
     <ClInclude Include="..\..\sdk\PiTypeDef.h" />
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
+    <ClInclude Include="..\..\sdk\TextStringCut.h" />
     <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
     <ClInclude Include="DllCommon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp" />
     <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\TextStringCut.cpp" />
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
     <ClCompile Include="..\..\sdk\PiString.cpp" />
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
+    <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
     <ClCompile Include="DllCommon.cpp" />
   </ItemGroup>

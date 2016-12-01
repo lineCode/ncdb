@@ -43,6 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>e:\work\svn\nc\output\Bin</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -104,6 +105,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h" />
+    <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h" />
+    <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
+    <ClInclude Include="..\..\sdk\PiString.h" />
+    <ClInclude Include="..\..\sdk\PiTypeDef.h" />
+    <ClInclude Include="..\..\sdk\PiWindowPack.h" />
+    <ClInclude Include="..\..\sdk\TextStringCut.h" />
+    <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -111,6 +120,13 @@
     <ClInclude Include="testDllCommonDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp" />
+    <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp" />
+    <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
+    <ClCompile Include="..\..\sdk\PiString.cpp" />
+    <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
+    <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
+    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

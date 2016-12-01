@@ -9,6 +9,9 @@
 #include "..\DllCommon\DllCommon.h"
 #include "PiTypeDef.h"
 #include "functional.h"
+#include "E:\\work\\svn\\nc\\src\\common\\NCPopWindow\\NCPopWindow.h"
+#pragma comment(lib, "e:\\work\\svn\\nc\\output\\Bin\\NCPopWindow.lib")
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -73,6 +76,7 @@ BEGIN_MESSAGE_MAP(CtestDllCommonDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &CtestDllCommonDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BTN_WARN, &CtestDllCommonDlg::OnBnClickedBtnWarn)
 END_MESSAGE_MAP()
 
 
@@ -166,20 +170,50 @@ HCURSOR CtestDllCommonDlg::OnQueryDragIcon()
 void CtestDllCommonDlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	TestPop();
+	return;
+	{
+		//typedef bool _cdecl (*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
+
+		
+	}
 	{
 		typedef bool(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
 		typedef const wchar_t* (*FuncQueryFile)(int nInDex);
-		 ;
+		typedef bool(_cdecl * FuncPopSaveDialog)(tagSAVE_FILE* pTag, wchar_t* szPath);
+		
 
-		 static FuncSelectFileOrDir pFunSelect = nullptr;
-		 static FuncQueryFile pFunQuery = nullptr;
+		static FuncSelectFileOrDir pFunSelect = nullptr;
+		static FuncQueryFile pFunQuery = nullptr;
+		static FuncPopSaveDialog pFunPopSave = nullptr;
+		
 		if (!pFunSelect)
 		{
 			HMODULE hD = LoadLibraryA("DllCommon.dll");
 			pFunSelect = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
 			pFunQuery = (FuncQueryFile)GetProcAddress(hD, "QuerySelectFile");
+			pFunPopSave = (FuncPopSaveDialog)GetProcAddress(hD, "PopSaveDialog");
+			
 		}
 		
+		/*{
+			CPIUITool::tagSAVE_FILE tagS;
+			tagS.hParent = m_hWnd;
+			tagS.szTitle = _T("选择一个保存路径");
+			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl\\MFCTest1");
+			tagS.szFilter = _T("All\0*.*\0pic\0*.jpg;*.png\0\0\0");
+			tagS.szBeginFileName = _T("willBeSave.txt");
+			tagS.bCenterToParent = true;
+			tagS.bTypeSmall = true;
+			//tstring strPath = CPIUITool::PopSaveDialog(&tagS);
+			TCHAR szBuf[MAX_PATH] = { 0 };
+			if (!(*pFunPopSave)(&tagS, szBuf))
+			{
+				return;
+			}
+			OutInfo(szBuf, _T(""));
+			return;
+		}*/
 		tagSELECT_FILE_DIR tagS;
 		tagS.hParent = m_hWnd;
 		tagS.szBtnOkName = _T("发送");
@@ -201,4 +235,21 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 		}
 		//FreeLibrary(hD);
 	}
+
+
+}
+
+void CtestDllCommonDlg::TestPop()
+{
+	tag_CREATE tag = {0};
+	
+	NCInitPopup(&tag);
+}
+
+
+void CtestDllCommonDlg::OnBnClickedBtnWarn()
+{
+	// TODO:  在此添加控件通知处理程序代码
+	tag_CREATE tag = { 0 };
+	NCInitPopup(&tag);
 }

@@ -17,3 +17,19 @@ NCCOMMON_API const wchar_t* QuerySelectFile(int nIndex)
 	
 }
 
+NCCOMMON_API bool NCCOMMON_CALL PopSaveDialog(tagSAVE_FILE* pTag, wchar_t* szPath)
+{
+	if (!szPath)
+	{
+		return false;
+	}
+	tstring strPath = CPIUITool::PopSaveDialog(pTag).c_str();
+	if (strPath.length() >= MAX_PATH)
+	{
+		_tcscpy_s(szPath, MAX_PATH, _T("buf too small"));
+		return false;
+	}
+	_tcscpy_s(szPath, MAX_PATH, strPath.c_str());
+	return strPath.length() > 0;
+}
+

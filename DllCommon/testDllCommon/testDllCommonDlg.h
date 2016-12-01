@@ -31,5 +31,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton1();
+	void TestPop();
 private:
+public:
+	afx_msg void OnBnClickedBtnWarn();
 };

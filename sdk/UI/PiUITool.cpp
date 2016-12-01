@@ -4,7 +4,7 @@
 #include <shlwapi.h>
 #include "PiWindowPack.h"
 #include "PiString.h"
-#include "..\..\nc\src\common\sdk\TextStringCut.h"
+#include "..\TextStringCut.h"
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
@@ -165,12 +165,119 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 	int i = CallWindowProc((WNDPROC)g_lOriWndProc, hwnd, uMsg, wParam, lParam);
 	return i;
 }
+
 UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
 	//return 0;
 
 	//OK，CANCEL按钮等控件的消息在父窗口处理。
 	int nRet = 0;	//return to default dialog box procedure
+	switch (uiMsg)
+	{
+	case WM_INITDIALOG:
+	{
+		OutputDebugString(_T("hook WM_INITDIALOG \n"));
+		//break;
+
+		/*
+		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+		break;*/
+		HWND hDlgCommon = ::GetParent(hdlg);
+		LPOPENFILENAME pON = (LPOPENFILENAME)lParam;
+		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pON->lCustData;
+		::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
+		SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(pON));
+		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+
+		//居中显示
+		HWND hParentToCenter = ::GetDesktopWindow();
+		if (pTag->bCenterToParent && pON->hwndOwner)
+		{
+			hParentToCenter = pON->hwndOwner;
+		}
+		CPiWindowPack::CenterWindow(hDlgCommon, hParentToCenter);
+	}
+	break;
+	default:
+		break;
+	}
+	if (uiMsg == WM_NOTIFY)
+	{
+		HWND hDlgCommon = ::GetParent(hdlg);
+		LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
+		if (lpOfNotify->hdr.code == CDN_INITDONE
+			&& !g_lOriWndProc)
+		{
+			OutputDebugString(_T("dlg CDN_INITDONE\n"));
+			nRet = 0;
+
+			/*tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
+			::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
+			SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(lpOfNotify->lpOFN));
+			g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+
+			//居中显示
+			HWND hParentToCenter = ::GetDesktopWindow();
+			if (pTag->bCenterToParent && lpOfNotify->lpOFN->hwndOwner)
+			{
+			hParentToCenter = lpOfNotify->lpOFN->hwndOwner;
+			}
+			CPiWindowPack::CenterWindow(hDlgCommon, hParentToCenter);*/
+		}
+		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
+		{
+			//return 0;
+			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
+			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
+			if (pTag->bSelectMulti)
+			{
+				return 0;	//允许选择多个， 采用系统默认的， 会过滤掉目录
+			}
+
+			nRet = 0;
+			wchar_t wcDirPath[MAX_PATH] = { 0 };
+			CommDlg_OpenSave_GetFilePathW(GetParent(hdlg), wcDirPath, sizeof(wcDirPath));
+			//OutputDebugString(wcDirPath);
+			//return 0;
+
+			HWND hComboAddr = GetDlgItem(GetParent(hdlg), ID_COMBO_ADDR);
+			if (hComboAddr != NULL)
+			{
+				if (wcslen(wcDirPath))
+				{
+					//去掉文件夹快捷方式的后缀名。
+					int pathSize = wcslen(wcDirPath);
+					if (pathSize >= 4)
+					{
+						/*wchar_t* wcExtension = PathFindExtensionW(wcDirPath);
+						if (wcslen(wcExtension))
+						{
+						wcExtension = CharLowerW(wcExtension);
+						if (!wcscmp(wcExtension, L".lnk"))
+						{
+						wcDirPath[pathSize - 4] = L'\0';
+						}
+						}*/
+					}
+					//
+					SetWindowTextW(hComboAddr, wcDirPath);
+				}
+				else
+				{
+					SetWindowTextW(hComboAddr, L"");
+				}
+			}
+		}
+
+	}
+	return nRet;	//return to default;
+}
+UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+{
+	int nRet = 0;	//return to default dialog box procedure
+	return nRet;	//保存对话框， 有设置钩子就会使用旧版的窗口UI， 不需要额外处理
+
+	//OK，CANCEL按钮等控件的消息在父窗口处理。
 	switch (uiMsg)
 	{
 	case WM_INITDIALOG:
@@ -209,19 +316,6 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 		{
 			OutputDebugString(_T("dlg CDN_INITDONE\n"));
 			nRet = 0;
-
-			/*tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
-			::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
-			SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(lpOfNotify->lpOFN));
-			g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
-
-			//居中显示
-			HWND hParentToCenter = ::GetDesktopWindow();
-			if (pTag->bCenterToParent && lpOfNotify->lpOFN->hwndOwner)
-			{
-				hParentToCenter = lpOfNotify->lpOFN->hwndOwner;
-			}
-			CPiWindowPack::CenterWindow(hDlgCommon, hParentToCenter);*/
 		}
 		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
 		{
@@ -344,7 +438,7 @@ void CPIUITool::AlterPath()
 	
 }
 
-const wchar_t* CPIUITool::QuerySelectFile(UNINT nIndex)
+tcpchar CPIUITool::QuerySelectFile(UNINT nIndex)
 {
 	ARR_STRING& arr = CPIUITool::GetFileList();
 	if (nIndex >= arr.size() - 1)
@@ -353,4 +447,52 @@ const wchar_t* CPIUITool::QuerySelectFile(UNINT nIndex)
 	}
 
 	return arr[nIndex + 1].c_str();
+}
+
+tstring CPIUITool::PopSaveDialog(tagSAVE_FILE* pTag)
+{
+	tstring strTitle(_T("选择一个文件(目录)"));
+	tstring strBtnOkName(_T("确定"));
+	if (pTag->szTitle && *pTag->szTitle)
+	{
+		strTitle = pTag->szTitle;
+	}
+	if (!pTag->szFilter || !*pTag->szFilter)
+	{
+		pTag->szFilter = _T("All(*.*)\0 * .*\0\0");
+	}
+
+	OPENFILENAMEW openFile;
+	memset(&openFile, 0, sizeof(openFile));
+	openFile.lStructSize = sizeof(openFile);
+
+	tstring strFilePath(MAX_PATH, 0);
+	strFilePath = pTag->szBeginFileName;
+	wchar_t    szFileName[MAX_PATH] = { 0 };
+	OPENFILENAME openFileName = { 0 };
+	openFile.lStructSize = sizeof(OPENFILENAME);
+	openFile.nMaxFile = MAX_PATH;
+	openFile.lpstrFilter = pTag->szFilter;	//第一对为1
+	openFile.lpstrTitle = pTag->szTitle;
+	openFile.lpstrFile = &strFilePath.at(0);
+	openFile.nMaxFile = strFilePath.capacity();
+	openFile.nFilterIndex = 1;
+	//openFile.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST /*| OFN_ENABLEHOOK*/ | OFN_HIDEREADONLY;
+	openFile.Flags = OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+	openFile.lpstrFilter = pTag->szFilter;
+	openFile.lpstrTitle = strTitle.c_str();
+	openFile.lpstrInitialDir = pTag->szBeginDir;
+	openFile.hwndOwner = pTag->hParent;
+	if (pTag->bTypeSmall)
+	{
+		openFile.Flags |= OFN_ENABLEHOOK;
+		openFile.lpfnHook = ProcHookSaveDlg;
+	}
+
+	if (!GetSaveFileName(&openFile))
+	{
+		//TODO:处理路径太长的问题
+		return _T("");
+	}
+	return openFile.lpstrFile;
 }
