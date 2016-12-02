@@ -254,8 +254,8 @@ tstring CPiTime::SecondToTimeStrHighHour( time_t nSecond, tcpchar szFormat /*= _
 	//nSize = strTime.capacity();
 
 	tm tmSrut = {0};
-	tmSrut.tm_hour = SECOND_TO_HOUR(nSecond);
-	nSecondInciseHour = nSecond - HOUR_TO_SECOND(tmSrut.tm_hour);
+	tmSrut.tm_hour = static_cast<int>(SECOND_TO_HOUR(nSecond));
+	nSecondInciseHour = static_cast<int>(nSecond - HOUR_TO_SECOND(tmSrut.tm_hour));
 
 	tmSrut.tm_min   = SECOND_TO_MINUTE(nSecondInciseHour);
 	nSecondInciseHourMin = nSecondInciseHour - MINUTE_TO_SECOND(tmSrut.tm_min);

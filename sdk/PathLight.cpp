@@ -379,7 +379,7 @@ tstring CPathLight::GetFileName()
 LLONG CPathLight::GetFileSize( tcpchar szPath )
 {
 	struct __stat64 fileInfo = {0};
-	DWORD dwFileSize = 0;
+	LLONG dwFileSize = 0;
 	_tstat64(szPath, &fileInfo);
 	dwFileSize  = fileInfo.st_size;
 

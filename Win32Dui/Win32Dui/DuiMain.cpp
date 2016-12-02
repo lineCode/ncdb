@@ -104,7 +104,7 @@ void CDuiMain::OnClick(DuiLib::TNotifyUI& msg)
 		return;
 
 
-		tstring strPath = CPIUITool::SelectFileOrDir(GetHWND(), _T("e:\\work\\svn\\nc2"), _T("你选择吧"), _T("发送"));
+		/*tstring strPath = CPIUITool::SelectFileOrDir(GetHWND(), _T("e:\\work\\svn\\nc2"), _T("你选择吧"), _T("发送"));
 		if (strPath.length())
 		{
 			MessageBox(NULL, strPath.c_str(), _T("用户选择了"), NULL);
@@ -115,7 +115,7 @@ void CDuiMain::OnClick(DuiLib::TNotifyUI& msg)
 		{
 			MessageBox(NULL, strPath.c_str(), _T("用户选择了"), NULL);
 		}
-		return;
+		return;*/
 
 		/*
 		{

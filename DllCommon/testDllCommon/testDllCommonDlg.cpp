@@ -112,7 +112,6 @@ BOOL CtestDllCommonDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
-	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -172,6 +171,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 	// TODO:  在此添加控件通知处理程序代码
 	TestPop();
 	return;
+
 	{
 		//typedef bool _cdecl (*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
 
@@ -242,7 +242,9 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 void CtestDllCommonDlg::TestPop()
 {
 	tag_CREATE tag = {0};
-	
+	tag.bBig = true;
+	tag.szTitle = _T("标题");
+	tag.szUrl = _T("http://www.2lv.wang/tulv/index.html?clientkey=1");
 	NCInitPopup(&tag);
 }
 
@@ -251,5 +253,6 @@ void CtestDllCommonDlg::OnBnClickedBtnWarn()
 {
 	// TODO:  在此添加控件通知处理程序代码
 	tag_CREATE tag = { 0 };
+	tag.bBig = false;
 	NCInitPopup(&tag);
 }

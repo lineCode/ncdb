@@ -15,7 +15,7 @@ using namespace std;
 
 
 //int 分解成带小数的浮点数
-float IntResolveToFloat(UNLONG Num,	UNCHAR decimal);
+double IntResolveToFloat(int Num, UNCHAR decimal);
 
 string  GetLocalDateTime(const char* cFormat);
 

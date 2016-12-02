@@ -224,6 +224,28 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 			}
 			CPiWindowPack::CenterWindow(hDlgCommon, hParentToCenter);*/
 		}
+		switch (lpOfNotify->hdr.code)
+		{
+		case CDN_FILEOK:
+			//OutputDebugString(_T(""));
+		{
+			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
+			OutputDebugString(lpOfNotify->lpOFN->lpstrFile);
+
+			ARR_STRING& arr = CPIUITool::GetFileList();
+			arr.clear();
+			{
+				wchar_t wcDirP[MAX_PATH] = { 0 };
+				CommDlg_OpenSave_GetFolderPath(hDlgCommon, wcDirP, sizeof(wcDirP));//多选模式下， 如果只选择一个文件， 文件列表没有双引号
+				::PathAddBackslash(wcDirP);
+				arr.push_back(wcDirP);
+			}
+			arr.push_back(lpOfNotify->lpOFN->lpstrFile);
+		}
+			break;
+		default:
+			break;
+		}
 		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
 		{
 			//return 0;
@@ -441,7 +463,7 @@ void CPIUITool::AlterPath()
 tcpchar CPIUITool::QuerySelectFile(UNINT nIndex)
 {
 	ARR_STRING& arr = CPIUITool::GetFileList();
-	if (nIndex >= arr.size() - 1)
+	if (!arr.size() || nIndex >= arr.size() - 1)
 	{
 		return _T("");
 	}

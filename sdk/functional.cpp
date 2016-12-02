@@ -58,11 +58,11 @@ void MemToString(string& strDist, void* pMem, UNINT nSize)
 
 
 
-float IntResolveToFloat(UNLONG Num,	UNCHAR decimal)
+double IntResolveToFloat(int Num, UNCHAR decimal)
 {
 	//
 	// a/10  = a/(8+2) = a << 
-	float fRet = Num;
+	double fRet = Num * 1.0;
 	while(decimal--)
 	{
 		fRet = fRet/10.00f;
@@ -204,7 +204,7 @@ void* GetFileData( tcpchar szfilePath )
 		return szBuf;
 	}*/
 	const DWORD dwFileSizeLimit = 1024 * 1024 * 20;
-	ULONGLONG nSize = file.GetFileSize();
+	size_t nSize = static_cast<size_t>(file.GetFileSize());
 	if (nSize > dwFileSizeLimit)
 	{
 		return szBuf;
@@ -606,7 +606,7 @@ tstring GetFileDataStr( tcpchar szfilePath, bool bUtf8 /*= false*/ )
 		return strData;
 	}
 	const DWORD dwFileSizeLimit = 1024 * 1024 * 20;
-	ULONGLONG nSize = file.GetFileSize();
+	size_t nSize = static_cast<size_t>(file.GetFileSize());
 	if (nSize > dwFileSizeLimit)
 	{
 		return strData;
