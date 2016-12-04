@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "PiUITool.h"
 #include <shlobj.h>
-#include <shlwapi.h>
 #include "PiWindowPack.h"
 #include "PiString.h"
 #include "..\TextStringCut.h"
@@ -53,7 +52,7 @@ LONG g_lOriWndProc = NULL;
 #define  ID_LEFT_TOOBAR 0x4A0
 LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	
+    bool bDeal = false;
 	switch (uMsg)
 	{
 	case WM_COMMAND:
@@ -77,6 +76,7 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 			if (pTag->bSelectMulti)
 			{
+                bDeal = true;
 				tchar szBuf[MAX_PATH + 1] = { 0 };
 				CommDlg_OpenSave_GetSpec(hwnd, szBuf, MAX_PATH);
 
@@ -94,6 +94,8 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 					text.GetInDQM(arr);
 				}
+                EndDialog(hwnd, 1);
+
 				/*if (arr.size() > 1)
 				{
 					
@@ -162,6 +164,10 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	break;
 	}
+    if (bDeal)
+    {
+        return 1;
+    }
 	int i = CallWindowProc((WNDPROC)g_lOriWndProc, hwnd, uMsg, wParam, lParam);
 	return i;
 }
@@ -230,7 +236,7 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 			//OutputDebugString(_T(""));
 		{
 			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
-			OutputDebugString(lpOfNotify->lpOFN->lpstrFile);
+			//OutputDebugString(lpOfNotify->lpOFN->lpstrFile);
 
 			ARR_STRING& arr = CPIUITool::GetFileList();
 			arr.clear();
@@ -251,15 +257,18 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 			//return 0;
 			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
 			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
-			if (pTag->bSelectMulti)
+			/*if (pTag->bSelectMulti)
 			{
 				return 0;	//允许选择多个， 采用系统默认的， 会过滤掉目录
-			}
+			}*/
 
 			nRet = 0;
 			wchar_t wcDirPath[MAX_PATH] = { 0 };
 			CommDlg_OpenSave_GetFilePathW(GetParent(hdlg), wcDirPath, sizeof(wcDirPath));
-			//OutputDebugString(wcDirPath);
+            tstring strM(_T("select:"));
+            strM += wcDirPath;
+            strM += L"\n";
+			OutputDebugString(strM.c_str());
 			//return 0;
 
 			HWND hComboAddr = GetDlgItem(GetParent(hdlg), ID_COMBO_ADDR);
@@ -387,7 +396,7 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 	}
 	return nRet;	//return to default;
 }
-int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
+int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 {
 	//setlocale(LC_ALL, "chs");
 	tstring strTitle(_T("选择一个文件(目录)"));
@@ -430,7 +439,6 @@ int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath)
 		openFile.Flags |= OFN_ALLOWMULTISELECT;
 	}
 	BOOL b = GetOpenFileName(&openFile);
-	strPath = openFile.lpstrFile;
 	int nSel = 1;
 	if (pTag->bSelectMulti)
 	{

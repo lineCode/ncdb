@@ -16,30 +16,75 @@
     <Filter Include="cef">
       <UniqueIdentifier>{4087af82-f9da-408a-a057-1d37416a06ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{9ae2f829-67df-4058-8add-22986579c4bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCApp.cpp">
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCApp.cpp">
       <Filter>cef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCCef.cpp">
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCCef.cpp">
       <Filter>cef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.cpp">
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCHandle.cpp">
       <Filter>cef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\PiString.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\PiWindowPack.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\TextStringCut.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\AutoType.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\doString.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCApp.h">
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCApp.h">
       <Filter>cef</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCCef.h">
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCCef.h">
       <Filter>cef</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.h">
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCHandle.h">
       <Filter>cef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\PiUITool.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\PiString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\PiWindowPack.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\DataStruct\PiRect.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\TextStringCut.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\AutoType.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\doString.h">
+      <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

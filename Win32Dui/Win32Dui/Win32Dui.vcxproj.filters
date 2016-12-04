@@ -27,47 +27,8 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\FileOpr.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\functional.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\Lock.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PathLight.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PiString.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\StrCoding.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\MD5.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\Duilib\DuiBase.cpp">
-      <Filter>sdk\duilib</Filter>
-    </ClCompile>
     <ClCompile Include="DuiMain.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\DataStruct\PiRect.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PiWindowPack.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\PiUITool.cpp">
-      <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCApp.cpp">
       <Filter>cef</Filter>
@@ -78,58 +39,43 @@
     <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.cpp">
       <Filter>cef</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sdk\AutoType.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\doString.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\FileOpr.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\functional.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\Lock.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\MD5.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\PathLight.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\PiString.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\StrCoding.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\Duilib\DuiHeader.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\BaseDef.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\define_gnl.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\FileOpr.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\functional.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\Lock.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PathLight.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PiString.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\StrCoding.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\MD5.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\Duilib\DuiBase.h">
-      <Filter>sdk\duilib</Filter>
-    </ClInclude>
     <ClInclude Include="DuiMain.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\DataStruct\PiRect.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PiWindowPack.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\PiUITool.h">
-      <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
@@ -142,6 +88,45 @@
     </ClInclude>
     <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.h">
       <Filter>cef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\AutoType.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\BaseDef.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\define_gnl.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\doString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FileOpr.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\functional.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\Lock.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\MD5.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\PathLight.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\PiString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\StrCoding.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\DataStruct\PiRect.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\PiUITool.h">
+      <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

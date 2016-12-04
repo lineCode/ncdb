@@ -53,13 +53,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;__STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;_WIN32;WINVER=0x0602;_WIN32_WINNT=0x602;WIN32_LEAN_AND_MEAN;_HAS_EXCEPTIONS=0;CEF_USE_ATL;CMAKE_INTDIR="Debug";_DEBUG;_WINDOWS;M_DEBUG_INFO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Tddownload\cef_binary_3.2840.1518.gffd843c_windows32\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\UseNCCef\UseNCCef\;..\..\UseNCCef\UseNCCef\cef;..\..\sdk</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d:\tddownload\\cef_binary_3.2840.1518.gffd843c_windows32\Debug\libcef.lib;d:\tddownload\cef_binary_3.2840.1518.gffd843c_windows32\build\libcef_dll_wrapper\Debug\libcef_dll_wrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\..\UseNCCef\UseNCCef\cef\bin\libcef.lib;..\..\UseNCCef\UseNCCef\cef\bin\\libcef_dll_wrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,15 +81,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCApp.cpp" />
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCCef.cpp" />
-    <ClCompile Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.cpp" />
+    <ClCompile Include="..\..\sdk\AutoType.cpp" />
+    <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
+    <ClCompile Include="..\..\sdk\doString.cpp" />
+    <ClCompile Include="..\..\sdk\PiString.cpp" />
+    <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
+    <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
+    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCApp.cpp" />
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCCef.cpp" />
+    <ClCompile Include="..\..\UseNCCef\UseNCCef\NCHandle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCApp.h" />
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCCef.h" />
-    <ClInclude Include="..\..\..\nc\src\samples\UseNCCef\NCHandle.h" />
+    <ClInclude Include="..\..\sdk\AutoType.h" />
+    <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
+    <ClInclude Include="..\..\sdk\doString.h" />
+    <ClInclude Include="..\..\sdk\PiString.h" />
+    <ClInclude Include="..\..\sdk\PiWindowPack.h" />
+    <ClInclude Include="..\..\sdk\TextStringCut.h" />
+    <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCApp.h" />
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCCef.h" />
+    <ClInclude Include="..\..\UseNCCef\UseNCCef\NCHandle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

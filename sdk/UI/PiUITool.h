@@ -1,6 +1,8 @@
 #pragma once
 #include "..\PiTypeDef.h"
 #include <Windows.h>
+#include <shlwapi.h>
+#include <shellapi.h>
 using std::string;
 
 
@@ -28,6 +30,7 @@ public:
 			, szBeginDir(NULL)
 			, szTitle(NULL)
 			, szBtnOkName(NULL)
+            , szFilter(nullptr)
 			, bCenterToParent(true)
 			, bSelectMulti(false)
 		{
@@ -65,7 +68,7 @@ public:
 		param:	szBeginDir, 弹窗后显示的起始目录， 如果目录不存在则显示上次的目录
 		memo:	
 	************************************************************************/
-	static int SelectFileOrDir(tagSELECT_FILE_DIR* pTag, tstring& strPath);
+	static int SelectFileOrDir(tagSELECT_FILE_DIR* pTag);
 	static ARR_STRING& GetFileList();
 	static void AlterPath();
 	static tcpchar QuerySelectFile(UNINT nIndex);
