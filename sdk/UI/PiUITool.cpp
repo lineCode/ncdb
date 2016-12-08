@@ -4,6 +4,7 @@
 #include "PiWindowPack.h"
 #include "PiString.h"
 #include "..\TextStringCut.h"
+#include <commdlg.h>
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
@@ -306,7 +307,7 @@ UINT_PTR static __stdcall  MyFolderProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LP
 UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
 	int nRet = 0;	//return to default dialog box procedure
-	return nRet;	//保存对话框， 有设置钩子就会使用旧版的窗口UI， 不需要额外处理
+	//return nRet;	//保存对话框， 有设置钩子就会使用旧版的窗口UI， 不需要额外处理
 
 	//OK，CANCEL按钮等控件的消息在父窗口处理。
 	switch (uiMsg)
@@ -323,8 +324,8 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 		LPOPENFILENAME pON = (LPOPENFILENAME)lParam;
 		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pON->lCustData;
 		::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
-		SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(pON));
-		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+		/*SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(pON));
+		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);*/
 
 		//居中显示
 		HWND hParentToCenter = ::GetDesktopWindow();
@@ -338,7 +339,8 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 	default:
 		break;
 	}
-	if (uiMsg == WM_NOTIFY)
+	#if 0
+if (uiMsg == WM_NOTIFY)
 	{
 		HWND hDlgCommon = ::GetParent(hdlg);
 		LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
@@ -392,8 +394,10 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 				}
 			}
 		}
+}
+#endif
 		
-	}
+	
 	return nRet;	//return to default;
 }
 int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
@@ -479,7 +483,7 @@ tcpchar CPIUITool::QuerySelectFile(UNINT nIndex)
 	return arr[nIndex + 1].c_str();
 }
 
-tstring CPIUITool::PopSaveDialog(tagSAVE_FILE* pTag)
+tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 {
 	tstring strTitle(_T("选择一个文件(目录)"));
 	tstring strBtnOkName(_T("确定"));
@@ -497,7 +501,10 @@ tstring CPIUITool::PopSaveDialog(tagSAVE_FILE* pTag)
 	openFile.lStructSize = sizeof(openFile);
 
 	tstring strFilePath(MAX_PATH, 0);
-	strFilePath = pTag->szBeginFileName;
+	if (pTag->szBeginFileName)
+	{
+		strFilePath = pTag->szBeginFileName;
+	}
 	wchar_t    szFileName[MAX_PATH] = { 0 };
 	OPENFILENAME openFileName = { 0 };
 	openFile.lStructSize = sizeof(OPENFILENAME);
@@ -508,16 +515,14 @@ tstring CPIUITool::PopSaveDialog(tagSAVE_FILE* pTag)
 	openFile.nMaxFile = strFilePath.capacity();
 	openFile.nFilterIndex = 1;
 	//openFile.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST /*| OFN_ENABLEHOOK*/ | OFN_HIDEREADONLY;
-	openFile.Flags = OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+	openFile.Flags = OFN_EXPLORER | OFN_ENABLEHOOK;
+	openFile.lpfnHook = ProcHookSaveDlg;
+
 	openFile.lpstrFilter = pTag->szFilter;
 	openFile.lpstrTitle = strTitle.c_str();
 	openFile.lpstrInitialDir = pTag->szBeginDir;
 	openFile.hwndOwner = pTag->hParent;
-	if (pTag->bTypeSmall)
-	{
-		openFile.Flags |= OFN_ENABLEHOOK;
-		openFile.lpfnHook = ProcHookSaveDlg;
-	}
+	openFile.lCustData = (LPARAM)pTag;
 
 	if (!GetSaveFileName(&openFile))
 	{

@@ -6,7 +6,7 @@
 NCCOMMON_API int NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 {
 	tstring  strSelectPath;
-	int nSelect = CPIUITool::SelectFileOrDir(pTag, strSelectPath);
+	int nSelect = CPIUITool::SelectFileOrDir(pTag);
 	//g_pFileLst = pTag->pFileLst;
 	return nSelect;
 }
@@ -17,7 +17,7 @@ NCCOMMON_API const wchar_t* QuerySelectFile(int nIndex)
 	
 }
 
-NCCOMMON_API bool NCCOMMON_CALL PopSaveDialog(tagSAVE_FILE* pTag, wchar_t* szPath)
+NCCOMMON_API bool NCCOMMON_CALL PopSaveDialog(tagSELECT_FILE_DIR* pTag, wchar_t* szPath)
 {
 	if (!szPath)
 	{

@@ -9,8 +9,7 @@
 #include "..\DllCommon\DllCommon.h"
 #include "PiTypeDef.h"
 #include "functional.h"
-#include "E:\\work\\svn\\nc\\src\\common\\NCPopWindow\\NCPopWindow.h"
-#pragma comment(lib, "e:\\work\\svn\\nc\\output\\Bin\\NCPopWindow.lib")
+//#pragma comment(lib, "e:\\work\\svn\\nc\\output\\Bin\\NCPopWindow.lib")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -165,12 +164,54 @@ HCURSOR CtestDllCommonDlg::OnQueryDragIcon()
 }
 
 
-
+#include <shobjidl.h> 
 void CtestDllCommonDlg::OnBnClickedButton1()
 {
+	{
+		//test file dialog with COM
+		HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
+			COINIT_DISABLE_OLE1DDE);
+		if (SUCCEEDED(hr))
+		{
+			IFileOpenDialog *pFileOpen;
+
+			// Create the FileOpenDialog object.
+			hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+				IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+
+			if (SUCCEEDED(hr))
+			{
+				// Show the Open dialog box.
+				hr = pFileOpen->Show(NULL);
+
+				// Get the file name from the dialog box.
+				if (SUCCEEDED(hr))
+				{
+					IShellItem *pItem;
+					hr = pFileOpen->GetResult(&pItem);
+					if (SUCCEEDED(hr))
+					{
+						PWSTR pszFilePath;
+						hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+						// Display the file name to the user.
+						if (SUCCEEDED(hr))
+						{
+							::MessageBox(NULL, pszFilePath, L"File Path", MB_OK);
+							CoTaskMemFree(pszFilePath);
+						}
+						pItem->Release();
+					}
+				}
+				pFileOpen->Release();
+			}
+			CoUninitialize();
+		}
+		return;
+	}
 	// TODO:  在此添加控件通知处理程序代码
-	TestPop();
-	return;
+	/*TestPop();
+	return;*/
 
 	{
 		//typedef bool _cdecl (*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
@@ -180,7 +221,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 	{
 		typedef bool(*FuncSelectFileOrDir)(tagSELECT_FILE_DIR* pTag);
 		typedef const wchar_t* (*FuncQueryFile)(int nInDex);
-		typedef bool(_cdecl * FuncPopSaveDialog)(tagSAVE_FILE* pTag, wchar_t* szPath);
+		typedef bool(_cdecl * FuncPopSaveDialog)(tagSELECT_FILE_DIR* pTag, wchar_t* szPath);
 		
 
 		static FuncSelectFileOrDir pFunSelect = nullptr;
@@ -195,25 +236,45 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			pFunPopSave = (FuncPopSaveDialog)GetProcAddress(hD, "PopSaveDialog");
 			
 		}
-		
-		/*{
-			CPIUITool::tagSAVE_FILE tagS;
+		{
+			tagSELECT_FILE_DIR tagS;
+			tagS.hParent = m_hWnd;
+			tagS.szBtnOkName = _T("自定义");
+			tagS.szTitle = _T("随便选择一个目录");
+			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
+			tagS.szFilter = _T("All\0*.*\0图片\0*.jpg;*.png\0\0\0");
+			tagS.bCenterToParent = true;
+			tstring strSelect(1024, 0);
+			//int nSel = (*pFunPopSave)(&tagS, &strSelect.at(0));
+			strSelect = CPIUITool::PopSaveDialog(&tagS);
+			OutputDebugString(strSelect.c_str());
+			return;
+		}
+		{
+			CPIUITool::tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
 			tagS.szTitle = _T("选择一个保存路径");
 			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl\\MFCTest1");
 			tagS.szFilter = _T("All\0*.*\0pic\0*.jpg;*.png\0\0\0");
 			tagS.szBeginFileName = _T("willBeSave.txt");
 			tagS.bCenterToParent = true;
-			tagS.bTypeSmall = true;
-			//tstring strPath = CPIUITool::PopSaveDialog(&tagS);
-			TCHAR szBuf[MAX_PATH] = { 0 };
-			if (!(*pFunPopSave)(&tagS, szBuf))
+			tagS.bSelectMulti = true;
+			int nSel = CPIUITool::SelectFileOrDir(&tagS);
+			if (!nSel)
 			{
 				return;
 			}
-			OutInfo(szBuf, _T(""));
+			/*{
+				IFolderView2* pFV = nullptr;
+				HRESULT hR = IServiceProvider::QueryInterface(SID_SFolderView, (void**)&pFV);
+			}*/
+			FOR_COUNT((UINT)nSel, i)
+			{
+				tcpchar szPath = CPIUITool::QuerySelectFile(i);
+				OutInfo(szPath, _T(""));
+			}
 			return;
-		}*/
+		}
 		tagSELECT_FILE_DIR tagS;
 		tagS.hParent = m_hWnd;
 		tagS.szBtnOkName = _T("发送");
@@ -241,18 +302,18 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 
 void CtestDllCommonDlg::TestPop()
 {
-	tag_CREATE tag = {0};
+	/*tag_CREATE tag = {0};
 	tag.bBig = true;
 	tag.szTitle = _T("标题");
 	tag.szUrl = _T("http://www.2lv.wang/tulv/index.html?clientkey=1");
-	NCInitPopup(&tag);
+	NCInitPopup(&tag);*/
 }
 
 
 void CtestDllCommonDlg::OnBnClickedBtnWarn()
 {
 	// TODO:  在此添加控件通知处理程序代码
-	tag_CREATE tag = { 0 };
+	/*tag_CREATE tag = { 0 };
 	tag.bBig = false;
-	NCInitPopup(&tag);
+	NCInitPopup(&tag);*/
 }

@@ -15,6 +15,7 @@ public:
 	{
 		HWND			hParent;			//所属窗口， 可以为空
 		const wchar_t*	szBeginDir;			//初始显示目录, 可为空
+		const wchar_t*	szBeginFileName;	//初始显示文件名
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szBtnOkName;		//ok按钮要替换成的名字，  如果为空则显示为"确定"
 		const wchar_t*	szFilter;			//过滤字符串
@@ -26,10 +27,11 @@ public:
 		//int				pFileLst;			
 
 		tagSELECT_FILE_DIR()
-			:hParent(NULL)
-			, szBeginDir(NULL)
-			, szTitle(NULL)
-			, szBtnOkName(NULL)
+			:hParent(nullptr)
+			, szBeginDir(nullptr)
+			, szBeginFileName(nullptr)
+			, szTitle(nullptr)
+			, szBtnOkName(nullptr)
             , szFilter(nullptr)
 			, bCenterToParent(true)
 			, bSelectMulti(false)
@@ -48,7 +50,7 @@ public:
 		bool			bTypeSmall;			//true使用小窗口样式， 跟打开对话框一样的大小
 
 		tagSAVE_FILE()
-			:hParent(NULL)
+			:hParent(nullptr)
 			, szBeginDir(nullptr)
 			, szTitle(nullptr)
 			, szFilter(nullptr)
@@ -78,7 +80,7 @@ public:
 		param:	
 		memo:	
 	************************************************************************/
-	static tstring PopSaveDialog(tagSAVE_FILE* pTag);
+	static tstring PopSaveDialog(tagSELECT_FILE_DIR* pTag);
 private:
 	static		ARR_STRING		m_FileList;
 };

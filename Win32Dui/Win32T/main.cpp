@@ -15,13 +15,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_ LPTSTR    lpCmdLine,
 	_In_ int       nCmdShow)
 {
-    CNCCef* m_pCef = new CNCCef(hInstance);
+	CNCCef* m_pCef = new CNCCef(hInstance);
+	{
+		CPIUITool::tagSELECT_FILE_DIR tag{};
+		tag.szTitle = _T("title save");
+		tag.szBtnOkName = _T("±£´æ°É");
+		tag.bCenterToParent = true;
+		tstring strPath = CPIUITool::PopSaveDialog(&tag);
+		OutputDebugString(strPath.c_str());
+		return 0;
+	}
     {
         CPIUITool::tagSELECT_FILE_DIR tag{};
         tag.szTitle = _T("title");
         tag.szBtnOkName = _T("·¢ËÍ°É");
         tag.bSelectMulti = true;
-        
+		
+
         int nSel = CPIUITool::SelectFileOrDir(&tag);
         for (int i = 0; i < nSel; ++i)
         {
