@@ -33,6 +33,10 @@ void CPiFileDialog::OnInitDone()
 
 BOOL CPiFileDialog::OnFileNameOK()
 {
+	EndSelect();
+	return TRUE;
+#if 0
+
 	IFileDialog* pIFD = nullptr;
 	IFolderView2 *pFolderView;
 	OutInfo(_T("m_pIFileDialog"), (int)m_pIFileDialog);
@@ -68,6 +72,7 @@ BOOL CPiFileDialog::OnFileNameOK()
 	
 	int n = 0;
 	n++;
+#endif
 	return FALSE;
 }
 
@@ -88,7 +93,7 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 			//TODO:如果选择多个， 标志给外部
 			CPiFileDialog* pFile = (CPiFileDialog*)GetProp(hwnd, _T("ttt"));
-			pFile->OnButtonClicked(IDOK);
+			pFile->EndSelect();
 			EndDialog(hwnd, IDOK);
 			RemoveProp(hwnd, _T("ttt"));
 		}
@@ -177,6 +182,7 @@ void CPiFileDialog::OnFileNameChange()
 
 void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 {
+	m_strSelect.clear();
 	IFileDialog* pIFD = nullptr;
 	IFolderView2 *pFolderView;
 	HRESULT hr = IUnknown_QueryService((IUnknown*)m_pIFileDialog, SID_SFolderView, IID_PPV_ARGS(&pFolderView));
@@ -197,7 +203,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 		hRet = pIArr->GetItemAt(i, &pItem);
 		LPWSTR szName = nullptr;
 		hRet = pItem->GetDisplayName(SIGDN_FILESYSPATH, &szName);
-		OutInfo(szName);
+		m_strSelect.push_back(szName);
 		CoTaskMemFree(szName);
 	}
 
@@ -205,4 +211,20 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 	n++;
 
 	m_pIFileDialog->Close(S_OK);
+}
+
+bool CPiFileDialog::Popup()
+{
+	return DoModal() == IDOK;
+}
+
+ARR_STRING CPiFileDialog::GetSelect()
+{
+	return m_strSelect;
+}
+
+bool CPiFileDialog::EndSelect()
+{
+	OnButtonClicked(IDOK);
+	return true;
 }

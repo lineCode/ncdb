@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 #include "PiWindowPack.h"
 #include "functional.h"
-#include "PiFileDialog.h"
+#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -203,6 +203,20 @@ void CMFCTest1Dlg::OnBnClickedButton1()
 	tstring strFilter = _T("All Files (*.*)|*.*|txt Files (*.txt)|*.txt|bin Files (*.exe)|*.exe;*.obj||");
 
 	CPiFileDialog dlgFile(_T("选择多个文件(目录)"), strFilter.c_str());
-	dlgFile.DoModal();
+	if (!dlgFile.Popup())
+	{
+		return;
+	}
+	tstring strOut;
+	CWnd* pEdit = GetDlgItem(IDC_EDIT_OUTPUT);
+	pEdit->SetWindowText(strOut.c_str());
+
+	ARR_STRING lstSel = dlgFile.GetSelect();
+	for (auto& strSel : lstSel)
+	{
+		strOut += strSel;
+		strOut += _T("\r\n");
+	}
+	pEdit->SetWindowText(strOut.c_str());
 	return;
 }

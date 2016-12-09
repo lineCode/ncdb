@@ -81,8 +81,8 @@
     <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="PiFileDialog.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\sdk\UI\PiFileDialog.h">
+      <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,8 +134,8 @@
     <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="PiFileDialog.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
