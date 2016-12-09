@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "PiFileDialog.h"
-#include "functional.h"
+#include "PiUITool.h"
+#include "PiWindowPack.h"
 
+#define STRING_WND_PROP_NAME _T("propPiFileDialog")
+typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
+static LONG	g_lOriWndProc;
 
 CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/)
 	:CFileDialog(true, NULL, NULL, OFN_ALLOWMULTISELECT | OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
@@ -76,9 +80,8 @@ BOOL CPiFileDialog::OnFileNameOK()
 	return FALSE;
 }
 
-LONG g_lOriWndProc = NULL;
 
-LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT __stdcall  CPiFileDialog::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	bool bDeal = false;
 	switch (uMsg)
@@ -92,10 +95,10 @@ LRESULT static __stdcall  _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 			break;*/
 
 			//TODO:如果选择多个， 标志给外部
-			CPiFileDialog* pFile = (CPiFileDialog*)GetProp(hwnd, _T("ttt"));
+			CPiFileDialog* pFile = (CPiFileDialog*)GetProp(hwnd, STRING_WND_PROP_NAME);
 			pFile->EndSelect();
-			EndDialog(hwnd, IDOK);
-			RemoveProp(hwnd, _T("ttt"));
+			::EndDialog(hwnd, IDOK);
+			RemoveProp(hwnd, STRING_WND_PROP_NAME);
 		}
 		break;
 	default:
@@ -139,12 +142,20 @@ void CPiFileDialog::OnFileNameChange()
 
 
 		//TODO:替换窗口过程
-		HWND hDlgCommon = hParent;
-		::SetDlgItemText(hDlgCommon, IDOK, _T("发送吧"));
-		SetPropW(hDlgCommon, _T("ttt"), (CPiFileDialog*)(this));
-		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);
+		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)m_pTag;
+		//居中显示
+		HWND hParentToCenter = ::GetDesktopWindow();
+		if (pTag->bCenterToParent && pTag->hParent)
+		{
+			hParentToCenter = pTag->hParent;
+		}
+		CPiWindowPack::CenterWindow(hParent, hParentToCenter);
 
+		::SetDlgItemText(hParent, IDOK, pTag->szBtnOkName);
+		SetPropW(hParent, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
+		g_lOriWndProc = ::SetWindowLongW(hParent, GWL_WNDPROC, (LONG)_WndProc);
 
+		
 	}
 
 	return;
@@ -171,7 +182,6 @@ void CPiFileDialog::OnFileNameChange()
 		hRet = pIArr->GetItemAt(i, &pItem);
 		LPWSTR szName = nullptr;
 		hRet = pItem->GetDisplayName(SIGDN_FILESYSPATH, &szName);
-		OutInfo(szName);
 		CoTaskMemFree(szName);
 	}
 
@@ -227,4 +237,9 @@ bool CPiFileDialog::EndSelect()
 {
 	OnButtonClicked(IDOK);
 	return true;
+}
+
+void CPiFileDialog::SetParam(void* pTag)
+{
+	m_pTag = pTag;
 }

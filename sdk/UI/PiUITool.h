@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "..\PiTypeDef.h"
 #include <Windows.h>
 #include <shlwapi.h>
@@ -47,7 +48,6 @@ public:
 		const wchar_t*	szFilter;			//过滤字符串
 		const wchar_t*	szBeginFileName;	//默认文件名
 		bool			bCenterToParent;	//true相对父窗口居中， 否则屏幕居中
-		bool			bTypeSmall;			//true使用小窗口样式， 跟打开对话框一样的大小
 
 		tagSAVE_FILE()
 			:hParent(nullptr)
@@ -56,7 +56,6 @@ public:
 			, szFilter(nullptr)
 			, szBeginFileName(nullptr)
 			, bCenterToParent(true)
-			, bTypeSmall(false)
 		{}
 	};
 	/************************************************************************/
@@ -81,6 +80,7 @@ public:
 		memo:	
 	************************************************************************/
 	static tstring PopSaveDialog(tagSELECT_FILE_DIR* pTag);
+	static int SelectFileOrDirVista(tagSELECT_FILE_DIR* pTag);
 private:
 	static		ARR_STRING		m_FileList;
 };

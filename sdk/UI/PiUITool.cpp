@@ -5,6 +5,7 @@
 #include "PiString.h"
 #include "..\TextStringCut.h"
 #include <commdlg.h>
+#include "PiFileDialog.h"
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
@@ -530,4 +531,30 @@ tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 		return _T("");
 	}
 	return openFile.lpstrFile;
+}
+
+int CPIUITool::SelectFileOrDirVista(tagSELECT_FILE_DIR* pTag)
+{
+	tstring strTitle(_T("选择文件(目录)"));
+	tstring strBtnOkName(_T("确定"));
+	if (pTag->szTitle && *pTag->szTitle)
+	{
+		strTitle = pTag->szTitle;
+	}
+
+	if (!pTag->szBtnOkName || !*pTag->szBtnOkName)
+	{
+		pTag->szBtnOkName = strBtnOkName.c_str();
+	}
+	if (!pTag->szFilter || !*pTag->szFilter)
+	{
+		pTag->szFilter = _T("All Files (*.*)|*.*||");
+	}
+
+	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter);
+	if (!dlgFile.Popup())
+	{
+		return 0;
+	}
+	return dlgFile.GetSelect().size();
 }

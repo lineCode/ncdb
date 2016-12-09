@@ -1,0 +1,10 @@
+// DllCommonMFC.idl : DllCommonMFC.dll 的类型库源
+// 此文件将由 MIDL 编译器处理以产生
+// 类型库(DllCommonMFC.tlb)。
+
+[ uuid(6C7E93CE-24A1-4E7B-9530-53E921C4434D), version(1.0) ]
+library DllCommonMFC
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+};
