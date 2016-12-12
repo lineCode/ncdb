@@ -255,6 +255,38 @@ PAIR_STRING ns_PiPi::CPiString::SpilitStrTwoPart( const tstring& strSrc, tcpchar
 	return pairS;
 }
 
+bool ns_PiPi::CPiString::Replace(tcpchar c, tcpchar c2 /*= _T("")*/, int nCount /*= -1*/)
+{
+	//-1,无限, 0, 不找, >0 , 指定次数
+	bool bReplase = false;
+	if (nCount == 0)
+	{
+		return bReplase;
+	}
+	int pos = -1;
+	bool bCount = nCount > 0;
+	while (1)
+	{
+		if (nCount > 0)
+		{
+			--nCount;
+		}
+		else if (bCount)
+		{
+			break;
+		}
+
+		pos = find(c, pos + _tcslen(c2));
+		if (pos == string::npos)
+		{
+			break;
+		}
+		replace(pos, _tcslen(c), c2, _tcslen(c2));
+		++bReplase;
+	}
+	return bReplase;
+}
+
 void CPiString::Format(const TCHAR* format,...)
 {
 	TCHAR *buff = (TCHAR*)0;

@@ -17,6 +17,7 @@ public:
 	~CPiString(void);
 public:
 	void    Format(const TCHAR* format,...);
+	bool	Replace(tcpchar c, tcpchar c2 = _T(""), int nCount = -1);
 
 	static ARR_STRING SpilitStrToArray(const tstring& strSrc, tcpchar szSpilit, tcpchar szPack = NULL);
 	static LST_STRING SpilitStr(const tstring& strSrc, tcpchar szSpilit);

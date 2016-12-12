@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\sdk\MD5.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sdk\platform\DelphiTrans.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DllCommonMFC.h">
@@ -117,6 +120,9 @@
       <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sdk\MD5.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\platform\DelphiTrans.h">
       <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>

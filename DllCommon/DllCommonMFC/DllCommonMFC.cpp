@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "DllCommonMFC.h"
 #include "UI\PiFileDialog.h"
+#include "PiString.h"
+#include "platform/DelphiTrans.h"
+
+Pi_NameSpace_Using
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -139,10 +143,8 @@ NCCOMMON_API int NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 	{
 		pTag->szBtnOkName = strBtnOkName.c_str();
 	}
-	if (!pTag->szFilter || !*pTag->szFilter)
-	{
-		pTag->szFilter = _T("All Files (*.*)|*.*||");
-	}
+	tstring strFilter = CDelphiTrans::FilterToMFC(pTag->szFilter);
+	pTag->szFilter = strFilter.c_str();
 
 	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter, pTag->bSelectMulti);
 	dlgFile.SetParam(pTag);
@@ -167,6 +169,9 @@ NCCOMMON_API bool NCCOMMON_CALL PopSaveDialog(tagSELECT_FILE_DIR* pTag, wchar_t*
 	{
 		return false;
 	}
+	tstring strFilter = CDelphiTrans::FilterToMFC(pTag->szFilter);
+	pTag->szFilter = strFilter.c_str();
+
 	tstring strPath = CPIUITool::PopSaveDialog(pTag).c_str();
 	if (strPath.length() >= MAX_PATH)
 	{
