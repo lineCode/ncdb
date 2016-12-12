@@ -193,7 +193,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			pFunPopSave = (FuncPopSaveDialog)GetProcAddress(hD, "PopSaveDialog");
 			
 		}
-		{
+		/*{
 			tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
 			tagS.szBtnOkName = _T("自定义");
@@ -206,7 +206,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			strSelect = CPIUITool::PopSaveDialog(&tagS);
 			OutputDebugString(strSelect.c_str());
 			return;
-		}
+		}*/
 		{
 			CPIUITool::tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
@@ -216,7 +216,8 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			/************************************************************************
 					filter: display： 系统自动把具体格式字符串增加放入显示字符串后面
 			************************************************************************/
-			tagS.szFilter = _T("All Files (*.*)|*.*|bin files|*.exe;*.obj;*.pdb||");
+			//tagS.szFilter = _T("All Files (*.*)|*.*|bin files|*.exe;*.obj;*.pdb||");
+			//tagS.szFilter = _T("图片|*.jpg,*.png;文档|*.doc,*.ppt");
 			tagS.szBeginFileName = _T("willBeSave.txt");
 			tagS.bCenterToParent = true;
 			tagS.bSelectMulti = false;
