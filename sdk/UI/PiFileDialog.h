@@ -6,7 +6,7 @@ class CPiFileDialog :
 	public CFileDialog
 {
 public:
-	CPiFileDialog(tcpchar szTitle, tcpchar szFilter = nullptr);
+	CPiFileDialog(tcpchar szTitle, tcpchar szFilter = nullptr, bool bSelectMulti = true);
 	~CPiFileDialog();
 public:
 	bool Popup();
@@ -21,6 +21,7 @@ private:
 	virtual BOOL OnFileNameOK();
 	virtual void OnFileNameChange();
 	static LRESULT __stdcall _WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	bool OnInit();
 private:
 	IFileOpenDialog*		m_pIOD;
 	IFileDialog*			m_pIFileDialog;

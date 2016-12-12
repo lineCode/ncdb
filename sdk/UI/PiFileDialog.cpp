@@ -7,8 +7,8 @@
 typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
 static LONG	g_lOriWndProc;
 
-CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/)
-	:CFileDialog(true, NULL, NULL, OFN_ALLOWMULTISELECT | OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
+CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/, bool bSelectMulti /*= true*/)
+	:CFileDialog(true, NULL, NULL, (bSelectMulti ? OFN_ALLOWMULTISELECT : 0 )| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
 	, m_bInit(false)
 {
 	//m_IFileDialog
@@ -124,40 +124,7 @@ void CPiFileDialog::OnFileNameChange()
 	}
 	//HideControl(IDOK);
 	//return;
-	
-	{
-		m_bInit = true;
-		//AddPushButton(5, _T("bbbb"));
-
-		HRESULT hr = S_FALSE;
-		IOleWindow* pIOle = nullptr;
-		hr = m_pIFileDialog->QueryInterface(IID_IOleWindow, (void**)&pIOle);
-		HWND hParent = NULL;
-		hr = pIOle->GetWindow(&hParent);
-		
-		HWND hIDOK = ::GetDlgItem(hParent, IDOK);
-		HWND hIDCancel = ::GetDlgItem(hParent, IDCANCEL);
-		/*::ShowWindow(hIDOK, SW_HIDE);
-		::ShowWindow(hIDCancel, SW_HIDE);*/
-
-
-		//TODO:替换窗口过程
-		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)m_pTag;
-		//居中显示
-		HWND hParentToCenter = ::GetDesktopWindow();
-		if (pTag->bCenterToParent && pTag->hParent)
-		{
-			hParentToCenter = pTag->hParent;
-		}
-		CPiWindowPack::CenterWindow(hParent, hParentToCenter);
-
-		::SetDlgItemText(hParent, IDOK, pTag->szBtnOkName);
-		SetPropW(hParent, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
-		g_lOriWndProc = ::SetWindowLongW(hParent, GWL_WNDPROC, (LONG)_WndProc);
-
-		
-	}
-
+	OnInit();
 	return;
 
 
@@ -242,4 +209,37 @@ bool CPiFileDialog::EndSelect()
 void CPiFileDialog::SetParam(void* pTag)
 {
 	m_pTag = pTag;
+}
+
+bool CPiFileDialog::OnInit()
+{
+	m_bInit = true;
+	//AddPushButton(5, _T("bbbb"));
+
+	HRESULT hr = S_FALSE;
+	IOleWindow* pIOle = nullptr;
+	hr = m_pIFileDialog->QueryInterface(IID_IOleWindow, (void**)&pIOle);
+	HWND hParent = NULL;
+	hr = pIOle->GetWindow(&hParent);
+
+	HWND hIDOK = ::GetDlgItem(hParent, IDOK);
+	HWND hIDCancel = ::GetDlgItem(hParent, IDCANCEL);
+	/*::ShowWindow(hIDOK, SW_HIDE);
+	::ShowWindow(hIDCancel, SW_HIDE);*/
+
+
+	//TODO:替换窗口过程
+	tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)m_pTag;
+	//居中显示
+	HWND hParentToCenter = ::GetDesktopWindow();
+	if (pTag->bCenterToParent && pTag->hParent)
+	{
+		hParentToCenter = pTag->hParent;
+	}
+	CPiWindowPack::CenterWindow(hParent, hParentToCenter);
+	CPiWindowPack::TopMostWindow(hParent);
+	::SetDlgItemText(hParent, IDOK, pTag->szBtnOkName);
+	SetPropW(hParent, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
+	g_lOriWndProc = ::SetWindowLongW(hParent, GWL_WNDPROC, (LONG)_WndProc);	
+	return true;
 }

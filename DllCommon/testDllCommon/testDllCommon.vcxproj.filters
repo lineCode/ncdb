@@ -60,6 +60,9 @@
     <ClInclude Include="..\..\sdk\TextStringCut.h">
       <Filter>sdk</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\PiFileDialog.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="testDllCommon.cpp">
@@ -90,6 +93,9 @@
       <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\sdk\TextStringCut.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>

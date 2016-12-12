@@ -111,6 +111,7 @@
     <ClInclude Include="..\..\sdk\PiTypeDef.h" />
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\TextStringCut.h" />
+    <ClInclude Include="..\..\sdk\UI\PiFileDialog.h" />
     <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="..\..\sdk\PiString.cpp" />
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
+    <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

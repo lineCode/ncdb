@@ -164,51 +164,8 @@ HCURSOR CtestDllCommonDlg::OnQueryDragIcon()
 }
 
 
-#include <shobjidl.h> 
 void CtestDllCommonDlg::OnBnClickedButton1()
 {
-	{
-		//test file dialog with COM
-		HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
-			COINIT_DISABLE_OLE1DDE);
-		if (SUCCEEDED(hr))
-		{
-			IFileOpenDialog *pFileOpen;
-
-			// Create the FileOpenDialog object.
-			hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
-				IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
-
-			if (SUCCEEDED(hr))
-			{
-				// Show the Open dialog box.
-				hr = pFileOpen->Show(NULL);
-
-				// Get the file name from the dialog box.
-				if (SUCCEEDED(hr))
-				{
-					IShellItem *pItem;
-					hr = pFileOpen->GetResult(&pItem);
-					if (SUCCEEDED(hr))
-					{
-						PWSTR pszFilePath;
-						hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-
-						// Display the file name to the user.
-						if (SUCCEEDED(hr))
-						{
-							::MessageBox(NULL, pszFilePath, L"File Path", MB_OK);
-							CoTaskMemFree(pszFilePath);
-						}
-						pItem->Release();
-					}
-				}
-				pFileOpen->Release();
-			}
-			CoUninitialize();
-		}
-		return;
-	}
 	// TODO:  在此添加控件通知处理程序代码
 	/*TestPop();
 	return;*/
@@ -230,7 +187,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 		
 		if (!pFunSelect)
 		{
-			HMODULE hD = LoadLibraryA("DllCommon.dll");
+			HMODULE hD = LoadLibraryA("NCFileDialog.dll");
 			pFunSelect = (FuncSelectFileOrDir)GetProcAddress(hD, "SelectFileOrDir");
 			pFunQuery = (FuncQueryFile)GetProcAddress(hD, "QuerySelectFile");
 			pFunPopSave = (FuncPopSaveDialog)GetProcAddress(hD, "PopSaveDialog");
@@ -240,7 +197,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
 			tagS.szBtnOkName = _T("自定义");
-			tagS.szTitle = _T("随便选择一个目录");
+			tagS.szTitle = _T("选择保存路径");
 			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
 			tagS.szFilter = _T("All\0*.*\0图片\0*.jpg;*.png\0\0\0");
 			tagS.bCenterToParent = true;
@@ -253,24 +210,27 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 		{
 			CPIUITool::tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
-			tagS.szTitle = _T("选择一个保存路径");
+			tagS.szTitle = _T("选择文件或者目录");
 			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl\\MFCTest1");
-			tagS.szFilter = _T("All\0*.*\0pic\0*.jpg;*.png\0\0\0");
+			//tagS.szFilter = _T("All\0*.*\0pic\0*.jpg;*.png\0\0\0");
+			/************************************************************************
+					filter: display： 系统自动把具体格式字符串增加放入显示字符串后面
+			************************************************************************/
+			tagS.szFilter = _T("All Files (*.*)|*.*|bin files|*.exe;*.obj;*.pdb||");
 			tagS.szBeginFileName = _T("willBeSave.txt");
 			tagS.bCenterToParent = true;
-			tagS.bSelectMulti = true;
-			int nSel = CPIUITool::SelectFileOrDir(&tagS);
+			tagS.bSelectMulti = false;
+			tagS.szBtnOkName = _T("发送吧");
+			int nSel = (*pFunSelect)(&tagS);
+			//int nSel = CPIUITool::SelectFileOrDir(&tagS);
 			if (!nSel)
 			{
 				return;
 			}
-			/*{
-				IFolderView2* pFV = nullptr;
-				HRESULT hR = IServiceProvider::QueryInterface(SID_SFolderView, (void**)&pFV);
-			}*/
 			FOR_COUNT((UINT)nSel, i)
 			{
-				tcpchar szPath = CPIUITool::QuerySelectFile(i);
+				//tcpchar szPath = CPIUITool::QuerySelectFile(i);
+				tcpchar szPath = (*pFunQuery)(i);
 				OutInfo(szPath, _T(""));
 			}
 			return;

@@ -325,6 +325,7 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 		LPOPENFILENAME pON = (LPOPENFILENAME)lParam;
 		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pON->lCustData;
 		::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
+		CPiWindowPack::TopMostWindow(hDlgCommon);
 		/*SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(pON));
 		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);*/
 
@@ -340,64 +341,6 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 	default:
 		break;
 	}
-	#if 0
-if (uiMsg == WM_NOTIFY)
-	{
-		HWND hDlgCommon = ::GetParent(hdlg);
-		LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
-		if (lpOfNotify->hdr.code == CDN_INITDONE
-			&& !g_lOriWndProc)
-		{
-			OutputDebugString(_T("dlg CDN_INITDONE\n"));
-			nRet = 0;
-		}
-		if (lpOfNotify->hdr.code == CDN_SELCHANGE)
-		{
-			//return 0;
-			LPOFNOTIFY lpOfNotify = (LPOFNOTIFY)lParam;
-			tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)lpOfNotify->lpOFN->lCustData;
-			if (pTag->bSelectMulti)
-			{
-				return 0;	//允许选择多个， 采用系统默认的， 会过滤掉目录
-			}
-
-			nRet = 0;
-			wchar_t wcDirPath[MAX_PATH] = { 0 };
-			CommDlg_OpenSave_GetFilePathW(GetParent(hdlg), wcDirPath, sizeof(wcDirPath));
-			//OutputDebugString(wcDirPath);
-			//return 0;
-
-			HWND hComboAddr = GetDlgItem(GetParent(hdlg), ID_COMBO_ADDR);
-			if (hComboAddr != NULL)
-			{
-				if (wcslen(wcDirPath))
-				{
-					//去掉文件夹快捷方式的后缀名。
-					int pathSize = wcslen(wcDirPath);
-					if (pathSize >= 4)
-					{
-						/*wchar_t* wcExtension = PathFindExtensionW(wcDirPath);
-						if (wcslen(wcExtension))
-						{
-						wcExtension = CharLowerW(wcExtension);
-						if (!wcscmp(wcExtension, L".lnk"))
-						{
-						wcDirPath[pathSize - 4] = L'\0';
-						}
-						}*/
-					}
-					//
-					SetWindowTextW(hComboAddr, wcDirPath);
-				}
-				else
-				{
-					SetWindowTextW(hComboAddr, L"");
-				}
-			}
-		}
-}
-#endif
-		
 	
 	return nRet;	//return to default;
 }

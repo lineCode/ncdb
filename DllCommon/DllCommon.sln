@@ -8,7 +8,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testDllCommon", "testDllCommon\testDllCommon.vcxproj", "{E551770A-7603-4DE0-AACC-96BBC87FD36A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA} = {AD836C4B-CBA6-4BB3-88DA-8A7600AC7FBA}
+		{9560D8DE-0107-4717-BED0-0A5E0171253F} = {9560D8DE-0107-4717-BED0-0A5E0171253F}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllCommonMFC", "DllCommonMFC\DllCommonMFC.vcxproj", "{9560D8DE-0107-4717-BED0-0A5E0171253F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +27,10 @@ Global
 		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Debug|Win32.Build.0 = Debug|Win32
 		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Release|Win32.ActiveCfg = Release|Win32
 		{E551770A-7603-4DE0-AACC-96BBC87FD36A}.Release|Win32.Build.0 = Release|Win32
+		{9560D8DE-0107-4717-BED0-0A5E0171253F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9560D8DE-0107-4717-BED0-0A5E0171253F}.Debug|Win32.Build.0 = Debug|Win32
+		{9560D8DE-0107-4717-BED0-0A5E0171253F}.Release|Win32.ActiveCfg = Release|Win32
+		{9560D8DE-0107-4717-BED0-0A5E0171253F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

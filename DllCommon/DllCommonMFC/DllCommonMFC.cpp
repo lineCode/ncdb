@@ -144,7 +144,7 @@ NCCOMMON_API int NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 		pTag->szFilter = _T("All Files (*.*)|*.*||");
 	}
 
-	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter);
+	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter, pTag->bSelectMulti);
 	dlgFile.SetParam(pTag);
 	if (!dlgFile.Popup())
 	{
