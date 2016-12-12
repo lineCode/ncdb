@@ -15,7 +15,7 @@ public:
 	struct tagSELECT_FILE_DIR
 	{
 		HWND			hParent;			//所属窗口， 可以为空
-		const wchar_t*	szBeginDir;			//初始显示目录, 可为空
+		const wchar_t*	szInitialDir;			//初始显示目录, 可为空
 		const wchar_t*	szBeginFileName;	//初始显示文件名
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szBtnOkName;		//ok按钮要替换成的名字，  如果为空则显示为"确定"
@@ -29,7 +29,7 @@ public:
 
 		tagSELECT_FILE_DIR()
 			:hParent(nullptr)
-			, szBeginDir(nullptr)
+			, szInitialDir(nullptr)
 			, szBeginFileName(nullptr)
 			, szTitle(nullptr)
 			, szBtnOkName(nullptr)

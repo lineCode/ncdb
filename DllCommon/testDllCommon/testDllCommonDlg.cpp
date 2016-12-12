@@ -211,7 +211,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			CPIUITool::tagSELECT_FILE_DIR tagS;
 			tagS.hParent = m_hWnd;
 			tagS.szTitle = _T("选择文件或者目录");
-			tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl\\MFCTest1");
+			tagS.szInitialDir = _T("e:\\work\\svn\\gitlwl\\MFCTest1");
 			//tagS.szFilter = _T("All\0*.*\0pic\0*.jpg;*.png\0\0\0");
 			/************************************************************************
 					filter: display： 系统自动把具体格式字符串增加放入显示字符串后面
@@ -220,7 +220,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			//tagS.szFilter = _T("图片|*.jpg,*.png;文档|*.doc,*.ppt");
 			tagS.szBeginFileName = _T("willBeSave.txt");
 			tagS.bCenterToParent = true;
-			tagS.bSelectMulti = false;
+			tagS.bSelectMulti = true;
 			tagS.szBtnOkName = _T("发送吧");
 			int nSel = (*pFunSelect)(&tagS);
 			//int nSel = CPIUITool::SelectFileOrDir(&tagS);
@@ -240,7 +240,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 		tagS.hParent = m_hWnd;
 		tagS.szBtnOkName = _T("发送");
 		tagS.szTitle = _T("随便选择一个目录");
-		tagS.szBeginDir = _T("e:\\work\\svn\\gitlwl");
+		tagS.szInitialDir = _T("e:\\work\\svn\\gitlwl");
 		tagS.szFilter = _T("All\0*.*\0图片\0*.jpg;*.png\0\0\0");
 		tagS.bCenterToParent = true;
 		tagS.bSelectMulti = false;

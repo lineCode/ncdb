@@ -7,12 +7,13 @@
 typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
 static LONG	g_lOriWndProc;
 
-CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/, bool bSelectMulti /*= true*/)
+CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/, tcpchar szInitDir /*= nullptr*/, bool bSelectMulti /*= true*/)
 	:CFileDialog(true, NULL, NULL, (bSelectMulti ? OFN_ALLOWMULTISELECT : 0 )| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
 	, m_bInit(false)
 {
 	//m_IFileDialog
 	m_ofn.lpstrTitle = szTitle;
+	m_ofn.lpstrInitialDir = szInitDir;
 	m_pIFileDialog = (IFileDialog*)CFileDialog::m_pIFileDialog;
 	//AddPushButton(1, _T("Ñ¡Ôñ"));
 	//AddPushButton(2, _T("bbb"));
@@ -163,13 +164,24 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 	IFileDialog* pIFD = nullptr;
 	IFolderView2 *pFolderView;
 	HRESULT hr = IUnknown_QueryService((IUnknown*)m_pIFileDialog, SID_SFolderView, IID_PPV_ARGS(&pFolderView));
+	if (!SUCCEEDED(hr))
+	{
+		return;
+	}
 	//pIFD->QueryInterface(SID_SFolderView, IID_PPV_ARGS(&pShellView));
-	HRESULT hRet = S_FALSE;
-	IShellItemArray* pIArr = nullptr;
-	hRet = pFolderView->GetSelection(true, &pIArr);
 
+	IShellItemArray* pIArr = nullptr;
+	hr = pFolderView->GetSelection(true, &pIArr);
+	if (!SUCCEEDED(hr))
+	{
+		return;
+	}
 	DWORD dwCount = 0;
-	hRet = pIArr->GetCount(&dwCount);
+	hr = pIArr->GetCount(&dwCount);
+	if (!SUCCEEDED(hr))
+	{
+		return;
+	}
 	if (!dwCount)
 	{
 		return;
@@ -177,9 +189,17 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 	for (UINT i = 0; i < dwCount; ++i)
 	{
 		IShellItem* pItem = nullptr;
-		hRet = pIArr->GetItemAt(i, &pItem);
+		hr = pIArr->GetItemAt(i, &pItem);
+		if (!SUCCEEDED(hr))
+		{
+			break;
+		}
 		LPWSTR szName = nullptr;
-		hRet = pItem->GetDisplayName(SIGDN_FILESYSPATH, &szName);
+		hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &szName);
+		if (!SUCCEEDED(hr))
+		{
+			break;
+		}
 		m_strSelect.push_back(szName);
 		CoTaskMemFree(szName);
 	}
@@ -218,9 +238,15 @@ bool CPiFileDialog::OnInit()
 
 	HRESULT hr = S_FALSE;
 	IOleWindow* pIOle = nullptr;
-	hr = m_pIFileDialog->QueryInterface(IID_IOleWindow, (void**)&pIOle);
+	if (!SUCCEEDED(hr = m_pIFileDialog->QueryInterface(IID_IOleWindow, (void**)&pIOle)))
+	{
+		return false;
+	}
 	HWND hParent = NULL;
-	hr = pIOle->GetWindow(&hParent);
+	if (!SUCCEEDED(hr = pIOle->GetWindow(&hParent)))
+	{
+		return false;
+	}
 
 	HWND hIDOK = ::GetDlgItem(hParent, IDOK);
 	HWND hIDCancel = ::GetDlgItem(hParent, IDCANCEL);

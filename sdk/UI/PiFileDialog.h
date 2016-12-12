@@ -6,7 +6,7 @@ class CPiFileDialog :
 	public CFileDialog
 {
 public:
-	CPiFileDialog(tcpchar szTitle, tcpchar szFilter = nullptr, bool bSelectMulti = true);
+	CPiFileDialog(tcpchar szTitle, tcpchar szFilter = nullptr, tcpchar szInitDir = nullptr, bool bSelectMulti = true);
 	~CPiFileDialog();
 public:
 	bool Popup();

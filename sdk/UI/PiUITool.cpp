@@ -378,7 +378,7 @@ int CPIUITool::SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 	openFile.hInstance = (HMODULE)GetCurrentProcess();
 	openFile.lpfnHook = MyFolderProc;
 	openFile.lpstrTitle = strTitle.c_str();
-	openFile.lpstrInitialDir = pTag->szBeginDir;
+	openFile.lpstrInitialDir = pTag->szInitialDir;
 	openFile.hwndOwner = pTag->hParent;
 	openFile.lCustData = (LPARAM)pTag;
 
@@ -464,7 +464,7 @@ tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 
 	openFile.lpstrFilter = pTag->szFilter;
 	openFile.lpstrTitle = strTitle.c_str();
-	openFile.lpstrInitialDir = pTag->szBeginDir;
+	openFile.lpstrInitialDir = pTag->szInitialDir;
 	openFile.hwndOwner = pTag->hParent;
 	openFile.lCustData = (LPARAM)pTag;
 

@@ -146,7 +146,7 @@ NCCOMMON_API int NCCOMMON_CALL SelectFileOrDir(tagSELECT_FILE_DIR* pTag)
 	tstring strFilter = CDelphiTrans::FilterToMFC(pTag->szFilter);
 	pTag->szFilter = strFilter.c_str();
 
-	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter, pTag->bSelectMulti);
+	CPiFileDialog dlgFile(pTag->szTitle, pTag->szFilter, pTag->szInitialDir, pTag->bSelectMulti);
 	dlgFile.SetParam(pTag);
 	if (!dlgFile.Popup())
 	{
