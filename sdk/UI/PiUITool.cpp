@@ -445,9 +445,9 @@ tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 	openFile.lStructSize = sizeof(openFile);
 
 	tstring strFilePath(MAX_PATH, 0);
-	if (pTag->szBeginFileName)
+	if (pTag->szInitialFileName)
 	{
-		strFilePath = pTag->szBeginFileName;
+		strFilePath = pTag->szInitialFileName;
 	}
 	wchar_t    szFileName[MAX_PATH] = { 0 };
 	OPENFILENAME openFileName = { 0 };

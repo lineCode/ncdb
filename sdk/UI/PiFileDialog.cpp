@@ -11,13 +11,9 @@ CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/, tc
 	:CFileDialog(true, NULL, NULL, (bSelectMulti ? OFN_ALLOWMULTISELECT : 0 )| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
 	, m_bInit(false)
 {
-	//m_IFileDialog
 	m_ofn.lpstrTitle = szTitle;
 	m_ofn.lpstrInitialDir = szInitDir;
 	m_pIFileDialog = (IFileDialog*)CFileDialog::m_pIFileDialog;
-	//AddPushButton(1, _T("Ñ¡Ôñ"));
-	//AddPushButton(2, _T("bbb"));
-	//AddControlItem(1, 2, _T("ci1"));
 }
 
 CPiFileDialog::~CPiFileDialog()
@@ -40,45 +36,6 @@ BOOL CPiFileDialog::OnFileNameOK()
 {
 	EndSelect();
 	return TRUE;
-#if 0
-
-	IFileDialog* pIFD = nullptr;
-	IFolderView2 *pFolderView;
-	OutInfo(_T("m_pIFileDialog"), (int)m_pIFileDialog);
-	HRESULT hr = IUnknown_QueryService((IUnknown*)m_pIFileDialog, SID_SFolderView, IID_PPV_ARGS(&pFolderView));
-	if (hr == S_FALSE)
-	{
-		OutInfo(_T("IUnknown_QueryService error"));
-		return FALSE;
-	}
-
-	
-
-	//pIFD->QueryInterface(SID_SFolderView, IID_PPV_ARGS(&pShellView));
-	HRESULT hRet = S_FALSE;
-	IShellItemArray* pIArr = nullptr;
-	hRet = pFolderView->GetSelection(true, &pIArr);
-	
-	DWORD dwCount = 0;
-	hRet = pIArr->GetCount(&dwCount);
-	if (!dwCount)
-	{
-		return FALSE;
-	}
-	for (UINT i = 0; i < dwCount; ++i)
-	{
-		IShellItem* pItem = nullptr;
-		hRet = pIArr->GetItemAt(i, &pItem);
-		LPWSTR szName = nullptr;
-		hRet = pItem->GetDisplayName(SIGDN_FILESYSPATH, &szName);
-		OutInfo(szName);
-		CoTaskMemFree(szName);
-	}
-	
-	int n = 0;
-	n++;
-#endif
-	return FALSE;
 }
 
 

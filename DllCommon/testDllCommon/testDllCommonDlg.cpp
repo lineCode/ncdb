@@ -218,7 +218,7 @@ void CtestDllCommonDlg::OnBnClickedButton1()
 			************************************************************************/
 			//tagS.szFilter = _T("All Files (*.*)|*.*|bin files|*.exe;*.obj;*.pdb||");
 			//tagS.szFilter = _T("Í¼Æ¬|*.jpg,*.png;ÎÄµµ|*.doc,*.ppt");
-			tagS.szBeginFileName = _T("willBeSave.txt");
+			tagS.szInitialFileName = _T("willBeSave.txt");
 			tagS.bCenterToParent = true;
 			tagS.bSelectMulti = true;
 			tagS.szBtnOkName = _T("·¢ËÍ°É");

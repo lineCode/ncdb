@@ -324,8 +324,6 @@ int CPiWindowPack::CenterPosX( ARR_RECT& lstRect, int nSpace, int nAreaWidth )
 			nNewX = rtPrevious.m_rt.left + rtPrevious.GetWidth() + nSpace;
 			lstRect[i].SetPos(nNewX, nYOrigion);
 		}
-		//OutInfo(_T("new x:"), nNewX);
-
 	}
 
 	return nAreaWidth;

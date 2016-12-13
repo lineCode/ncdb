@@ -16,7 +16,7 @@ public:
 	{
 		HWND			hParent;			//所属窗口， 可以为空
 		const wchar_t*	szInitialDir;			//初始显示目录, 可为空
-		const wchar_t*	szBeginFileName;	//初始显示文件名
+		const wchar_t*	szInitialFileName;	//初始显示文件名
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szBtnOkName;		//ok按钮要替换成的名字，  如果为空则显示为"确定"
 		const wchar_t*	szFilter;			//过滤字符串
@@ -30,7 +30,7 @@ public:
 		tagSELECT_FILE_DIR()
 			:hParent(nullptr)
 			, szInitialDir(nullptr)
-			, szBeginFileName(nullptr)
+			, szInitialFileName(nullptr)
 			, szTitle(nullptr)
 			, szBtnOkName(nullptr)
             , szFilter(nullptr)
@@ -43,7 +43,7 @@ public:
 	struct tagSAVE_FILE
 	{
 		HWND			hParent;			//所属窗口， 可以为空
-		const wchar_t*	szBeginDir;			//初始显示目录, 可为空
+		const wchar_t*	szInitialDir;			//初始显示目录, 可为空
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szFilter;			//过滤字符串
 		const wchar_t*	szBeginFileName;	//默认文件名
@@ -51,7 +51,7 @@ public:
 
 		tagSAVE_FILE()
 			:hParent(nullptr)
-			, szBeginDir(nullptr)
+			, szInitialDir(nullptr)
 			, szTitle(nullptr)
 			, szFilter(nullptr)
 			, szBeginFileName(nullptr)

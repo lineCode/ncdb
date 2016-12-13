@@ -23,8 +23,8 @@ tstring CDelphiTrans::FilterToMFC(tcpchar szFilter)
 	{
 		//delphi格式转成MFC
 		str = szFilter;
-		str.Replace(_T(";"), _T("|"));
-		str.Replace(_T(","), _T(";"));
+		//str.Replace(_T(";"), _T("|"));
+		//str.Replace(_T(","), _T(";"));
 		str.append(_T("||"));
 	}
 	return str;

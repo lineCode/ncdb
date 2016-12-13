@@ -239,7 +239,7 @@ bool CPathLight::FileEnumeration( tcpchar lpPath, bool bRecursion, bool bEnumFil
 			continue;
 		}
 		
-		OutInfo((strDir + _T("\\") + fd.cFileName).c_str());
+		//OutInfo((strDir + _T("\\") + fd.cFileName).c_str());
 		strNewPath = strDir;
 		strNewPath += '\\';
 		strNewPath += fd.cFileName;
