@@ -25,6 +25,7 @@ HINSTANCE			CPiNCWke::m_hInstance;
 
 CPiNCWke::CPiNCWke()
 	:m_bTryReload(true)
+	, m_bDestroying(false)
 {
 }
 
@@ -43,6 +44,10 @@ void CPiNCWke::NCDraw()
 
 void CPiNCWke::NCDrawIfNeed()
 {
+	if (!m_pWData || !m_pWData->pRender)
+	{
+		return;
+	}
 	CRender* pRender = m_pWData->pRender;
 	if (pRender)
 	{
@@ -66,7 +71,6 @@ LRESULT CALLBACK CPiNCWke::WebViewDllWndProc(HWND hWnd, UINT message, WPARAM wPa
 	{
 		//OutInfo(_T("WebView WM_TIMER"));
 		int nTimerID = wParam;
-
 		CPiNCWke* pWke = WkeGetObject(pWeb);
 		if (!pWke)
 		{
@@ -84,10 +88,21 @@ LRESULT CALLBACK CPiNCWke::WebViewDllWndProc(HWND hWnd, UINT message, WPARAM wPa
 	break;
 	case WM_DESTROY:
 	{
+		LogSystem::WriteLogToFileMsgFormat(_T("web %d 's wnd destroying"), pWeb);
 		::KillTimer(hWnd, NUM_TIMER_ID_DRAW_WKE);
+		break;
 	}
-	break;
-
+	case WM_NCDESTROY:
+	{
+		LogSystem::WriteLogToFileMsgFormat(_T("web %d 's wnd ncdestroying"), pWeb);
+		CPiNCWke* pWke = WkeGetObject(pWeb);
+		if (!pWke)
+		{
+			break;
+		}
+		g_wkeMng.Erase(pWke);
+	}
+		break;
 	case WM_PAINT:
 		//LogSystem::WriteLogToFileMsg(_T("WebViewDllWndProc WM_PAINT"));
 	{
@@ -585,7 +600,7 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 	memset(&settings, 0, sizeof(settings));
 	wkeConfigure(&settings);
 
-	m_web = wkeCreateWebView();
+	m_webDestroy = m_web = wkeCreateWebView();
 	HNCwkeWebView hWebView = m_web;
 	if (!hWebView)
 	{
@@ -726,25 +741,30 @@ void CPiNCWke::ChangeSize(int x, int y, int width, int height)
 bool CPiNCWke::Destroy()
 {
 	//释放流程:取消定时器， 删除绘制， 销毁wke， 销毁父窗口, 
-	tagWKE_DATA* pWD = m_pWData;
-	CRAIILock raii2(pWD->pLock);		//防止执行脚本跟释放接口多线程调用
+	m_bDestroying = true;
+	::KillTimer(m_pWData->hParent, NUM_TIMER_ID_DRAW_WKE);
 
-	if (!pWD)
+	if (!m_pWData)
 	{
 		return false;
 	}
 
-	if (pWD->pRender)
+	CRAIILock raii2(m_pWData->pLock);		//防止执行脚本跟释放接口多线程调用
+
+	
+
+	if (m_pWData->pRender)
 	{
-		pWD->pRender->destroy();
-		pWD->pRender = nullptr;
+		m_pWData->pRender->destroy();
+		m_pWData->pRender = nullptr;
 	}
 	wkeDestroyWebView(m_web);
 	m_web = nullptr;
-	::DestroyWindow(pWD->hParent);
 	wkeFinalize();
 
-	g_wkeMng.Erase(this);
+	::DestroyWindow(m_pWData->hParent);
+
+
 
 	return true;
 }
@@ -1056,19 +1076,38 @@ bool CPiNCWke::PostReload()
 
 bool CPiNCWke::DealTimer(int nTimerID)
 {
+	
 	switch (nTimerID)
 	{
 	case NUM_TIMER_ID_DRAW_WKE:
 		{
+			if (m_bDestroying)
+			{
+				break;
+			}
 			NCDrawIfNeed();
 		}
 		break;
 	case NUM_TIMERID_RELOAD:
 		::KillTimer(m_pWData->hParent, NUM_TIMERID_RELOAD);
+		if (m_bDestroying)
+		{
+			break;
+		}
 		ReLoad();
 		break;
 	default:
 		break;
 	}
 	return true;
+}
+
+void CPiNCWke::ClearData()
+{
+	m_web = nullptr;
+}
+
+HNCwkeWebView CPiNCWke::GetWeb()
+{
+	return m_web ? m_web : m_webDestroy;
 }

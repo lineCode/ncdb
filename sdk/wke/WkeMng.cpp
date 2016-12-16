@@ -131,6 +131,8 @@ void CWkeMng::Erase(CPiNCWke* pWke)
 	{
 		if (iter->second == pWke)
 		{
+			pWke->ClearData();
+			delete pWke;
 			m_mapWke.erase(iter);
 			break;
 		}

@@ -51,10 +51,11 @@ public:
 	bool NotifyLoadEnd();
 	bool NotifyConsoleMsg(const tstring& strMsg);
 	bool ReLoad();
-	HNCwkeWebView GetWeb(){ return m_web; }
+	HNCwkeWebView GetWeb();
 	HWND GetParent();
 	static void SetInst(HINSTANCE hModule);
 	void SetLoadError(FunOnLoadError pFun);
+	void ClearData();
 private:
 	
 	HWND CreateHostWnd(HWND hParent);
@@ -88,6 +89,7 @@ private:
 private:
 	multimap<tstring, tstring>		m_mapErrorConsole;
 	HNCwkeWebView					m_web;
+	HNCwkeWebView					m_webDestroy;	
 	tagWKE_DATA*					m_pWData;
 	int								m_nReloadTimes;
 	static		HINSTANCE			m_hInstance;
@@ -95,6 +97,7 @@ private:
 	wkeLoadingResult				m_result; 
 	const wkeString*				m_failedReason;
 	bool							m_bTryReload;		//Õ¯“≥≥ˆœ÷¥ÌŒÛ «∑Òreload
+	bool							m_bDestroying;		
 public:
 	static		CWkeMng				g_wkeMng;
 	
