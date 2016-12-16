@@ -70,7 +70,7 @@ struct tagWKE_DATA
 	HWND hParent;
 	HWebView pWeb;
 	tagCallBack tagCB;
-
+	wstring		url;
 	CRender* pRender;
 	CLock*	pLock;
 	FunOnLoadError	pOnLoadError;	//dll版本兼容， 后期转入回调结构体

@@ -133,3 +133,12 @@ void CPiDebugUnit::OutFormat(const TCHAR* format,...)
 	} 
 	va_end(arglist);
 }
+
+tstring CPiDebugUnit::GetBuildDateTime()
+{
+	tstring strDT;
+	strDT += _T(__DATE__);
+	strDT += _T(" ");
+	strDT += _T(__TIME__);
+	return strDT;
+}

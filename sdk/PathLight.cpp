@@ -523,3 +523,28 @@ tstring CPathLight::SetSuffixName( tcpchar szSuffix )
 	m_strPath = strNew;
 	return m_strPath;
 }
+
+void CPathLight::AddSuffix(tcpchar szSuffix)
+{
+	//增加后缀， 处理有点的情况
+	//最后一个不是点， 增加点， 增加后缀
+	if (!szSuffix || !*szSuffix)
+	{
+		return;
+	}
+	if (m_strPath.length()
+		&& m_strPath.at(m_strPath.length() - 1) != '.')
+	{
+		m_strPath.append(_T("."));
+	}
+	if (m_strPath.find(_T(".")) == m_strPath.length() - 1)
+	{
+		m_strPath.append(szSuffix);
+	}
+}
+
+bool CPathLight::IsDirExist()
+{
+	return PathIsDirectory(m_strPath.c_str()) == TRUE;
+	
+}

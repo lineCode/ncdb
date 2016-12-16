@@ -215,7 +215,10 @@ CPiNCWke* CWkeMng::CreateWke(HWND hParent, tagCallBack* pTagCallBack)
 	{
 		return nullptr;
 	}
-	pWke->Create(hParent, pTagCallBack);
+	if (!pWke->Create(hParent, pTagCallBack))
+	{
+		return nullptr;
+	}
 	
 	m_mapWke[pWke->GetParent()] = pWke;
 	return pWke;

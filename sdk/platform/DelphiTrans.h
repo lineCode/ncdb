@@ -6,6 +6,7 @@ public:
 	CDelphiTrans();
 	~CDelphiTrans();
 public:
-	static tstring FilterToMFC(tcpchar szFilter);
+	static tcpchar FilterToMFC(tcpchar szFilter);
+	static tcpchar FilterToWin32(tcpchar szFilter);
 };
 

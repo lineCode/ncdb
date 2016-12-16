@@ -20,12 +20,10 @@ public:
 		const wchar_t*	szTitle;			//窗口标题， 可为空
 		const wchar_t*	szBtnOkName;		//ok按钮要替换成的名字，  如果为空则显示为"确定"
 		const wchar_t*	szFilter;			//过滤字符串
+		const wchar_t*	szDefExt;			//保存对话框使用，默认后缀名, 如rmvb
 		bool			bCenterToParent;	//true相对父窗口居中， 否则屏幕居中
 		bool			bSelectMulti;		//true为允许选择多个文件
-		
-		//以下成员属性内部使用
-		//int				nSelectCount;		
-		//int				pFileLst;			
+		int				nFilterIndex;		//保存对话框使用， 返回用户选择了第几行的filter
 
 		tagSELECT_FILE_DIR()
 			:hParent(nullptr)
@@ -34,8 +32,10 @@ public:
 			, szTitle(nullptr)
 			, szBtnOkName(nullptr)
             , szFilter(nullptr)
+			, szDefExt(nullptr)
 			, bCenterToParent(true)
 			, bSelectMulti(false)
+			, nFilterIndex(0)
 		{
 
 		}

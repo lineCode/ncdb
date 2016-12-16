@@ -6,6 +6,7 @@
 #include "..\TextStringCut.h"
 #include <commdlg.h>
 #include "PiFileDialog.h"
+#include "PathLight.h"
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 
@@ -325,7 +326,9 @@ UINT_PTR static __stdcall  ProcHookSaveDlg(HWND hdlg, UINT uiMsg, WPARAM wParam,
 		LPOPENFILENAME pON = (LPOPENFILENAME)lParam;
 		tagSELECT_FILE_DIR* pTag = (tagSELECT_FILE_DIR*)pON->lCustData;
 		::SetDlgItemText(hDlgCommon, IDOK, pTag->szBtnOkName);
-		CPiWindowPack::TopMostWindow(hDlgCommon);
+		//CPiWindowPack::TopMostWindow(hDlgCommon);
+		
+
 		/*SetPropW(hDlgCommon, STRING_PROP_NAME, (HANDLE)(pON));
 		g_lOriWndProc = ::SetWindowLongW(hDlgCommon, GWL_WNDPROC, (LONG)_WndProc);*/
 
@@ -439,7 +442,10 @@ tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 	{
 		pTag->szFilter = _T("All(*.*)\0 * .*\0\0");
 	}
-
+	if (pTag->szDefExt && *pTag->szDefExt == '.')
+	{
+		++pTag->szDefExt;
+	}
 	OPENFILENAMEW openFile;
 	memset(&openFile, 0, sizeof(openFile));
 	openFile.lStructSize = sizeof(openFile);
@@ -461,19 +467,31 @@ tstring CPIUITool::PopSaveDialog(tagSELECT_FILE_DIR* pTag)
 	//openFile.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST /*| OFN_ENABLEHOOK*/ | OFN_HIDEREADONLY;
 	openFile.Flags = OFN_EXPLORER | OFN_ENABLEHOOK;
 	openFile.lpfnHook = ProcHookSaveDlg;
-
+	openFile.lpstrDefExt = pTag->szDefExt;
 	openFile.lpstrFilter = pTag->szFilter;
 	openFile.lpstrTitle = strTitle.c_str();
 	openFile.lpstrInitialDir = pTag->szInitialDir;
 	openFile.hwndOwner = pTag->hParent;
 	openFile.lCustData = (LPARAM)pTag;
-
+	
 	if (!GetSaveFileName(&openFile))
 	{
 		//TODO:处理路径太长的问题
 		return _T("");
 	}
-	return openFile.lpstrFile;
+	CPiString strSel(openFile.lpstrFile);
+	CPathLight strPath(openFile.lpstrFile);
+	//处理:1. 只有文件名, 2文件名+"."， 3. 文件名.后缀
+	//1,2种情况需要添加后缀
+	/*if (strPath.GetExt().length() < 2)
+	{
+		strPath.AddSuffix(pTag->szDefExt);
+	}
+	strSel = strPath.GetPath();*/
+
+	
+	pTag->nFilterIndex = openFile.nFilterIndex;
+	return strSel;
 }
 
 int CPIUITool::SelectFileOrDirVista(tagSELECT_FILE_DIR* pTag)

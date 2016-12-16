@@ -2,6 +2,7 @@
 #include "PiFileDialog.h"
 #include "PiUITool.h"
 #include "PiWindowPack.h"
+#include "PathLight.h"
 
 #define STRING_WND_PROP_NAME _T("propPiFileDialog")
 typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
@@ -54,9 +55,11 @@ LRESULT __stdcall  CPiFileDialog::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 
 			//TODO:如果选择多个， 标志给外部
 			CPiFileDialog* pFile = (CPiFileDialog*)GetProp(hwnd, STRING_WND_PROP_NAME);
-			pFile->EndSelect();
-			::EndDialog(hwnd, IDOK);
-			RemoveProp(hwnd, STRING_WND_PROP_NAME);
+			if (pFile->EndSelect())
+			{
+				RemoveProp(hwnd, STRING_WND_PROP_NAME);
+				::EndDialog(hwnd, IDOK);
+			}
 		}
 		break;
 	default:
@@ -117,6 +120,12 @@ void CPiFileDialog::OnFileNameChange()
 
 void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 {
+	/************************************************************************
+		处理顺序
+			用户目录中的选择
+			用户文本框输入
+				如果为文件路径则为用户选择的路径， 否则返回当前目录
+	************************************************************************/
 	m_strSelect.clear();
 	IFileDialog* pIFD = nullptr;
 	IFolderView2 *pFolderView;
@@ -139,10 +148,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 	{
 		return;
 	}
-	if (!dwCount)
-	{
-		return;
-	}
+
 	for (UINT i = 0; i < dwCount; ++i)
 	{
 		IShellItem* pItem = nullptr;
@@ -160,11 +166,79 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 		m_strSelect.push_back(szName);
 		CoTaskMemFree(szName);
 	}
+	
+	do 
+	{
+		//用户没选择的情况， 有1个item， 为当前路径。 如果用户没选择， 处理文本框的值是否为用户选择的文件
+		if (dwCount == 1)
+		{
+			IShellItem* pISI = nullptr;
+			CPathLight path(m_strSelect.at(0));
+			tstring strDirCurrent;
+			tstring strTemp;
+			tpchar szTemp = nullptr;
 
+			if (!SUCCEEDED(m_pIFileDialog->GetFolder(&pISI)))
+			{
+				break;
+			}
+			if (!SUCCEEDED(pISI->GetDisplayName(SIGDN_FILESYSPATH, &szTemp)))
+			{
+				break;
+			}
+			strDirCurrent = szTemp;
+			CoTaskMemFree(szTemp);
+
+			if (path.GetPath() != strDirCurrent)
+			{
+				//用户选择了一个项
+				break;
+			}
+
+			//有选择按选择的项， 没选择给系统默认的
+			//TODO:获取文本框的文本
+			if (!SUCCEEDED(m_pIFileDialog->GetFileName(&szTemp)))
+			{
+				break;
+			}
+			strTemp = szTemp;
+			CoTaskMemFree(szTemp);
+			if (strTemp.empty())
+			{
+				//没选择， 没输入有效文件
+				m_strSelect.clear();
+				return;
+			}
+			path = strTemp;
+			CPathLight pathAppend(strDirCurrent);
+			pathAppend += path.GetPath();
+			if (path.IsDirExist())
+			{
+				//进入指定目录
+			}
+			else if (path.IsFileExist())
+			{
+				//一个文件， 用户选择的文件
+				m_strSelect.clear();
+				m_strSelect.push_back(path);
+			}
+			else if (pathAppend.IsFileExist())
+			{
+				//单纯输入一个存在的文件名
+				m_strSelect.clear();
+				m_strSelect.push_back(pathAppend);
+			}
+			else
+			{
+				m_strSelect.clear();
+				return;
+			}
+		}
+	} while (0);
+	
 	int n = 0;
 	n++;
 
-	m_pIFileDialog->Close(S_OK);
 }
 
 bool CPiFileDialog::Popup()
@@ -180,7 +254,12 @@ ARR_STRING CPiFileDialog::GetSelect()
 bool CPiFileDialog::EndSelect()
 {
 	OnButtonClicked(IDOK);
-	return true;
+	if (m_strSelect.size())
+	{
+		//m_pIFileDialog->Close(S_OK);
+		return true;
+	}
+	return false;
 }
 
 void CPiFileDialog::SetParam(void* pTag)
@@ -220,7 +299,10 @@ bool CPiFileDialog::OnInit()
 		hParentToCenter = pTag->hParent;
 	}
 	CPiWindowPack::CenterWindow(hParent, hParentToCenter);
-	CPiWindowPack::TopMostWindow(hParent);
+	
+	//CPiWindowPack::TopMostWindow(hParent);
+	
+
 	::SetDlgItemText(hParent, IDOK, pTag->szBtnOkName);
 	SetPropW(hParent, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
 	g_lOriWndProc = ::SetWindowLongW(hParent, GWL_WNDPROC, (LONG)_WndProc);	

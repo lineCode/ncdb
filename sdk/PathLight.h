@@ -106,7 +106,8 @@ public:
 	static tstring GetDirFromPath( tcpchar szPath );
 
 	static bool CreateMultipleDirectory(tcpchar strFileFolder);	// 创建多级目录
-	
+	void AddSuffix(tcpchar szSuffix);
+	bool IsDirExist();
 private:
     tstring             m_strPath;
     tstring             m_strPos;   //内部保存临时位置

@@ -42,9 +42,12 @@ public:
 	bool NotifyNavigation(tstring& strUrl);
 	void CheckMsg(const wchar_t * szMsg);
 	bool HasConsoleError();
-	bool NotifyError();
+	bool NotifyConsoleError();
+
+	void NotifyError();
+	void SetStatus(wkeLoadingResult result, const wkeString* failedReason);
 	bool IsLoadError();
-	void SendReLoad();
+	void NotifyLoadError();
 	bool NotifyLoadEnd();
 	bool NotifyConsoleMsg(const tstring& strMsg);
 	bool ReLoad();
@@ -77,13 +80,21 @@ private:
 	void NotifyAlert(const wstring& strMsg);
 	void LoadOk();
 	bool CanReLoad();
+	void LoadEnd();
+	bool IsCancel();
+	tstring GetUrl();
+	bool PostReload();
+	bool DealTimer(int nTimerID);
 private:
 	multimap<tstring, tstring>		m_mapErrorConsole;
 	HNCwkeWebView					m_web;
 	tagWKE_DATA*					m_pWData;
-	int								m_nRepeatTotal;
+	int								m_nReloadTimes;
 	static		HINSTANCE			m_hInstance;
 
+	wkeLoadingResult				m_result; 
+	const wkeString*				m_failedReason;
+	bool							m_bTryReload;		//Õ¯“≥≥ˆœ÷¥ÌŒÛ «∑Òreload
 public:
 	static		CWkeMng				g_wkeMng;
 	
