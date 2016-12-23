@@ -62,11 +62,13 @@ CMFCTest1Dlg::CMFCTest1Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CMFCTest1Dlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_bDraging = false;
 }
 
 void CMFCTest1Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON1, m_btn1);
 }
 
 BEGIN_MESSAGE_MAP(CMFCTest1Dlg, CDialogEx)
@@ -75,6 +77,9 @@ BEGIN_MESSAGE_MAP(CMFCTest1Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_EN_CHANGE(IDC_EDIT1, &CMFCTest1Dlg::OnEnChangeEdit1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTest1Dlg::OnBnClickedButton1)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -126,6 +131,8 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 		CString strFilePathName = dlg.GetNextPathName(pos);
 		* /
 	}*/
+
+	
 
 		
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -200,6 +207,29 @@ void CMFCTest1Dlg::OnEnChangeEdit1()
 void CMFCTest1Dlg::OnBnClickedButton1()
 {
 	// TODO:  在此添加控件通知处理程序代码
+	TestOleDrag();
+	{
+		CFileDialog fileDialog(TRUE, _T("*.*"), NULL, NULL, NULL);
+
+		if (fileDialog.DoModal() != IDOK)
+			return ;
+
+		CString str = fileDialog.GetFileExt();
+		str = _T(".") + str;
+
+		SHFILEINFO   sfi;
+		SHGetFileInfo(str, 0, &sfi, sizeof(sfi), SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES);
+
+		int i = sfi.iIcon;
+		CStatic* pStatic = (CStatic*)GetDlgItem(IDC_STATIC);
+		HICON hIcon = sfi.hIcon;
+		pStatic->SetIcon(hIcon);
+
+		m_btn1.ModifyStyle(0, BS_ICON); //设置Icon属性
+		m_btn1.SetIcon(hIcon); //设置图标
+		return;
+
+	}
 	tstring strFilter = _T("All Files (*.*)|*.*|txt Files (*.txt)|*.txt|bin Files (*.exe)|*.exe;*.obj||");
 
 	CPiFileDialog dlgFile(_T("选择多个文件(目录)"), strFilter.c_str());
@@ -219,4 +249,109 @@ void CMFCTest1Dlg::OnBnClickedButton1()
 	}
 	pEdit->SetWindowText(strOut.c_str());
 	return;
+}
+
+void CMFCTest1Dlg::TestOleDrag()
+{	
+	
+}
+
+
+void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	BeginDrag();
+
+	CDialogEx::OnLButtonDown(nFlags, point);
+}
+
+
+void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+
+	CDialogEx::OnLButtonUp(nFlags, point);
+}
+
+
+void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	DragIng();
+	CDialogEx::OnMouseMove(nFlags, point);
+}
+
+bool CMFCTest1Dlg::BeginDrag()
+{
+	if (m_bDraging)
+	{
+		return true;
+	}
+	m_bDraging = true;
+
+	return true;
+}
+
+void CMFCTest1Dlg::DragIng()
+{
+	if (!m_bDraging)
+	{
+		return;
+	}
+	{
+		COleDataSource*	pSource = new COleDataSource();
+		CSharedFile	sf(GMEM_MOVEABLE | GMEM_DDESHARE | GMEM_ZEROINIT);
+		CString iText;
+
+		//	lets move our text
+		GetWindowText(iText);
+
+		//	write name to clipboard
+		sf.Write(iText, iText.GetLength());
+
+		HGLOBAL hMem = sf.Detach();
+		if (!hMem)
+			return;
+		pSource->CacheGlobalData(CF_TEXT, hMem);
+
+		//	Do drag and drop!
+		pSource->DoDragDrop();
+
+		//	free source
+		delete pSource;
+		return;
+	}
+	COleDataSource*  pOleDataSource = new COleDataSource;
+
+	OutInfo(_T("drag begin"));
+	tstring strDragData(_T("e:\\work\\html\\prompt.htm"));
+	HGLOBAL        hMemData = NULL;
+	DWORD		uBufferSize = sizeof(DROPFILES) + strDragData.size() * sizeof(TCHAR) + 1;
+
+	hMemData = GlobalAlloc(GPTR, uBufferSize);
+	ASSERT(hMemData != NULL);
+	LPDROPFILES lpDropFiles = (LPDROPFILES)GlobalLock(hMemData); //锁定之,并设置相关成员
+	ASSERT(lpDropFiles != NULL);
+	lpDropFiles->pFiles = sizeof(DROPFILES);
+
+#ifdef _UNICODE
+	lpDropFiles->fWide = TRUE;
+#else
+	lpDropFiles->fWide = FALSE;
+#endif
+
+	/************************************************************************
+	拷贝要拖放的数据
+	************************************************************************/
+
+	LPTSTR pszStart = (LPTSTR)((LPBYTE)lpDropFiles + sizeof(DROPFILES));
+	pszStart = lstrcpy(pszStart, strDragData.c_str());
+	pszStart = _tcsrchr(pszStart, '\0') + 1; //下次的起始位置是上一次结尾+1
+
+	pOleDataSource->Empty();
+	pOleDataSource->CacheGlobalData(CF_TEXT, hMemData);
+
+	DROPEFFECT dwRet = pOleDataSource->DoDragDrop(DROPEFFECT_MOVE | DROPEFFECT_COPY);
+	delete pOleDataSource;
+	OutInfo(_T("drag ing, ret"), dwRet);
 }

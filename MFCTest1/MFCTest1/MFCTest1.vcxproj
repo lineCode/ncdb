@@ -49,7 +49,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>M_DEBUG_INFO;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -119,6 +119,8 @@
     <ClInclude Include="..\..\..\nc\src\common\sdk\StrCoding.h" />
     <ClInclude Include="..\..\..\nc\src\common\sdk\ThreadLight.h" />
     <ClInclude Include="..\..\sdk\UI\PiFileDialog.h" />
+    <ClInclude Include="ECMaterialDropText.h" />
+    <ClInclude Include="ECOleMemDropTarget.h" />
     <ClInclude Include="MFCTest1.h" />
     <ClInclude Include="MFCTest1Dlg.h" />
     <ClInclude Include="Resource.h" />
@@ -140,6 +142,8 @@
     <ClCompile Include="..\..\..\nc\src\common\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\..\nc\src\common\sdk\ThreadLight.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp" />
+    <ClCompile Include="ECMaterialDropText.cpp" />
+    <ClCompile Include="ECOleMemDropTarget.cpp" />
     <ClCompile Include="MFCTest1.cpp" />
     <ClCompile Include="MFCTest1Dlg.cpp" />
     <ClCompile Include="stdafx.cpp">

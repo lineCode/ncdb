@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
 
 // CMFCTest1Dlg ¶Ô»°¿ò
@@ -32,4 +33,17 @@ protected:
 public:
 	afx_msg void OnEnChangeEdit1();
 	afx_msg void OnBnClickedButton1();
+	void TestOleDrag();
+	CButton m_btn1;
+
+private:
+	COleDataSource m_oleDataSource;
+	bool			m_bDraging;
+
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	bool BeginDrag();
+	void DragIng();
 };
