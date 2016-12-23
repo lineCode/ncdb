@@ -56,6 +56,7 @@ public:
 	static void SetInst(HINSTANCE hModule);
 	void SetLoadError(FunOnLoadError pFun);
 	void ClearData();
+	bool DestroySync();
 private:
 	
 	HWND CreateHostWnd(HWND hParent);
@@ -86,6 +87,7 @@ private:
 	tstring GetUrl();
 	bool PostReload();
 	bool DealTimer(int nTimerID);
+	bool NotifyDropFile(StringCRef strName);
 private:
 	multimap<tstring, tstring>		m_mapErrorConsole;
 	HNCwkeWebView					m_web;
@@ -95,7 +97,7 @@ private:
 	static		HINSTANCE			m_hInstance;
 
 	wkeLoadingResult				m_result; 
-	const wkeString*				m_failedReason;
+	const wkeString*				m_failedReason;		//ref
 	bool							m_bTryReload;		//Õ¯“≥≥ˆœ÷¥ÌŒÛ «∑Òreload
 	bool							m_bDestroying;		
 public:

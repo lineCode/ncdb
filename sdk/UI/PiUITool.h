@@ -1,9 +1,9 @@
 #pragma once
-#include "stdafx.h"
+//#include "stdafx.h"
 #include "..\PiTypeDef.h"
-#include <Windows.h>
 #include <shlwapi.h>
 #include <shellapi.h>
+#include <Windows.h>
 using std::string;
 
 

@@ -333,6 +333,23 @@ void ns_PiPi::CPiString::AppendZero(int nCount)
 	}
 }
 
+int ns_PiPi::CPiString::findFirstOf(tcpchar szChar)
+{
+	if (!szChar || !length())
+	{
+		return -1;
+	}
+	int nLen = length();
+	for (int i = 0; i < nLen; i++) {
+		tcpchar cur = szChar;
+		while (*cur) {
+			if (at(i) == *(cur++))
+				return i;
+		}
+	}
+	return -1;
+}
+
 void CPiString::Format(const TCHAR* format,...)
 {
 	TCHAR *buff = (TCHAR*)0;

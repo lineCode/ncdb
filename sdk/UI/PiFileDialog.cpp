@@ -9,8 +9,9 @@ typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
 static LONG	g_lOriWndProc;
 
 CPiFileDialog::CPiFileDialog(tcpchar szTitle, tcpchar szFilter /*= nullptr*/, tcpchar szInitDir /*= nullptr*/, bool bSelectMulti /*= true*/)
-	:CFileDialog(true, NULL, NULL, (bSelectMulti ? OFN_ALLOWMULTISELECT : 0 )| OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
+	:CFileDialog(true, NULL, NULL, (bSelectMulti ? OFN_ALLOWMULTISELECT : 0) | OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilter, NULL)
 	, m_bInit(false)
+	, m_hParentDlg(NULL)
 {
 	m_ofn.lpstrTitle = szTitle;
 	m_ofn.lpstrInitialDir = szInitDir;
@@ -35,8 +36,7 @@ void CPiFileDialog::OnInitDone()
 
 BOOL CPiFileDialog::OnFileNameOK()
 {
-	EndSelect();
-	return TRUE;
+	return EndSelect() ? TRUE : FALSE;
 }
 
 
@@ -58,7 +58,6 @@ LRESULT __stdcall  CPiFileDialog::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 			if (pFile->EndSelect())
 			{
 				RemoveProp(hwnd, STRING_WND_PROP_NAME);
-				::EndDialog(hwnd, IDOK);
 			}
 		}
 		break;
@@ -257,6 +256,7 @@ bool CPiFileDialog::EndSelect()
 	if (m_strSelect.size())
 	{
 		//m_pIFileDialog->Close(S_OK);
+		::EndDialog(m_hParentDlg, IDOK);
 		return true;
 	}
 	return false;
@@ -278,16 +278,11 @@ bool CPiFileDialog::OnInit()
 	{
 		return false;
 	}
-	HWND hParent = NULL;
-	if (!SUCCEEDED(hr = pIOle->GetWindow(&hParent)))
+	m_hParentDlg = NULL;
+	if (!SUCCEEDED(hr = pIOle->GetWindow(&m_hParentDlg)))
 	{
 		return false;
 	}
-
-	HWND hIDOK = ::GetDlgItem(hParent, IDOK);
-	HWND hIDCancel = ::GetDlgItem(hParent, IDCANCEL);
-	/*::ShowWindow(hIDOK, SW_HIDE);
-	::ShowWindow(hIDCancel, SW_HIDE);*/
 
 
 	//TODO:Ìæ»»´°¿Ú¹ý³Ì
@@ -298,13 +293,13 @@ bool CPiFileDialog::OnInit()
 	{
 		hParentToCenter = pTag->hParent;
 	}
-	CPiWindowPack::CenterWindow(hParent, hParentToCenter);
+	CPiWindowPack::CenterWindow(m_hParentDlg, hParentToCenter);
 	
 	//CPiWindowPack::TopMostWindow(hParent);
 	
 
-	::SetDlgItemText(hParent, IDOK, pTag->szBtnOkName);
-	SetPropW(hParent, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
-	g_lOriWndProc = ::SetWindowLongW(hParent, GWL_WNDPROC, (LONG)_WndProc);	
+	::SetDlgItemText(m_hParentDlg, IDOK, pTag->szBtnOkName);
+	SetPropW(m_hParentDlg, STRING_WND_PROP_NAME, (CPiFileDialog*)(this));
+	g_lOriWndProc = ::SetWindowLongW(m_hParentDlg, GWL_WNDPROC, (LONG)_WndProc);
 	return true;
 }

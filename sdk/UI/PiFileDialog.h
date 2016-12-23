@@ -28,4 +28,5 @@ private:
 	bool					m_bInit;
 	ARR_STRING				m_strSelect;
 	void*					m_pTag;
+	HWND					m_hParentDlg;	//弹窗的通用模板窗口， 拥有点击ok按钮事件的窗口
 };

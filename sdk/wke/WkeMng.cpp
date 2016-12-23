@@ -131,9 +131,9 @@ void CWkeMng::Erase(CPiNCWke* pWke)
 	{
 		if (iter->second == pWke)
 		{
+			m_mapWke.erase(iter);
 			pWke->ClearData();
 			delete pWke;
-			m_mapWke.erase(iter);
 			break;
 		}
 	}
@@ -222,13 +222,15 @@ CPiNCWke* CWkeMng::CreateWke(HWND hParent, tagCallBack* pTagCallBack)
 		return nullptr;
 	}
 	
+	CRAIILock raii(m_pLockWkeData.get());
 	m_mapWke[pWke->GetParent()] = pWke;
 	return pWke;
 }
 
 CPiNCWke* CWkeMng::GetObj(HWebView pWeb)
 {
-	for(auto it : m_mapWke)
+	CRAIILock raii(m_pLockWkeData.get());
+	for (auto it : m_mapWke)
 	{
 		if ((it.second)->GetWeb() == pWeb)
 		{

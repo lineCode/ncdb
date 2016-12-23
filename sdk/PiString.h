@@ -46,6 +46,7 @@ public:
 	operator tcpchar();
 	CPiString operator +(tcpchar szData);
 	void AppendZero(int nCount);
+	int findFirstOf(tcpchar szChar);
 private:
 	//tstring		m_strData;
 };

@@ -16,6 +16,12 @@ public:
     tstring GetParamValue(tcpchar szParam);
     bool AppendParam( tcpchar szParam, tcpchar szValue );
     tstring GetUrl(){ return m_strUrl; }
+	/************************************************************************
+		fun:	把路径或者url后面的参数部分从utf8解码处理
+		param:	
+		memo:	先进行urlDecode， 再参数部分的utf8
+	************************************************************************/
+	tstring DecodeParam();
 private:
     tstring             m_strUrl;
 };
