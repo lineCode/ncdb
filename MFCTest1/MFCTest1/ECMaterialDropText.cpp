@@ -2,11 +2,11 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ECMaterialDropText.h"
-#include "DraggySampleDlg.h"
+//#include "DraggySampleDlg.h"
 
-#include "DragDropButton.h"
-#include "DragDropComboBox.h"
-#include "DragDropListBox.h"
+//#include "DragDropButton.h"
+//#include "DragDropComboBox.h"
+//#include "DragDropListBox.h"
 
 // ************************************************************
 //	ECMaterialDropText
@@ -37,6 +37,7 @@ DWORD ECMaterialDropText::GotDrag(void)
 			return DROPEFFECT_NONE;	//	nope
 
 		//	check if this is one of us...
+        /*
 		if(iPossibleWnd->IsKindOf(RUNTIME_CLASS(CDragDropButton)))
 		{
 			//	to do give some more feedback, lets set some text
@@ -81,7 +82,7 @@ DWORD ECMaterialDropText::GotDrag(void)
 				}
 			}
 			return DROPEFFECT_LINK;		//	something else again
-		}
+		}*/
 	}
 
 	return DROPEFFECT_NONE;   
@@ -131,11 +132,11 @@ void ECMaterialDropText::GotDrop(void)
 				return;	//	nope
 
 			//	check if this is one of us...
-			if(iPossibleWnd->IsKindOf(RUNTIME_CLASS(CDragDropButton)))
+			/*if(iPossibleWnd->IsKindOf(RUNTIME_CLASS(CDragDropButton)))
 			{
 				((CDragDropButton *)iPossibleWnd)->SetWindowText(iText);	//	Ha the cast. The terrible cast!
 			}
-			
+			*/
 		}
 	}
 }

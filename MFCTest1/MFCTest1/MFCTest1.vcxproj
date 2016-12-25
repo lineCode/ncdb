@@ -80,7 +80,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>M_DEBUG_INFO;WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\nc\src\common\sdk</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\sdk</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,21 +103,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\DataStruct\PiRect.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\define_gnl.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\EventLight.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\FileOpr.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\functional.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\Lock.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\MD5.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PathLight.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PiHeadKernel.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PiString.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\PiWindowPack.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\StrCoding.h" />
-    <ClInclude Include="..\..\..\nc\src\common\sdk\ThreadLight.h" />
+    <ClInclude Include="..\..\sdk\AutoType.h" />
+    <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
+    <ClInclude Include="..\..\sdk\define_gnl.h" />
+    <ClInclude Include="..\..\sdk\doString.h" />
+    <ClInclude Include="..\..\sdk\EventLight.h" />
+    <ClInclude Include="..\..\sdk\FileOpr.h" />
+    <ClInclude Include="..\..\sdk\functional.h" />
+    <ClInclude Include="..\..\sdk\Lock.h" />
+    <ClInclude Include="..\..\sdk\MD5.h" />
+    <ClInclude Include="..\..\sdk\PathLight.h" />
+    <ClInclude Include="..\..\sdk\PiHeadKernel.h" />
+    <ClInclude Include="..\..\sdk\PiString.h" />
+    <ClInclude Include="..\..\sdk\PiWindowPack.h" />
+    <ClInclude Include="..\..\sdk\StrCoding.h" />
+    <ClInclude Include="..\..\sdk\ThreadLight.h" />
     <ClInclude Include="..\..\sdk\UI\PiFileDialog.h" />
     <ClInclude Include="ECMaterialDropText.h" />
     <ClInclude Include="ECOleMemDropTarget.h" />
@@ -128,19 +128,19 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\DataStruct\PiRect.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\EventLight.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\FileOpr.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\functional.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\Lock.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\MD5.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PathLight.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PiString.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\PiWindowPack.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\StrCoding.cpp" />
-    <ClCompile Include="..\..\..\nc\src\common\sdk\ThreadLight.cpp" />
+    <ClCompile Include="..\..\sdk\AutoType.cpp" />
+    <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
+    <ClCompile Include="..\..\sdk\doString.cpp" />
+    <ClCompile Include="..\..\sdk\EventLight.cpp" />
+    <ClCompile Include="..\..\sdk\FileOpr.cpp" />
+    <ClCompile Include="..\..\sdk\functional.cpp" />
+    <ClCompile Include="..\..\sdk\Lock.cpp" />
+    <ClCompile Include="..\..\sdk\MD5.cpp" />
+    <ClCompile Include="..\..\sdk\PathLight.cpp" />
+    <ClCompile Include="..\..\sdk\PiString.cpp" />
+    <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
+    <ClCompile Include="..\..\sdk\StrCoding.cpp" />
+    <ClCompile Include="..\..\sdk\ThreadLight.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp" />
     <ClCompile Include="ECMaterialDropText.cpp" />
     <ClCompile Include="ECOleMemDropTarget.cpp" />
