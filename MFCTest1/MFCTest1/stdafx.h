@@ -51,3 +51,6 @@
 #endif
 
 
+
+extern UINT g_uCustomClipbrdFormat;
+extern bool g_bNT;

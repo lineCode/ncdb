@@ -16,6 +16,9 @@
     <Filter Include="sdk">
       <UniqueIdentifier>{18ebd714-be5b-4cb5-9a8d-5b897a7bb109}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ex">
+      <UniqueIdentifier>{511572b6-f2e2-4960-a68c-531834e1a1a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -90,6 +93,12 @@
     <ClInclude Include="ECMaterialDropText.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PiDropTarget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDropTarget.h">
+      <Filter>ex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCTest1.cpp">
@@ -148,6 +157,12 @@
     </ClCompile>
     <ClCompile Include="ECMaterialDropText.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PiDropTarget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDropTarget.cpp">
+      <Filter>ex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

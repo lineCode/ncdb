@@ -4,6 +4,8 @@
 
 #pragma once
 #include "afxwin.h"
+#include "PiDropTarget.h"
+#include "MyDropTarget.h"
 
 
 // CMFCTest1Dlg ¶Ô»°¿ò
@@ -44,6 +46,15 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult);
+
 	bool BeginDrag();
 	void DragIng();
+	void DragIng2();
+
+	bool				m_bBtnDown;
+	CPiDropTarget		m_DropTarget;
+	CListCtrl			c_FileList;
+
+	CMyDropTarget		m_droptarget;
 };

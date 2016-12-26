@@ -123,6 +123,8 @@
     <ClInclude Include="ECOleMemDropTarget.h" />
     <ClInclude Include="MFCTest1.h" />
     <ClInclude Include="MFCTest1Dlg.h" />
+    <ClInclude Include="MyDropTarget.h" />
+    <ClInclude Include="PiDropTarget.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -146,6 +148,8 @@
     <ClCompile Include="ECOleMemDropTarget.cpp" />
     <ClCompile Include="MFCTest1.cpp" />
     <ClCompile Include="MFCTest1Dlg.cpp" />
+    <ClCompile Include="MyDropTarget.cpp" />
+    <ClCompile Include="PiDropTarget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

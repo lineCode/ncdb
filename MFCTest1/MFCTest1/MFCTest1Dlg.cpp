@@ -59,9 +59,11 @@ BOOL CAboutDlg::OnInitDialog()
 
 
 CMFCTest1Dlg::CMFCTest1Dlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CMFCTest1Dlg::IDD, pParent)
+	: CDialogEx(CMFCTest1Dlg::IDD, pParent),
+	m_droptarget(&c_FileList)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_bBtnDown = false;
 	m_bDraging = false;
 }
 
@@ -69,7 +71,9 @@ void CMFCTest1Dlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, m_btn1);
-}
+	DDX_Control(pDX, IDC_LIST2, c_FileList);
+}    
+
 
 BEGIN_MESSAGE_MAP(CMFCTest1Dlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
@@ -77,6 +81,7 @@ BEGIN_MESSAGE_MAP(CMFCTest1Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_EN_CHANGE(IDC_EDIT1, &CMFCTest1Dlg::OnEnChangeEdit1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTest1Dlg::OnBnClickedButton1)
+	ON_NOTIFY(LVN_BEGINDRAG, IDC_LIST2, OnBegindragFilelist)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
@@ -115,6 +120,29 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO:  在此添加额外的初始化代码
+	c_FileList.ModifyStyle(0, LVS_SHAREIMAGELISTS);
+
+
+	// Set up the list columns.
+
+	c_FileList.InsertColumn(0, _T("Filename"), LVCFMT_LEFT, 0, 0);
+	c_FileList.InsertColumn(1, _T("Type"), LVCFMT_LEFT, 0, 1);
+	c_FileList.InsertColumn(2, _T("Size"), LVCFMT_LEFT, 0, 2);
+
+	c_FileList.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);
+	c_FileList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+	c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
+
+	// Enable tooltips for items that aren't completely visible.
+
+	c_FileList.SetExtendedStyle(LVS_EX_INFOTIP);
+
+
+
+	c_FileList.InsertItem(0, _T("3333"));
+
+
+	m_DropTarget.Register(this);
 
 	const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
 	/*CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -260,8 +288,7 @@ void CMFCTest1Dlg::TestOleDrag()
 void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
-	BeginDrag();
-
+	m_bBtnDown = true;
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
 
@@ -277,16 +304,18 @@ void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
-	DragIng();
+	BeginDrag();
+	DragIng2();
 	CDialogEx::OnMouseMove(nFlags, point);
 }
 
 bool CMFCTest1Dlg::BeginDrag()
 {
-	if (m_bDraging)
+	if (!m_bBtnDown || m_bDraging)
 	{
-		return true;
+		return false;
 	}
+	//first drag
 	m_bDraging = true;
 
 	return true;
@@ -354,4 +383,410 @@ void CMFCTest1Dlg::DragIng()
 	DROPEFFECT dwRet = pOleDataSource->DoDragDrop(DROPEFFECT_MOVE | DROPEFFECT_COPY);
 	delete pOleDataSource;
 	OutInfo(_T("drag ing, ret"), dwRet);
+}
+
+void CMFCTest1Dlg::DragIng2()
+{
+	OutputDebugString(_T("OnBegindragFilelist\n"));
+	//NMLISTVIEW*    pNMLV = (NMLISTVIEW*)pNMHDR;
+	COleDataSource datasrc;
+	HGLOBAL        hgDrop;
+	DROPFILES*     pDrop;
+	CStringList    lsDraggedFiles;
+	POSITION       pos;
+	int            nSelItem;
+	CString        sFile;
+	UINT           uBuffSize = 0;
+	TCHAR*         pszBuff;
+	FORMATETC      etc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+
+	//*pResult = 0;   // return value ignored
+
+	// For every selected item in the list, put the filename into lsDraggedFiles.
+
+	pos = c_FileList.GetFirstSelectedItemPosition();
+
+	while (NULL != pos)
+	{
+		nSelItem = c_FileList.GetNextSelectedItem(pos);
+		sFile = c_FileList.GetItemText(nSelItem, 0);
+
+		lsDraggedFiles.AddTail(sFile);
+
+		// Calculate the # of chars required to hold this string.
+
+		uBuffSize += lstrlen(sFile) + 1;
+	}
+
+	// Add 1 extra for the final null char, and the size of the DROPFILES struct.
+
+	uBuffSize = sizeof(DROPFILES) + sizeof(TCHAR) * (uBuffSize + 1);
+
+	// Allocate memory from the heap for the DROPFILES struct.
+
+	hgDrop = GlobalAlloc(GHND | GMEM_SHARE, uBuffSize);
+
+	if (NULL == hgDrop)
+		return;
+
+	pDrop = (DROPFILES*)GlobalLock(hgDrop);
+
+	if (NULL == pDrop)
+	{
+		GlobalFree(hgDrop);
+		return;
+	}
+
+	// Fill in the DROPFILES struct.
+
+	pDrop->pFiles = sizeof(DROPFILES);
+
+#ifdef _UNICODE
+	// If we're compiling for Unicode, set the Unicode flag in the struct to
+	// indicate it contains Unicode strings.
+
+	pDrop->fWide = TRUE;
+#endif
+
+	// Copy all the filenames into memory after the end of the DROPFILES struct.
+
+	pos = lsDraggedFiles.GetHeadPosition();
+	pszBuff = (TCHAR*)(LPBYTE(pDrop) + sizeof(DROPFILES));
+
+	while (NULL != pos)
+	{
+		lstrcpy(pszBuff, (LPCTSTR)lsDraggedFiles.GetNext(pos));
+		pszBuff = 1 + _tcschr(pszBuff, '\0');
+	}
+
+	GlobalUnlock(hgDrop);
+
+	// Put the data in the data source.
+
+	datasrc.CacheGlobalData(CF_HDROP, hgDrop, &etc);
+
+	// Add in our own custom data, so we know that the drag originated from our 
+	// window.  CMyDropTarget::DragEnter() checks for this custom format, and
+	// doesn't allow the drop if it's present.  This is how we prevent the user
+	// from dragging and then dropping in our own window.
+	// The data will just be a dummy bool.
+	HGLOBAL hgBool;
+
+	hgBool = GlobalAlloc(GHND | GMEM_SHARE, sizeof(bool));
+
+	if (NULL == hgBool)
+	{
+		GlobalFree(hgDrop);
+		return;
+	}
+
+	// Put the data in the data source.
+
+	etc.cfFormat = g_uCustomClipbrdFormat;
+
+	datasrc.CacheGlobalData(g_uCustomClipbrdFormat, hgBool, &etc);
+
+
+	// Start the drag 'n' drop!
+
+	DROPEFFECT dwEffect = datasrc.DoDragDrop(DROPEFFECT_COPY | DROPEFFECT_MOVE);
+
+	// If the DnD completed OK, we remove all of the dragged items from our
+	// list.
+
+	switch (dwEffect)
+	{
+	case DROPEFFECT_COPY:
+	case DROPEFFECT_MOVE:
+	{
+		// The files were copied or moved.
+		// Note: Don't call GlobalFree() because the data will be freed by the drop target.
+
+		for (nSelItem = c_FileList.GetNextItem(-1, LVNI_SELECTED);
+			nSelItem != -1;
+			nSelItem = c_FileList.GetNextItem(nSelItem, LVNI_SELECTED))
+		{
+			c_FileList.DeleteItem(nSelItem);
+			nSelItem--;
+		}
+
+		// Resize the list columns.
+
+		c_FileList.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);
+		c_FileList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+		c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
+	}
+	break;
+
+	case DROPEFFECT_NONE:
+	{
+		// This needs special handling, because on NT, DROPEFFECT_NONE
+		// is returned for move operations, instead of DROPEFFECT_MOVE.
+		// See Q182219 for the details.
+		// So if we're on NT, we check each selected item, and if the
+		// file no longer exists, it was moved successfully and we can
+		// remove it from the list.
+
+		/*if (g_bNT)
+		{
+			bool bDeletedAnything = false;
+
+			for (nSelItem = c_FileList.GetNextItem(-1, LVNI_SELECTED);
+				nSelItem != -1;
+				nSelItem = c_FileList.GetNextItem(nSelItem, LVNI_SELECTED))
+			{
+				CString sFilename = c_FileList.GetItemText(nSelItem, 0);
+
+				if (0xFFFFFFFF == GetFileAttributes(sFile) &&
+					GetLastError() == ERROR_FILE_NOT_FOUND)
+				{
+					// We couldn't read the file's attributes, and GetLastError()
+					// says the file doesn't exist, so remove the corresponding 
+					// item from the list.
+
+					c_FileList.DeleteItem(nSelItem);
+
+					nSelItem--;
+					bDeletedAnything = true;
+				}
+			}
+
+			// Resize the list columns if we deleted any items.
+
+			if (bDeletedAnything)
+			{
+				c_FileList.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);
+				c_FileList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+				c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
+
+				// Note: Don't call GlobalFree() because the data belongs to 
+				// the caller.
+			}
+			else
+			{
+				// The DnD operation wasn't accepted, or was canceled, so we 
+				// should call GlobalFree() to clean up.
+
+				GlobalFree(hgDrop);
+				GlobalFree(hgBool);
+			}
+		}   // end if (NT)
+		else*/
+		{
+			// We're on 9x, and a return of DROPEFFECT_NONE always means
+			// that the DnD operation was aborted.  We need to free the
+			// allocated memory.
+
+			GlobalFree(hgDrop);
+			GlobalFree(hgBool);
+		}
+	}
+	break;  // end case DROPEFFECT_NONE
+	}   // end switch
+}
+
+
+void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	OutInfo(_T("OnBegindragFilelist"));
+
+	OutputDebugString(_T("OnBegindragFilelist\n"));
+	NMLISTVIEW*    pNMLV = (NMLISTVIEW*)pNMHDR;
+	COleDataSource datasrc;
+	HGLOBAL        hgDrop;
+	DROPFILES*     pDrop;
+	CStringList    lsDraggedFiles;
+	POSITION       pos;
+	int            nSelItem;
+	CString        sFile;
+	UINT           uBuffSize = 0;
+	TCHAR*         pszBuff;
+	FORMATETC      etc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
+
+	*pResult = 0;   // return value ignored
+
+	// For every selected item in the list, put the filename into lsDraggedFiles.
+
+	pos = c_FileList.GetFirstSelectedItemPosition();
+
+	while (NULL != pos)
+	{
+		nSelItem = c_FileList.GetNextSelectedItem(pos);
+		sFile = c_FileList.GetItemText(nSelItem, 0);
+
+		lsDraggedFiles.AddTail(sFile);
+
+		// Calculate the # of chars required to hold this string.
+
+		uBuffSize += lstrlen(sFile) + 1;
+	}
+
+	// Add 1 extra for the final null char, and the size of the DROPFILES struct.
+
+	uBuffSize = sizeof(DROPFILES) + sizeof(TCHAR) * (uBuffSize + 1);
+
+	// Allocate memory from the heap for the DROPFILES struct.
+
+	hgDrop = GlobalAlloc(GHND | GMEM_SHARE, uBuffSize);
+
+	if (NULL == hgDrop)
+		return;
+
+	pDrop = (DROPFILES*)GlobalLock(hgDrop);
+
+	if (NULL == pDrop)
+	{
+		GlobalFree(hgDrop);
+		return;
+	}
+
+	// Fill in the DROPFILES struct.
+
+	pDrop->pFiles = sizeof(DROPFILES);
+
+#ifdef _UNICODE
+	// If we're compiling for Unicode, set the Unicode flag in the struct to
+	// indicate it contains Unicode strings.
+
+	pDrop->fWide = TRUE;
+#endif
+
+	// Copy all the filenames into memory after the end of the DROPFILES struct.
+
+	pos = lsDraggedFiles.GetHeadPosition();
+	pszBuff = (TCHAR*)(LPBYTE(pDrop) + sizeof(DROPFILES));
+
+	while (NULL != pos)
+	{
+		lstrcpy(pszBuff, (LPCTSTR)lsDraggedFiles.GetNext(pos));
+		pszBuff = 1 + _tcschr(pszBuff, '\0');
+	}
+
+	GlobalUnlock(hgDrop);
+
+	// Put the data in the data source.
+
+	datasrc.CacheGlobalData(CF_HDROP, hgDrop, &etc);
+
+	// Add in our own custom data, so we know that the drag originated from our 
+	// window.  CMyDropTarget::DragEnter() checks for this custom format, and
+	// doesn't allow the drop if it's present.  This is how we prevent the user
+	// from dragging and then dropping in our own window.
+	// The data will just be a dummy bool.
+	HGLOBAL hgBool;
+
+	hgBool = GlobalAlloc(GHND | GMEM_SHARE, sizeof(bool));
+
+	if (NULL == hgBool)
+	{
+		GlobalFree(hgDrop);
+		return;
+	}
+
+	// Put the data in the data source.
+
+	etc.cfFormat = g_uCustomClipbrdFormat;
+
+	datasrc.CacheGlobalData(g_uCustomClipbrdFormat, hgBool, &etc);
+
+
+	// Start the drag 'n' drop!
+
+	DROPEFFECT dwEffect = datasrc.DoDragDrop(DROPEFFECT_COPY | DROPEFFECT_MOVE);
+
+	// If the DnD completed OK, we remove all of the dragged items from our
+	// list.
+
+	switch (dwEffect)
+	{
+	case DROPEFFECT_COPY:
+	case DROPEFFECT_MOVE:
+	{
+		// The files were copied or moved.
+		// Note: Don't call GlobalFree() because the data will be freed by the drop target.
+
+		for (nSelItem = c_FileList.GetNextItem(-1, LVNI_SELECTED);
+			nSelItem != -1;
+			nSelItem = c_FileList.GetNextItem(nSelItem, LVNI_SELECTED))
+		{
+			c_FileList.DeleteItem(nSelItem);
+			nSelItem--;
+		}
+
+		// Resize the list columns.
+
+		c_FileList.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);
+		c_FileList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+		c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
+	}
+	break;
+
+	case DROPEFFECT_NONE:
+	{
+		// This needs special handling, because on NT, DROPEFFECT_NONE
+		// is returned for move operations, instead of DROPEFFECT_MOVE.
+		// See Q182219 for the details.
+		// So if we're on NT, we check each selected item, and if the
+		// file no longer exists, it was moved successfully and we can
+		// remove it from the list.
+
+		if (g_bNT)
+		{
+			bool bDeletedAnything = false;
+
+			for (nSelItem = c_FileList.GetNextItem(-1, LVNI_SELECTED);
+				nSelItem != -1;
+				nSelItem = c_FileList.GetNextItem(nSelItem, LVNI_SELECTED))
+			{
+				CString sFilename = c_FileList.GetItemText(nSelItem, 0);
+
+				if (0xFFFFFFFF == GetFileAttributes(sFile) &&
+					GetLastError() == ERROR_FILE_NOT_FOUND)
+				{
+					// We couldn't read the file's attributes, and GetLastError()
+					// says the file doesn't exist, so remove the corresponding 
+					// item from the list.
+
+					//c_FileList.DeleteItem(nSelItem);
+
+					nSelItem--;
+					bDeletedAnything = true;
+				}
+			}
+
+			// Resize the list columns if we deleted any items.
+
+			if (bDeletedAnything)
+			{
+				c_FileList.SetColumnWidth(0, LVSCW_AUTOSIZE_USEHEADER);
+				c_FileList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
+				c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
+
+				// Note: Don't call GlobalFree() because the data belongs to 
+				// the caller.
+			}
+			else
+			{
+				// The DnD operation wasn't accepted, or was canceled, so we 
+				// should call GlobalFree() to clean up.
+
+				GlobalFree(hgDrop);
+				GlobalFree(hgBool);
+			}
+		}   // end if (NT)
+		else
+		{
+			// We're on 9x, and a return of DROPEFFECT_NONE always means
+			// that the DnD operation was aborted.  We need to free the
+			// allocated memory.
+
+			GlobalFree(hgDrop);
+			GlobalFree(hgBool);
+		}
+	}
+	break;  // end case DROPEFFECT_NONE
+	}   // end switch
+
+
+	//DragIng2();
 }
