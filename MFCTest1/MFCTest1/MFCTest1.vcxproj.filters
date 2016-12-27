@@ -84,9 +84,6 @@
     <ClInclude Include="..\..\sdk\doString.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdk\UI\PiFileDialog.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
     <ClInclude Include="ECOleMemDropTarget.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -147,9 +144,6 @@
       <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\sdk\doString.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="ECOleMemDropTarget.cpp">

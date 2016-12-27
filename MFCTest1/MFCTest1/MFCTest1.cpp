@@ -34,6 +34,8 @@ CMFCTest1App::CMFCTest1App()
 
 CMFCTest1App theApp;
 
+UINT g_uCustomClipbrdFormat = RegisterClipboardFormat(_T("MultiFiler_FA0C30C3_192A_4FF5_9D98_4DA9C5B8092A"));
+bool g_bNT = (0 == (GetVersion() & 0x80000000));
 
 // CMFCTest1App 初始化
 
@@ -69,6 +71,8 @@ BOOL CMFCTest1App::InitInstance()
 	// TODO:  应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+
+	AfxOleInit();
 
 	CMFCTest1Dlg dlg;
 	m_pMainWnd = &dlg;

@@ -118,7 +118,6 @@
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\StrCoding.h" />
     <ClInclude Include="..\..\sdk\ThreadLight.h" />
-    <ClInclude Include="..\..\sdk\UI\PiFileDialog.h" />
     <ClInclude Include="ECMaterialDropText.h" />
     <ClInclude Include="ECOleMemDropTarget.h" />
     <ClInclude Include="MFCTest1.h" />
@@ -143,7 +142,6 @@
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\sdk\ThreadLight.cpp" />
-    <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp" />
     <ClCompile Include="ECMaterialDropText.cpp" />
     <ClCompile Include="ECOleMemDropTarget.cpp" />
     <ClCompile Include="MFCTest1.cpp" />

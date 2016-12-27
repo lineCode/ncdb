@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 #include "PiWindowPack.h"
 #include "functional.h"
-#include "UI/PiFileDialog.h"
+//#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -81,7 +81,7 @@ BEGIN_MESSAGE_MAP(CMFCTest1Dlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_EN_CHANGE(IDC_EDIT1, &CMFCTest1Dlg::OnEnChangeEdit1)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMFCTest1Dlg::OnBnClickedButton1)
-	ON_NOTIFY(LVN_BEGINDRAG, IDC_LIST2, OnBegindragFilelist)
+	ON_NOTIFY(LVN_BEGINDRAG, IDC_LIST, OnBegindragFilelist)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
@@ -139,13 +139,13 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 
 
 
-	c_FileList.InsertItem(0, _T("3333"));
+	//c_FileList.InsertItem(0, _T("3333"));
 
 
-	m_DropTarget.Register(this);
+	m_droptarget.Register(this);
 
-	const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
-	/*CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
+	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 		pszFilter, this);
 
 	dlg.m_ofn.lpstrInitialDir = _T("c:\\WINDOWS\\");  //设置对话框默认呈现的路径
@@ -258,7 +258,7 @@ void CMFCTest1Dlg::OnBnClickedButton1()
 		return;
 
 	}
-	tstring strFilter = _T("All Files (*.*)|*.*|txt Files (*.txt)|*.txt|bin Files (*.exe)|*.exe;*.obj||");
+	/*tstring strFilter = _T("All Files (*.*)|*.*|txt Files (*.txt)|*.txt|bin Files (*.exe)|*.exe;*.obj||");
 
 	CPiFileDialog dlgFile(_T("选择多个文件(目录)"), strFilter.c_str());
 	if (!dlgFile.Popup())
@@ -275,7 +275,7 @@ void CMFCTest1Dlg::OnBnClickedButton1()
 		strOut += strSel;
 		strOut += _T("\r\n");
 	}
-	pEdit->SetWindowText(strOut.c_str());
+	pEdit->SetWindowText(strOut.c_str());*/
 	return;
 }
 
@@ -288,6 +288,7 @@ void CMFCTest1Dlg::TestOleDrag()
 void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	OutInfo(_T("lBtnDown"));
 	m_bBtnDown = true;
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
@@ -296,6 +297,8 @@ void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
+	OutInfo(_T("lBtnUp"));
+	m_bBtnDown = false;
 
 	CDialogEx::OnLButtonUp(nFlags, point);
 }
@@ -387,9 +390,11 @@ void CMFCTest1Dlg::DragIng()
 
 void CMFCTest1Dlg::DragIng2()
 {
-	OutputDebugString(_T("OnBegindragFilelist\n"));
+	if (!m_bDraging)
+	{
+		return ;
+	}
 	//NMLISTVIEW*    pNMLV = (NMLISTVIEW*)pNMHDR;
-	COleDataSource datasrc;
 	HGLOBAL        hgDrop;
 	DROPFILES*     pDrop;
 	CStringList    lsDraggedFiles;
@@ -403,12 +408,24 @@ void CMFCTest1Dlg::DragIng2()
 	//*pResult = 0;   // return value ignored
 
 	// For every selected item in the list, put the filename into lsDraggedFiles.
+	int nCount = c_FileList.GetItemCount();
+	if (!nCount)
+	{
+		return;
+	}
+	OutputDebugString(_T("DragIng2\n"));
+	COleDataSource*			pDatasrc = new COleDataSource;
 
-	pos = c_FileList.GetFirstSelectedItemPosition();
+	sFile = c_FileList.GetItemText(0, 0);
+	lsDraggedFiles.AddTail(sFile);
+	uBuffSize += lstrlen(sFile) + 1;
+
+	/*pos = c_FileList.GetFirstSelectedItemPosition();
 
 	while (NULL != pos)
 	{
-		nSelItem = c_FileList.GetNextSelectedItem(pos);
+		//nSelItem = c_FileList.GetNextSelectedItem(pos);
+		c_FileList.GetItemCount()
 		sFile = c_FileList.GetItemText(nSelItem, 0);
 
 		lsDraggedFiles.AddTail(sFile);
@@ -416,7 +433,7 @@ void CMFCTest1Dlg::DragIng2()
 		// Calculate the # of chars required to hold this string.
 
 		uBuffSize += lstrlen(sFile) + 1;
-	}
+	}*/
 
 	// Add 1 extra for the final null char, and the size of the DROPFILES struct.
 
@@ -463,7 +480,7 @@ void CMFCTest1Dlg::DragIng2()
 
 	// Put the data in the data source.
 
-	datasrc.CacheGlobalData(CF_HDROP, hgDrop, &etc);
+	pDatasrc->CacheGlobalData(CF_HDROP, hgDrop, &etc);
 
 	// Add in our own custom data, so we know that the drag originated from our 
 	// window.  CMyDropTarget::DragEnter() checks for this custom format, and
@@ -484,12 +501,12 @@ void CMFCTest1Dlg::DragIng2()
 
 	etc.cfFormat = g_uCustomClipbrdFormat;
 
-	datasrc.CacheGlobalData(g_uCustomClipbrdFormat, hgBool, &etc);
+	pDatasrc->CacheGlobalData(g_uCustomClipbrdFormat, hgBool, &etc);
 
 
 	// Start the drag 'n' drop!
 
-	DROPEFFECT dwEffect = datasrc.DoDragDrop(DROPEFFECT_COPY | DROPEFFECT_MOVE);
+	DROPEFFECT dwEffect = pDatasrc->DoDragDrop(DROPEFFECT_COPY | DROPEFFECT_MOVE);
 
 	// If the DnD completed OK, we remove all of the dragged items from our
 	// list.
@@ -527,7 +544,7 @@ void CMFCTest1Dlg::DragIng2()
 		// file no longer exists, it was moved successfully and we can
 		// remove it from the list.
 
-		/*if (g_bNT)
+		if (g_bNT)
 		{
 			bool bDeletedAnything = false;
 
@@ -571,7 +588,7 @@ void CMFCTest1Dlg::DragIng2()
 				GlobalFree(hgBool);
 			}
 		}   // end if (NT)
-		else*/
+		else
 		{
 			// We're on 9x, and a return of DROPEFFECT_NONE always means
 			// that the DnD operation was aborted.  We need to free the
@@ -583,13 +600,16 @@ void CMFCTest1Dlg::DragIng2()
 	}
 	break;  // end case DROPEFFECT_NONE
 	}   // end switch
+
+
+	m_bBtnDown = false;
+	m_bDraging = false;
 }
 
 
 void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	OutInfo(_T("OnBegindragFilelist"));
-
 	OutputDebugString(_T("OnBegindragFilelist\n"));
 	NMLISTVIEW*    pNMLV = (NMLISTVIEW*)pNMHDR;
 	COleDataSource datasrc;
@@ -603,6 +623,10 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 	TCHAR*         pszBuff;
 	FORMATETC      etc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
+	{
+		COleDataSource datasrc;
+		pszBuff = nullptr;
+	}
 	*pResult = 0;   // return value ignored
 
 	// For every selected item in the list, put the filename into lsDraggedFiles.
@@ -747,7 +771,7 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 					// says the file doesn't exist, so remove the corresponding 
 					// item from the list.
 
-					//c_FileList.DeleteItem(nSelItem);
+					c_FileList.DeleteItem(nSelItem);
 
 					nSelItem--;
 					bDeletedAnything = true;
@@ -787,6 +811,4 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 	break;  // end case DROPEFFECT_NONE
 	}   // end switch
 
-
-	//DragIng2();
 }

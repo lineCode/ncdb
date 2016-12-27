@@ -53,7 +53,7 @@ public:
 	void DragIng2();
 
 	bool				m_bBtnDown;
-	CPiDropTarget		m_DropTarget;
+	//CPiDropTarget		m_DropTarget;
 	CListCtrl			c_FileList;
 
 	CMyDropTarget		m_droptarget;
