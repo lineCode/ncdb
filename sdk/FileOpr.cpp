@@ -62,8 +62,8 @@ bool CFileOpr::Open(tcpchar filePath, tcpchar cMode/* = "r"*/, int shflag /*= _S
 	if (0 == pFileTemp)
 	{
 		int Err = errno ;
-        wostringstream oss;
-        oss<<INFO_ERROR "open file:"<< filePath<<" failed!";
+        tostringstream oss;
+        oss<<INFO_ERROR _T("open file:")<< filePath<<_T(" failed!");
         this->SetErrDesc(oss.str().c_str());
 		return false;
 		//errno;

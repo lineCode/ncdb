@@ -118,11 +118,13 @@
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\StrCoding.h" />
     <ClInclude Include="..\..\sdk\ThreadLight.h" />
+    <ClInclude Include="DragDropImpl.h" />
     <ClInclude Include="ECMaterialDropText.h" />
     <ClInclude Include="ECOleMemDropTarget.h" />
     <ClInclude Include="MFCTest1.h" />
     <ClInclude Include="MFCTest1Dlg.h" />
     <ClInclude Include="MyDropTarget.h" />
+    <ClInclude Include="PiDataSource.h" />
     <ClInclude Include="PiDropTarget.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -142,11 +144,13 @@
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\sdk\ThreadLight.cpp" />
+    <ClCompile Include="DragDropImpl.cpp" />
     <ClCompile Include="ECMaterialDropText.cpp" />
     <ClCompile Include="ECOleMemDropTarget.cpp" />
     <ClCompile Include="MFCTest1.cpp" />
     <ClCompile Include="MFCTest1Dlg.cpp" />
     <ClCompile Include="MyDropTarget.cpp" />
+    <ClCompile Include="PiDataSource.cpp" />
     <ClCompile Include="PiDropTarget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

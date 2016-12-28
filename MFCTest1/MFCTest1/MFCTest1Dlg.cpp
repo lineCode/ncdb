@@ -8,6 +8,7 @@
 #include "afxdialogex.h"
 #include "PiWindowPack.h"
 #include "functional.h"
+#include "PiDataSource.h"
 //#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
@@ -59,8 +60,8 @@ BOOL CAboutDlg::OnInitDialog()
 
 
 CMFCTest1Dlg::CMFCTest1Dlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CMFCTest1Dlg::IDD, pParent),
-	m_droptarget(&c_FileList)
+	: CDialogEx(CMFCTest1Dlg::IDD, pParent)
+	//,m_droptarget(&c_FileList)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bBtnDown = false;
@@ -134,6 +135,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	c_FileList.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);
 
 	// Enable tooltips for items that aren't completely visible.
+	c_FileList.InsertItem(0, _T("e:\\work\\svn\\gitlwl\\wkeBrowserConsole.txt"));
 
 	c_FileList.SetExtendedStyle(LVS_EX_INFOTIP);
 
@@ -142,7 +144,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	//c_FileList.InsertItem(0, _T("3333"));
 
 
-	m_droptarget.Register(this);
+	//m_droptarget.Register(this);
 
 	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
 	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -308,7 +310,8 @@ void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
 	BeginDrag();
-	DragIng2();
+	//DragIng2();
+	DragDui();
 	CDialogEx::OnMouseMove(nFlags, point);
 }
 
@@ -398,7 +401,7 @@ void CMFCTest1Dlg::DragIng2()
 	HGLOBAL        hgDrop;
 	DROPFILES*     pDrop;
 	CStringList    lsDraggedFiles;
-	POSITION       pos;
+	//POSITION       pos;
 	int            nSelItem;
 	CString        sFile;
 	UINT           uBuffSize = 0;
@@ -416,9 +419,10 @@ void CMFCTest1Dlg::DragIng2()
 	OutputDebugString(_T("DragIng2\n"));
 	COleDataSource*			pDatasrc = new COleDataSource;
 
-	sFile = c_FileList.GetItemText(0, 0);
-	lsDraggedFiles.AddTail(sFile);
-	uBuffSize += lstrlen(sFile) + 1;
+	sFile = _T("e:\\work\\svn\\gitlwl\\MFCTest1\\MFCTest1\\DragDropIm");
+
+	
+	uBuffSize += sFile.GetLength() + 1;
 
 	/*pos = c_FileList.GetFirstSelectedItemPosition();
 
@@ -467,15 +471,18 @@ void CMFCTest1Dlg::DragIng2()
 
 	// Copy all the filenames into memory after the end of the DROPFILES struct.
 
-	pos = lsDraggedFiles.GetHeadPosition();
+	//pos = lsDraggedFiles.GetHeadPosition();
 	pszBuff = (TCHAR*)(LPBYTE(pDrop) + sizeof(DROPFILES));
 
+/*
 	while (NULL != pos)
 	{
 		lstrcpy(pszBuff, (LPCTSTR)lsDraggedFiles.GetNext(pos));
 		pszBuff = 1 + _tcschr(pszBuff, '\0');
-	}
+	}*/
 
+	lstrcpy(pszBuff, (LPCTSTR)sFile.GetBuffer());
+	pszBuff = 1 + _tcschr(pszBuff, '\0');
 	GlobalUnlock(hgDrop);
 
 	// Put the data in the data source.
@@ -487,21 +494,22 @@ void CMFCTest1Dlg::DragIng2()
 	// doesn't allow the drop if it's present.  This is how we prevent the user
 	// from dragging and then dropping in our own window.
 	// The data will just be a dummy bool.
-	HGLOBAL hgBool;
+	HGLOBAL hgBool = NULL;
 
-	hgBool = GlobalAlloc(GHND | GMEM_SHARE, sizeof(bool));
+	/*hgBool = GlobalAlloc(GHND | GMEM_SHARE, sizeof(bool));
 
 	if (NULL == hgBool)
 	{
 		GlobalFree(hgDrop);
 		return;
-	}
+	}*/
 
 	// Put the data in the data source.
 
-	etc.cfFormat = g_uCustomClipbrdFormat;
+	/*etc.cfFormat = g_uCustomClipbrdFormat;
 
 	pDatasrc->CacheGlobalData(g_uCustomClipbrdFormat, hgBool, &etc);
+*/
 
 
 	// Start the drag 'n' drop!
@@ -623,10 +631,6 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 	TCHAR*         pszBuff;
 	FORMATETC      etc = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-	{
-		COleDataSource datasrc;
-		pszBuff = nullptr;
-	}
 	*pResult = 0;   // return value ignored
 
 	// For every selected item in the list, put the filename into lsDraggedFiles.
@@ -811,4 +815,20 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 	break;  // end case DROPEFFECT_NONE
 	}   // end switch
 
+}
+
+void CMFCTest1Dlg::DragDui()
+{
+	if (!m_bDraging)
+	{
+		return;
+	}
+	OutInfo(_T("drop Begin"));
+	CPiDataSource ids;
+	ids.SetWindow(m_hWnd);
+	ids.GeneralPic();
+	ids.Drop();
+
+	m_bBtnDown = false;
+	m_bDraging = false;
 }

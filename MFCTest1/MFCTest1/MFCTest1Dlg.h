@@ -51,10 +51,11 @@ public:
 	bool BeginDrag();
 	void DragIng();
 	void DragIng2();
+	void DragDui();
 
 	bool				m_bBtnDown;
 	//CPiDropTarget		m_DropTarget;
 	CListCtrl			c_FileList;
 
-	CMyDropTarget		m_droptarget;
+	//CMyDropTarget		m_droptarget;
 };

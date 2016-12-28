@@ -6,9 +6,9 @@ using std::string;
 using std::wstring;
 
 //日志信息
-#define INFO_NORMAL     "[INFO]     || "
-#define INFO_WARNING    "[WARNING]  || "
-#define INFO_ERROR      "[ERROR]    || "
+#define INFO_NORMAL     _T("[INFO]     || ")
+#define INFO_WARNING    _T("[WARNING]  || ")
+#define INFO_ERROR      _T("[ERROR]    || ")
 
 #define DEBUG_ERROR(a)	OutputDebugStringA(string(string(INFO_ERROR)    + a + "\n").c_str())
 #define DEBUG_WARN(a)	OutputDebugStringA(string(string(INFO_WARNING)  + a + "\n").c_str())

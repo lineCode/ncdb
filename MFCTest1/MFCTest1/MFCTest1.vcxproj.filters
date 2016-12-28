@@ -96,6 +96,12 @@
     <ClInclude Include="MyDropTarget.h">
       <Filter>ex</Filter>
     </ClInclude>
+    <ClInclude Include="PiDataSource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DragDropImpl.h">
+      <Filter>ex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MFCTest1.cpp">
@@ -156,6 +162,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyDropTarget.cpp">
+      <Filter>ex</Filter>
+    </ClCompile>
+    <ClCompile Include="PiDataSource.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DragDropImpl.cpp">
       <Filter>ex</Filter>
     </ClCompile>
   </ItemGroup>

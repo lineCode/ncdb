@@ -3,6 +3,7 @@
 #include "PiUITool.h"
 #include "PiWindowPack.h"
 #include "PathLight.h"
+#include "..\..\nc\src\Common\sdk\StrCoding.h"
 
 #define STRING_WND_PROP_NAME _T("propPiFileDialog")
 typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;
@@ -162,7 +163,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 		{
 			break;
 		}
-		m_strSelect.push_back(szName);
+		m_strSelect.push_back(pw2psSmart(szName));
 		CoTaskMemFree(szName);
 	}
 	
@@ -175,7 +176,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 			CPathLight path(m_strSelect.at(0));
 			tstring strDirCurrent;
 			tstring strTemp;
-			tpchar szTemp = nullptr;
+			LPWSTR szTemp = nullptr;
 
 			if (!SUCCEEDED(m_pIFileDialog->GetFolder(&pISI)))
 			{
@@ -185,7 +186,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 			{
 				break;
 			}
-			strDirCurrent = szTemp;
+			strDirCurrent = pw2psSmart(szTemp);
 			CoTaskMemFree(szTemp);
 
 			if (path.GetPath() != strDirCurrent)
@@ -200,7 +201,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 			{
 				break;
 			}
-			strTemp = szTemp;
+			strTemp = pw2psSmart(szTemp);
 			CoTaskMemFree(szTemp);
 			if (strTemp.empty())
 			{
