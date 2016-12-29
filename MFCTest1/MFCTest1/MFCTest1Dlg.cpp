@@ -61,7 +61,7 @@ BOOL CAboutDlg::OnInitDialog()
 
 CMFCTest1Dlg::CMFCTest1Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CMFCTest1Dlg::IDD, pParent)
-	//,m_droptarget(&c_FileList)
+	,m_droptarget(&c_FileList)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bBtnDown = false;
@@ -144,7 +144,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	//c_FileList.InsertItem(0, _T("3333"));
 
 
-	//m_droptarget.Register(this);
+	m_droptarget.Register(this);
 
 	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
 	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -292,6 +292,11 @@ void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
 	OutInfo(_T("lBtnDown"));
 	m_bBtnDown = true;
+
+	m_idSource.SetClientPos(true);
+	m_idSource.SetWindow(m_hWnd);
+	m_idSource.PrepareDrag();
+
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
 
@@ -302,6 +307,7 @@ void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
 	OutInfo(_T("lBtnUp"));
 	m_bBtnDown = false;
 
+	m_idSource.CancelDrag();
 	CDialogEx::OnLButtonUp(nFlags, point);
 }
 
@@ -309,9 +315,24 @@ void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
-	BeginDrag();
+	/*BeginDrag();
 	//DragIng2();
-	DragDui();
+	DragDui();*/
+	RECT rtClient = { 0 };
+	GetClientRect(&rtClient);
+	RECT rtWnd = { 0 };
+	GetWindowRect(&rtWnd);
+	//int nCaptionHeight = rtWnd.bottom - rtWnd.top - rtClient.bottom;
+	int nCaptionHeight = 0;
+	POINT ptSize = {100, 100};
+	
+	RECT rt = { point.x - ptSize.x / 2, point.y + nCaptionHeight - ptSize.y / 2 };
+	rt.right = rt.left + ptSize.x;
+	rt.bottom = rt.top + ptSize.y;
+	m_idSource.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), 
+		rt
+	);
+
 	CDialogEx::OnMouseMove(nFlags, point);
 }
 
@@ -617,6 +638,16 @@ void CMFCTest1Dlg::DragIng2()
 
 void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 {
+	m_idSource.SetWindow(m_hWnd);
+	m_idSource.PrepareDrag();
+	m_idSource.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), RECT{ 0, 0, 100, 100 });
+	m_idSource.CancelDrag();
+	return;
+
+
+
+
+
 	OutInfo(_T("OnBegindragFilelist"));
 	OutputDebugString(_T("OnBegindragFilelist\n"));
 	NMLISTVIEW*    pNMLV = (NMLISTVIEW*)pNMHDR;
@@ -824,11 +855,9 @@ void CMFCTest1Dlg::DragDui()
 		return;
 	}
 	OutInfo(_T("drop Begin"));
-	CPiDataSource ids;
-	ids.SetWindow(m_hWnd);
-	ids.GeneralPic();
-	ids.Drop();
-
+	
+	m_idSource.SetWindow(m_hWnd);
+	m_idSource.Drag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"));
 	m_bBtnDown = false;
 	m_bDraging = false;
 }

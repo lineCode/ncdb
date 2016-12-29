@@ -74,6 +74,12 @@ BOOL CMFCTest1App::InitInstance()
 
 	AfxOleInit();
 
+	//gdi+ init
+	ULONG_PTR m_gdiplusToken;
+	Gdiplus::GdiplusStartupInput StartupInput;
+	GdiplusStartup(&m_gdiplusToken, &StartupInput, NULL);
+
+
 	CMFCTest1Dlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();

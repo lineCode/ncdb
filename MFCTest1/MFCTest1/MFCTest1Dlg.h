@@ -6,6 +6,7 @@
 #include "afxwin.h"
 #include "PiDropTarget.h"
 #include "MyDropTarget.h"
+#include "PiDataSource.h"
 
 
 // CMFCTest1Dlg ¶Ô»°¿ò
@@ -56,6 +57,6 @@ public:
 	bool				m_bBtnDown;
 	//CPiDropTarget		m_DropTarget;
 	CListCtrl			c_FileList;
-
-	//CMyDropTarget		m_droptarget;
+	CPiDataSource		m_idSource;
+	CMyDropTarget		m_droptarget;
 };
