@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 #include "PiWindowPack.h"
 #include "functional.h"
-#include "PiDataSource.h"
+#include "ui/PiDataSource.h"
 //#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
@@ -293,7 +293,6 @@ void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 	OutInfo(_T("lBtnDown"));
 	m_bBtnDown = true;
 
-	m_idSource.SetClientPos(true);
 	m_idSource.SetWindow(m_hWnd);
 	m_idSource.PrepareDrag();
 
@@ -315,6 +314,8 @@ void CMFCTest1Dlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	// TODO:  在此添加消息处理程序代码和/或调用默认值
+
+
 	/*BeginDrag();
 	//DragIng2();
 	DragDui();*/

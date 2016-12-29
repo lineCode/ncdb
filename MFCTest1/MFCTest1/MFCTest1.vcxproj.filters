@@ -84,23 +84,17 @@
     <ClInclude Include="..\..\sdk\doString.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="ECOleMemDropTarget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ECMaterialDropText.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="PiDropTarget.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MyDropTarget.h">
       <Filter>ex</Filter>
     </ClInclude>
-    <ClInclude Include="PiDataSource.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\sdk\UI\PiDataSource.h">
+      <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="DragDropImpl.h">
-      <Filter>ex</Filter>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h">
+      <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,23 +146,17 @@
     <ClCompile Include="..\..\sdk\doString.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="ECOleMemDropTarget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ECMaterialDropText.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PiDropTarget.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MyDropTarget.cpp">
       <Filter>ex</Filter>
     </ClCompile>
-    <ClCompile Include="PiDataSource.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\sdk\UI\PiDataSource.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="DragDropImpl.cpp">
-      <Filter>ex</Filter>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp">
+      <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

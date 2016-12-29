@@ -103,6 +103,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.h" />
     <ClInclude Include="..\..\sdk\AutoType.h" />
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
     <ClInclude Include="..\..\sdk\define_gnl.h" />
@@ -118,19 +119,17 @@
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\StrCoding.h" />
     <ClInclude Include="..\..\sdk\ThreadLight.h" />
-    <ClInclude Include="DragDropImpl.h" />
-    <ClInclude Include="ECMaterialDropText.h" />
-    <ClInclude Include="ECOleMemDropTarget.h" />
+    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h" />
+    <ClInclude Include="..\..\sdk\UI\PiDataSource.h" />
     <ClInclude Include="MFCTest1.h" />
     <ClInclude Include="MFCTest1Dlg.h" />
     <ClInclude Include="MyDropTarget.h" />
-    <ClInclude Include="PiDataSource.h" />
-    <ClInclude Include="PiDropTarget.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.cpp" />
     <ClCompile Include="..\..\sdk\AutoType.cpp" />
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
     <ClCompile Include="..\..\sdk\doString.cpp" />
@@ -144,14 +143,11 @@
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\sdk\ThreadLight.cpp" />
-    <ClCompile Include="DragDropImpl.cpp" />
-    <ClCompile Include="ECMaterialDropText.cpp" />
-    <ClCompile Include="ECOleMemDropTarget.cpp" />
+    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp" />
+    <ClCompile Include="..\..\sdk\UI\PiDataSource.cpp" />
     <ClCompile Include="MFCTest1.cpp" />
     <ClCompile Include="MFCTest1Dlg.cpp" />
     <ClCompile Include="MyDropTarget.cpp" />
-    <ClCompile Include="PiDataSource.cpp" />
-    <ClCompile Include="PiDropTarget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

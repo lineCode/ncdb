@@ -237,8 +237,6 @@ Author: Leon Finker  1/2001
 			di.crColorKey = crColorKey; 
 			di.ptOffset.x = pt.x - rc.left;
 			di.ptOffset.y = pt.y - rc.top;
-			//di.ptOffset.x = 0;
-			//di.ptOffset.y = 0;
 			return pDragSourceHelper->InitializeFromBitmap(&di, pDataObject);
 		}
 		HRESULT InitializeFromWindow(HWND hwnd, POINT& pt,IDataObject* pDataObject)

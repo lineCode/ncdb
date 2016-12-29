@@ -4,9 +4,9 @@
 
 #pragma once
 #include "afxwin.h"
-#include "PiDropTarget.h"
+#include "ui/PiDropTarget.h"
 #include "MyDropTarget.h"
-#include "PiDataSource.h"
+#include "ui/PiDataSource.h"
 
 
 // CMFCTest1Dlg ¶Ô»°¿ò

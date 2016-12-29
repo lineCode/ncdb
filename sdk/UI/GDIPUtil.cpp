@@ -1,6 +1,6 @@
 #include "StdAfx.h"
-#include <GdiPlus.h>
 #include "GDIPUtil.h"
+#include <GdiPlus.h>
 #pragma comment( lib, "GdiPlus.lib" )
 using namespace Gdiplus;
 
@@ -106,4 +106,17 @@ void CGDIPUtil::ClipPic( LPCTSTR strPicSize, LPCTSTR strPicSrc )
 	CGDIPUtil::GetEncoderClsid(L"image/png", &pngClsid);
 	bm.Save(strPicSrc, &pngClsid, NULL);
 	
+}
+
+HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath)
+{	
+	Bitmap tempBmp(szPath);
+	if (tempBmp.GetLastStatus() != Ok)
+	{
+		return NULL;
+	}
+	Color   backColor;
+	HBITMAP   hBitmap = NULL;
+	tempBmp.GetHBITMAP(backColor, &hBitmap);
+	return hBitmap;
 }

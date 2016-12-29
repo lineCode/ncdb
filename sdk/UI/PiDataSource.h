@@ -24,6 +24,7 @@ public:
 	bool PrepareDrag();
 	bool BeginDrag(tcpchar szPath, RECT rt);
 	void GeneralPic(RECT rtPic);
+	void GeneralPic(tcpchar szPath);
 	bool Drag(tcpchar szPath);
 	void SetWindow(HWND hWnd);
 	bool IsFrstDrag();
@@ -31,8 +32,9 @@ public:
 	bool CanDrag();
 	void CancelDrag();
 	void SetClientPos(bool bClient);
+	void SetDragImage(HBITMAP hBitDrag);
 private:
-	HWND				m_hWnd;
+	HWND				m_hWnd;			//ref
 	HDC					m_dc;
 	HBITMAP				m_hDragBitmap;
 	bool m_bDraging;
