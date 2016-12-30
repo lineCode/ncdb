@@ -144,7 +144,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	//c_FileList.InsertItem(0, _T("3333"));
 
 
-	m_droptarget.Register(this);
+	//m_droptarget.Register(this);
 
 	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
 	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -641,7 +641,8 @@ void CMFCTest1Dlg::OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	m_idSource.SetWindow(m_hWnd);
 	m_idSource.PrepareDrag();
-	m_idSource.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), RECT{ 0, 0, 100, 100 });
+	//m_idSource.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), RECT{ 0, 0, 100, 100 });
+	m_idSource.BeginDrag(_T("e:\\temp\\2\\temp.jpg"), RECT{ 0, 0, 100, 100 });
 	m_idSource.CancelDrag();
 	return;
 

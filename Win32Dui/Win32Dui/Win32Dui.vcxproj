@@ -53,7 +53,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>M_DEBUG_INFO;WIN32;_DEBUG;_WINDOWS;_STDC_CONSTANT_MACROS;__STDC_FORMAT_MACROS;_WIN32;UNICODE;_UNICODE;WINVER=0x0602;_WIN32_WINNT=0x602;WIN32_LEAN_AND_MEAN;_HAS_EXCEPTIONS=0;CEF_USE_ATL;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Tddownload\cef_binary_3.2840.1518.gffd843c_windows32\;..\..\..\nc\src\DuiLib;..\..\..\nc\src\common\sdk</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Tddownload\cef_binary_3.2840.1518.gffd843c_windows32\;..\..\..\nc\src\DuiLib;e:\work\svn\gitlwl\sdk;e:\work\svn\gitlwl\sdk\UI</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -89,6 +89,7 @@
     <ClCompile Include="..\..\sdk\AutoType.cpp" />
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
     <ClCompile Include="..\..\sdk\doString.cpp" />
+    <ClCompile Include="..\..\sdk\Duilib\DuiBase.cpp" />
     <ClCompile Include="..\..\sdk\FileOpr.cpp" />
     <ClCompile Include="..\..\sdk\functional.cpp" />
     <ClCompile Include="..\..\sdk\Lock.cpp" />
@@ -98,7 +99,9 @@
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
-    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
+    <ClCompile Include="..\..\sdk\UI\DragDropImpl.cpp" />
+    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp" />
+    <ClCompile Include="..\..\sdk\UI\PiDataSource.cpp" />
     <ClCompile Include="DuiMain.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -111,6 +114,7 @@
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
     <ClInclude Include="..\..\sdk\define_gnl.h" />
     <ClInclude Include="..\..\sdk\doString.h" />
+    <ClInclude Include="..\..\sdk\Duilib\DuiBase.h" />
     <ClInclude Include="..\..\sdk\FileOpr.h" />
     <ClInclude Include="..\..\sdk\functional.h" />
     <ClInclude Include="..\..\sdk\Lock.h" />
@@ -120,7 +124,9 @@
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\StrCoding.h" />
     <ClInclude Include="..\..\sdk\TextStringCut.h" />
-    <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
+    <ClInclude Include="..\..\sdk\UI\DragDropImpl.h" />
+    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h" />
+    <ClInclude Include="..\..\sdk\UI\PiDataSource.h" />
     <ClInclude Include="DuiMain.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

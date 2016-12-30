@@ -90,10 +90,10 @@
     <ClInclude Include="..\..\sdk\UI\PiDataSource.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.h">
+    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h">
+    <ClInclude Include="..\..\sdk\UI\PiDragDropImpl.h">
       <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
@@ -152,10 +152,10 @@
     <ClCompile Include="..\..\sdk\UI\PiDataSource.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\DragDropImpl.cpp">
+    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp">
+    <ClCompile Include="..\..\sdk\UI\PiDragDropImpl.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>

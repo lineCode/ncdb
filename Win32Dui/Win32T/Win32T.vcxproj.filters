@@ -33,9 +33,6 @@
     <ClCompile Include="..\..\UseNCCef\UseNCCef\NCHandle.cpp">
       <Filter>cef</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\sdk\PiString.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
@@ -54,6 +51,21 @@
     <ClCompile Include="..\..\sdk\doString.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\GDIPUtil.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\PathLight.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\FileOpr.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\MD5.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\StrCoding.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\UseNCCef\UseNCCef\NCApp.h">
@@ -64,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="..\..\UseNCCef\UseNCCef\NCHandle.h">
       <Filter>cef</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\sdk\UI\PiUITool.h">
-      <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sdk\PiString.h">
       <Filter>sdk</Filter>
@@ -84,6 +93,21 @@
       <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sdk\doString.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\GDIPUtil.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\PathLight.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\FileOpr.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\MD5.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\StrCoding.h">
       <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>

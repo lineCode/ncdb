@@ -4,6 +4,7 @@
 #include "UI\PiUITool.h"
 #include "resource.h"
 #include <Commdlg.h>
+#include "PiDataSource.h"
 CDuiMain::CDuiMain()
 {
 	//m_SkinFolder	= _T("34");
@@ -206,4 +207,17 @@ bool CDuiMain::TestCef()
 	//pCef->Start();
 	//m_pCef->Load(_T("sdf"));
 	return true;
+}
+
+LRESULT CDuiMain::OnLButtonDown(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+{
+	RECT rt = { 0, 0, 100, 100 };
+	CPiDataSource piSour;
+	//piSour.SetWindow(hWnd);
+	piSour.PrepareDrag();
+	//piSour.GeneralPic(strTempFile.c_str());
+	//piSour.Drag(strTempFile.c_str());
+
+	piSour.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), rt);
+	return 1;
 }

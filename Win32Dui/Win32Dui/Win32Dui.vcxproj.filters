@@ -69,14 +69,23 @@
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp">
-      <Filter>sdk</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\sdk\TextStringCut.cpp">
       <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\DragDropImpl.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\PiDataSource.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\GDIPUtil.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\Duilib\DuiBase.cpp">
+      <Filter>sdk\duilib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,14 +140,23 @@
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdk\UI\PiUITool.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\sdk\PiWindowPack.h">
       <Filter>sdk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sdk\TextStringCut.h">
       <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\DragDropImpl.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\PiDataSource.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\GDIPUtil.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\Duilib\DuiBase.h">
+      <Filter>sdk\duilib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

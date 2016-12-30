@@ -3,7 +3,7 @@
 #include "PiUITool.h"
 #include "PiWindowPack.h"
 #include "PathLight.h"
-#include "..\..\nc\src\Common\sdk\StrCoding.h"
+#include "StrCoding.h"
 
 #define STRING_WND_PROP_NAME _T("propPiFileDialog")
 typedef CPIUITool::tagSELECT_FILE_DIR	tagSELECT_FILE_DIR;

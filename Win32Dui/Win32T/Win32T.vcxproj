@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>e:\work\svn\gitlwl\sdk;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -81,26 +82,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\nc\src\common\sdk\FileOpr.cpp" />
+    <ClCompile Include="..\..\..\nc\src\common\sdk\MD5.cpp" />
+    <ClCompile Include="..\..\..\nc\src\common\sdk\PathLight.cpp" />
+    <ClCompile Include="..\..\..\nc\src\common\sdk\StrCoding.cpp" />
+    <ClCompile Include="..\..\..\nc\src\common\sdk\UI\GDIPUtil.cpp" />
     <ClCompile Include="..\..\sdk\AutoType.cpp" />
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
     <ClCompile Include="..\..\sdk\doString.cpp" />
     <ClCompile Include="..\..\sdk\PiString.cpp" />
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
     <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
-    <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />
     <ClCompile Include="..\..\UseNCCef\UseNCCef\NCApp.cpp" />
     <ClCompile Include="..\..\UseNCCef\UseNCCef\NCCef.cpp" />
     <ClCompile Include="..\..\UseNCCef\UseNCCef\NCHandle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\nc\src\common\sdk\FileOpr.h" />
+    <ClInclude Include="..\..\..\nc\src\common\sdk\MD5.h" />
+    <ClInclude Include="..\..\..\nc\src\common\sdk\PathLight.h" />
+    <ClInclude Include="..\..\..\nc\src\common\sdk\StrCoding.h" />
+    <ClInclude Include="..\..\..\nc\src\common\sdk\UI\GDIPUtil.h" />
     <ClInclude Include="..\..\sdk\AutoType.h" />
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
     <ClInclude Include="..\..\sdk\doString.h" />
     <ClInclude Include="..\..\sdk\PiString.h" />
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
     <ClInclude Include="..\..\sdk\TextStringCut.h" />
-    <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
     <ClInclude Include="..\..\UseNCCef\UseNCCef\NCApp.h" />
     <ClInclude Include="..\..\UseNCCef\UseNCCef\NCCef.h" />
     <ClInclude Include="..\..\UseNCCef\UseNCCef\NCHandle.h" />
