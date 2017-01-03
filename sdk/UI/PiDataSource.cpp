@@ -5,7 +5,7 @@
 #include <gdiplus.h>
 #include <assert.h> 
 #include "GDIPUtil.h"
-#include "Math\mathUnit.h"
+#include "Math/PiMathUnit.h"
 #pragma comment(lib, "GdiPlus.lib")
 
 using std::string;
@@ -177,8 +177,8 @@ void CPiDataSource::GeneralPic(RECT rtPic)
 	{
 		m_szDragImg = szSrc;
 	}
-
-	SIZE szDist = CPiMath::GetKeepRadio(SIZE{ szSrc.cx, szSrc.cy }, m_szDragImg);
+	SIZE szDist = GetDragImgDistSize(szSrc);
+	//SIZE szDist = CPiMath::GetKeepRadio(SIZE{ szSrc.cx, szSrc.cy }, m_szDragImg);
 
 	HDC hPaintDC = ::CreateCompatibleDC(m_dc);
 	HBITMAP hPaintBitmap = ::CreateCompatibleBitmap(m_dc, szDist.cx, szDist.cy);
@@ -237,7 +237,15 @@ void CPiDataSource::GeneralPic(RECT rtPic)
 
 void CPiDataSource::GeneralPic(tcpchar szPath)
 {
-	HBITMAP hBitmap = CGDIPUtil::GetBitmapFromImage(szPath, m_szDragImg);
+	Gdiplus::Bitmap tempBmp(szPath);
+	if (tempBmp.GetLastStatus() != Gdiplus::Ok
+		|| tempBmp.GetHeight() == 0
+		|| tempBmp.GetWidth() == 0)
+	{
+		return ;
+	}
+	SIZE szDist = GetDragImgDistSize(SIZE{ tempBmp.GetWidth(), tempBmp.GetHeight() });
+	HBITMAP hBitmap = CGDIPUtil::GetBitmapFromImage(szPath, szDist);
 	if (!hBitmap)
 	{
 		return;
@@ -355,4 +363,17 @@ void CPiDataSource::SetDragImageSize(int cx, int cy)
 {
 	m_szDragImg.cx = cx;
 	m_szDragImg.cy = cy;
+}
+
+SIZE CPiDataSource::GetDragImgDistSize(const SIZE& szSrc)
+{
+	SIZE szDist = szSrc;
+	if (szDist.cx <= m_szDragImg.cx
+		&& szDist.cy <= m_szDragImg.cy)
+	{
+		return szDist;
+	}
+
+	szDist = CPiMath::GetKeepRadio(szSrc, m_szDragImg);
+	return szDist;
 }

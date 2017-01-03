@@ -4,19 +4,19 @@
 #include <wtypes.h>
 
 Pi_NameSpace_Begin
-const int NUM_INT_DIGIT_LENGTH			= 30;//字符串形式的数据大小最大支持的位数
+const int NUM_INT_DIGIT_LENGTH = 30;//字符串形式的数据大小最大支持的位数
 
 const UNLONG NUM_FILE_SIZE_RATE = 1024;                     //文件大小单位进率
-const UNLONG NUM_FILE_SIZE_1K   = 1024;
-const UNLONG NUM_FILE_SIZE_1M   = NUM_FILE_SIZE_1K * NUM_FILE_SIZE_RATE;
-const UNINT64 NUM_FILE_SIZE_1G   = NUM_FILE_SIZE_1M * NUM_FILE_SIZE_RATE;
-const UNINT64 NUM_FILE_SIZE_1T   = NUM_FILE_SIZE_1G * NUM_FILE_SIZE_RATE;
+const UNLONG NUM_FILE_SIZE_1K = 1024;
+const UNLONG NUM_FILE_SIZE_1M = NUM_FILE_SIZE_1K * NUM_FILE_SIZE_RATE;
+const UNINT64 NUM_FILE_SIZE_1G = NUM_FILE_SIZE_1M * NUM_FILE_SIZE_RATE;
+const UNINT64 NUM_FILE_SIZE_1T = NUM_FILE_SIZE_1G * NUM_FILE_SIZE_RATE;
 
-const int NUM_PERCENT_MAX       = 100;  //百分比最大值
+const int NUM_PERCENT_MAX = 100;  //百分比最大值
 
 
 //时间
-const UNLONG NUM_TIME_RATE              = 60;
+const UNLONG NUM_TIME_RATE = 60;
 
 #define SECOND_TO_NANOSECOND(n) ((n)*1000*1000*1000)        //秒 -> 纳秒
 #define SECOND_TO_MILLISECOND(n) ((n)*1000)        //秒 -> 毫秒
@@ -66,9 +66,9 @@ public:
 	~CPiMath();
 public:
 	/************************************************************************
-		fun:	获取缩放后的大小
-		param:	
-		memo:	
+	fun:	获取等比例扩大或缩放后的最大大小
+	param:
+	memo:
 	************************************************************************/
 	static SIZE GetKeepRadio(const SIZE& szSrc, const SIZE& szLimit);
 protected:

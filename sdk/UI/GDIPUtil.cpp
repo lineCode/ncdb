@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "GDIPUtil.h"
 #include <GdiPlus.h>
-#include "Math\mathUnit.h"
+#include "Math/PiMathUnit.h"
 #pragma comment( lib, "GdiPlus.lib" )
 using namespace Gdiplus;
 
@@ -111,9 +111,9 @@ void CGDIPUtil::ClipPic( LPCTSTR strPicSize, LPCTSTR strPicSrc )
 	
 }
 
-HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize /*= { 0 }*/, bool bKeepRadio /*= true*/)
+HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize /*= { 0 }*/)
 {
-	Bitmap tempBmp(szPath);
+	Gdiplus::Bitmap tempBmp(szPath);
 	if (tempBmp.GetLastStatus() != Ok
 		|| tempBmp.GetHeight() == 0
 		|| tempBmp.GetWidth() == 0)
@@ -129,9 +129,6 @@ HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize /*= { 0 }*/
 	}
 	else
 	{
-		//把图片等比例缩放， 取宽和高中缩放比例比较大的
-		szPicSize = CPiMath::GetKeepRadio(SIZE{ tempBmp.GetWidth(), tempBmp.GetHeight() }, szPicSize);
-		
 		Bitmap bmDest(szPicSize.cx, szPicSize.cy, PixelFormat32bppARGB); //新建缩放后的位图  
 		if (bmDest.GetLastStatus() != Ok)
 		{

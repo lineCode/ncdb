@@ -52,6 +52,7 @@ public:
 		memo:	
 	************************************************************************/
 	void SetDragImageSize(int cx, int cy);
+	SIZE GetDragImgDistSize(const SIZE& szSrc);
 private:
 	HWND				m_hWnd;			//ref
 	HDC					m_dc;
