@@ -111,6 +111,7 @@
     <ClInclude Include="..\..\sdk\FileOpr.h" />
     <ClInclude Include="..\..\sdk\functional.h" />
     <ClInclude Include="..\..\sdk\Lock.h" />
+    <ClInclude Include="..\..\sdk\math\mathUnit.h" />
     <ClInclude Include="..\..\sdk\MD5.h" />
     <ClInclude Include="..\..\sdk\PathLight.h" />
     <ClInclude Include="..\..\sdk\PiHeadKernel.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="..\..\sdk\FileOpr.cpp" />
     <ClCompile Include="..\..\sdk\functional.cpp" />
     <ClCompile Include="..\..\sdk\Lock.cpp" />
+    <ClCompile Include="..\..\sdk\math\mathUnit.cpp" />
     <ClCompile Include="..\..\sdk\MD5.cpp" />
     <ClCompile Include="..\..\sdk\PathLight.cpp" />
     <ClCompile Include="..\..\sdk\PiString.cpp" />

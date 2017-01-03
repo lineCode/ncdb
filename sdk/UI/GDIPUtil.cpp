@@ -1,10 +1,13 @@
 #include "StdAfx.h"
 #include "GDIPUtil.h"
 #include <GdiPlus.h>
+#include "Math\mathUnit.h"
 #pragma comment( lib, "GdiPlus.lib" )
 using namespace Gdiplus;
 
 static const CPiGdip g_gidp;
+Pi_NameSpace_Using
+
 CPiGdip::CPiGdip()
 {
 	GdiplusStartupInput gdiplusStartupInput;
@@ -108,15 +111,42 @@ void CGDIPUtil::ClipPic( LPCTSTR strPicSize, LPCTSTR strPicSrc )
 	
 }
 
-HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath)
-{	
+HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize /*= { 0 }*/, bool bKeepRadio /*= true*/)
+{
 	Bitmap tempBmp(szPath);
-	if (tempBmp.GetLastStatus() != Ok)
+	if (tempBmp.GetLastStatus() != Ok
+		|| tempBmp.GetHeight() == 0
+		|| tempBmp.GetWidth() == 0)
 	{
 		return NULL;
 	}
+
 	Color   backColor;
 	HBITMAP   hBitmap = NULL;
-	tempBmp.GetHBITMAP(backColor, &hBitmap);
+	if (szPicSize.cx <= 0 || szPicSize.cy <= 0)
+	{
+		tempBmp.GetHBITMAP(backColor, &hBitmap);
+	}
+	else
+	{
+		//把图片等比例缩放， 取宽和高中缩放比例比较大的
+		szPicSize = CPiMath::GetKeepRadio(SIZE{ tempBmp.GetWidth(), tempBmp.GetHeight() }, szPicSize);
+		
+		Bitmap bmDest(szPicSize.cx, szPicSize.cy, PixelFormat32bppARGB); //新建缩放后的位图  
+		if (bmDest.GetLastStatus() != Ok)
+		{
+			return hBitmap;
+		}
+
+		Graphics g(&bmDest);
+		
+		if (g.GetLastStatus() == Ok)
+		{
+			// 使用高质量模式(相对比较耗时)，可以查看msdn，替换为其他mode   
+			g.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+			g.DrawImage(&tempBmp, 0, 0, szPicSize.cx, szPicSize.cy);
+			bmDest.GetHBITMAP(backColor, &hBitmap);
+		}
+	}
 	return hBitmap;
 }

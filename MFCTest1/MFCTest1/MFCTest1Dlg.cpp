@@ -9,12 +9,13 @@
 #include "PiWindowPack.h"
 #include "functional.h"
 #include "ui/PiDataSource.h"
+#include "Math/mathUnit.h"
 //#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+Pi_NameSpace_Using
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -140,7 +141,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	c_FileList.SetExtendedStyle(LVS_EX_INFOTIP);
 
 
-
+	Test();
 	//c_FileList.InsertItem(0, _T("3333"));
 
 
@@ -294,6 +295,7 @@ void CMFCTest1Dlg::OnLButtonDown(UINT nFlags, CPoint point)
 	m_bBtnDown = true;
 
 	m_idSource.SetWindow(m_hWnd);
+	m_idSource.SetDragImageSize(200, 200);
 	m_idSource.PrepareDrag();
 
 	CDialogEx::OnLButtonDown(nFlags, point);
@@ -325,14 +327,20 @@ void CMFCTest1Dlg::OnMouseMove(UINT nFlags, CPoint point)
 	GetWindowRect(&rtWnd);
 	//int nCaptionHeight = rtWnd.bottom - rtWnd.top - rtClient.bottom;
 	int nCaptionHeight = 0;
-	POINT ptSize = {100, 100};
+	POINT ptSize = {200, 200};
 	
 	RECT rt = { point.x - ptSize.x / 2, point.y + nCaptionHeight - ptSize.y / 2 };
 	rt.right = rt.left + ptSize.x;
 	rt.bottom = rt.top + ptSize.y;
-	m_idSource.BeginDrag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"), 
-		rt
-	);
+
+	
+	/*m_idSource.BeginDrag(_T("e:\\work\\svn\\“发帖子”韩文怎么写？_百度知道.htm")
+		, rt
+	);*/
+
+	tstring strPath(_T("e:\\work\\svn\\1.jpg"));
+	m_idSource.BeginDrag(strPath.c_str());
+	
 
 	CDialogEx::OnMouseMove(nFlags, point);
 }
@@ -862,4 +870,37 @@ void CMFCTest1Dlg::DragDui()
 	m_idSource.Drag(_T("e:\\work\\svn\\nc\\src\\“发帖子”韩文怎么写？_百度知道.htm"));
 	m_bBtnDown = false;
 	m_bDraging = false;
+}
+
+void CMFCTest1Dlg::Test()
+{
+	SIZE szSrc = { 50, 40 };
+	SIZE szLimit = { 100, 100 };
+	SIZE szResult = { 0 };
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+	assert(szResult.cx == 100 && szResult.cy == 80);
+
+	szLimit.cx = 30;
+	szLimit.cy = 30;
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+
+	szLimit.cx = 30;
+	szLimit.cy = 70;
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+
+	szLimit.cx = 70;
+	szLimit.cy = 50;
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+
+	szLimit.cx = 70;
+	szLimit.cy = 40;
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+
+	szLimit.cx = 50;
+	szLimit.cy = 80;
+	szResult = CPiMath::GetKeepRadio(szSrc, szLimit);
+
+	/*(1.0 * szLimit.cx / szLimit.cx)
+	assert(szResult.cx == 100 && szResult.cy == 100);*/
+	szResult.cx = 0;
 }

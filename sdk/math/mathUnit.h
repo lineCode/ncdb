@@ -1,6 +1,7 @@
 #pragma once
 #include   <limits>
 #include "PiTypeDef.h"
+#include <wtypes.h>
 
 Pi_NameSpace_Begin
 const int NUM_INT_DIGIT_LENGTH			= 30;//字符串形式的数据大小最大支持的位数
@@ -56,5 +57,22 @@ const UNLONG NUM_TIME_RATE              = 60;
 
 bool FlowBigger(double n1, double n2);
 bool FlowEqual(double n1, double n2);
+
+
+class CPiMath
+{
+public:
+	CPiMath();
+	~CPiMath();
+public:
+	/************************************************************************
+		fun:	获取缩放后的大小
+		param:	
+		memo:	
+	************************************************************************/
+	static SIZE GetKeepRadio(const SIZE& szSrc, const SIZE& szLimit);
+protected:
+private:
+};
 
 Pi_NameSpace_End
