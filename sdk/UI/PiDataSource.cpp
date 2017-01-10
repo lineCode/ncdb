@@ -11,6 +11,8 @@
 using std::string;
 using std::wstring;
 
+UINT CPiDataSource::m_nDataDragSelfFlag = CPiDataSource::RegisterSelfFlag();
+
 Pi_NameSpace_Using
 
 CPiDataSource::CPiDataSource()
@@ -102,13 +104,22 @@ bool CPiDataSource::Drag(tcpchar szPath)
 
 	FORMATETC fmtetc = { 0 };
 	STGMEDIUM medium = { 0 };
-	/*fmtetc.dwAspect = DVASPECT_CONTENT;
+	HGLOBAL hgSelfFlag = GlobalAlloc(GHND | GMEM_SHARE, sizeof(bool));
+
+	//custom data to indicate the drag is from out, and in out drag Target, get this data to know the drag is or not from our self
+	fmtetc.dwAspect = DVASPECT_CONTENT;
 	fmtetc.lindex = -1;
 	//////////////////////////////////////
-	fmtetc.cfFormat = CF_BITMAP;
-	fmtetc.tymed = TYMED_GDI;
-	medium.tymed = TYMED_GDI;
-	pdobj->SetData(&fmtetc, &medium, FALSE);*/
+	fmtetc.cfFormat = m_nDataDragSelfFlag;
+	fmtetc.tymed = TYMED_HGLOBAL;
+	medium.tymed = fmtetc.tymed;
+	medium.hGlobal = hgDrop;
+
+	if (pdobj->SetData(&fmtetc, &medium, TRUE) != S_OK)
+	{
+		return false;
+	}
+
 
 	{
 		//file
@@ -120,7 +131,10 @@ bool CPiDataSource::Drag(tcpchar szPath)
 
 		medium.tymed = TYMED_HGLOBAL;
 		medium.hGlobal = hgDrop;
-		pdobj->SetData(&fmtetc, &medium, TRUE);
+		if (pdobj->SetData(&fmtetc, &medium, TRUE) != S_OK)
+		{
+			return false;
+		}
 	}
 
 	//HBITMAP hBitmap = (HBITMAP)OleDuplicateData(m_hDragBitmap, fmtetc.cfFormat, NULL);
@@ -156,8 +170,13 @@ bool CPiDataSource::Drag(tcpchar szPath)
 
 	DWORD dwEffect; 
 	HRESULT hr = ::DoDragDrop(pdobj, pdsrc, DROPEFFECT_COPY /*| DROPEFFECT_MOVE*/, &dwEffect);
+
 	pdsrc->Release();
 	pdobj->Release();
+	
+	GlobalFree(hgDrop);
+	GlobalFree(hgSelfFlag);
+
 	::DeleteObject(m_hDragBitmap);
 	m_hDragBitmap = NULL;
 
@@ -376,4 +395,15 @@ SIZE CPiDataSource::GetDragImgDistSize(const SIZE& szSrc)
 
 	szDist = CPiMath::GetKeepRadio(szSrc, m_szDragImg);
 	return szDist;
+}
+
+UINT CPiDataSource::RegisterSelfFlag()
+{
+	UINT m_nDataDragSelfFlag = RegisterClipboardFormat(_T("PiDataSource_BDDC9C13-68E5-4885-8EA6-4724501357E7"));
+	if (!m_nDataDragSelfFlag)
+	{
+		int n = GetLastError();
+		n++;
+	}
+	return m_nDataDragSelfFlag;
 }

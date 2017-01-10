@@ -53,11 +53,15 @@ public:
 	************************************************************************/
 	void SetDragImageSize(int cx, int cy);
 	SIZE GetDragImgDistSize(const SIZE& szSrc);
+	static UINT RegisterSelfFlag();
+	static UINT DataDragSelfFlag() { return m_nDataDragSelfFlag; }
 private:
 	HWND				m_hWnd;			//ref
 	HDC					m_dc;
 	HBITMAP				m_hDragBitmap;
 	SIZE				m_szDragImg;
+	static UINT				m_nDataDragSelfFlag;
+	
 	bool m_bDraging;
 	bool m_bBtnDown;
 	bool m_bClientPos;
