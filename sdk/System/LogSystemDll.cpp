@@ -133,7 +133,7 @@ void LogSystem::QueryLogLevel()
 		strTemp += _T("Debug\\NCBrowser.debug");
 		strPath = strTemp;
 	}
-	m_logLevel = PathFileExists(strPath.c_str()) == TRUE ? LOG_ALL : m_logLevel;
+	m_logLevel = PathFileExists(strPath.c_str()) == TRUE ? LOG_LIGHT : m_logLevel;
 
 	//m_logLevel = path.IsFileExist() ? LOG_ALL : m_logLevel;
 }

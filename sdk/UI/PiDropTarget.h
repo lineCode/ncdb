@@ -35,6 +35,7 @@ public:
 	HRESULT STDMETHODCALLTYPE Drop(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, __RPC__inout DWORD *pdwEffect);
 	bool ReadHdropData(__RPC__in_opt IDataObject * pDataObj);
 	void SetDragFun(std::function<void(const LST_STRING&)> fDrag);
+	bool Revoke();
 private:
 	HWND m_hWnd;
 	IDropTargetHelper* m_piDropHelper;
@@ -43,6 +44,7 @@ private:
 	ULONG  m_lRefCount;
 	UINT			m_nDragSelfFlag;		//自身拖动时会有的数据格式
 	IDataObject*		m_pDataObj;
+	
 private:
 	std::function<void(const LST_STRING&)>		m_fDrag;
 };

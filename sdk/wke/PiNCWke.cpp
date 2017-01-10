@@ -531,7 +531,7 @@ void CPiNCWke::OnwkeAlertBoxCallback(HNCwkeWebView webView, void* param, const w
 
 	wstring strMsg(wkeGetStringW(msg));
 
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d OnwkeAlertBoxCallback: %s"), webView, strMsg.c_str());
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d OnwkeAlertBoxCallback: %s"), webView, strMsg.c_str());
 
 	CPiNCWke* pWke = WkeGetObject(webView);
 	if (!pWke)
@@ -578,7 +578,7 @@ void CPiNCWke::OnwkeLoadingFinishCallback(HNCwkeWebView webView, void* param, co
 		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d loadEnd other web :%s"), webView, strUrlTemp.c_str());
 		return;
 	}
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d loadEnd, code:%d"), webView, result);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d loadEnd, code:%d"), webView, result);
 	pWke->SetStatus(result, failedReason);
 
 	if (pWke->IsCancel())
@@ -607,7 +607,7 @@ void CPiNCWke::OnwkeLoadingFinishCallback(HNCwkeWebView webView, void* param, co
 
 bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 {
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d init browser begin"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("init browser begin"));
 	m_pWData = new tagWKE_DATA;
 
 	HWND hHost = CreateHostWnd(hParent);
@@ -674,7 +674,7 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 		wkeOnAlertBox(hWebView, OnwkeAlertBoxCallback, nullptr);
 	}
 	wkeOnLoadingFinish(hWebView, OnwkeLoadingFinishCallback, nullptr);
-	LogSystem::WriteLogToFileMsg(LogSystem::LOG_ALL, _T("init browser, setCallBack"));
+	LogSystem::WriteLogToFileMsg(LogSystem::LOG_LIGHT, _T("init browser, setCallBack"));
 
 	WD->pRender = CRender::create(CRender::D3D_RENDER);
 	WD->pLock = new CLock;
@@ -726,13 +726,13 @@ bool CPiNCWke::LoadFile(tcpchar szPath)
 	strUrl.Replace(_T("\\"), _T("/"));//路径在回调时返回的是坐斜杠， 保证数据一致性
 	m_pWData->url = strUrl;
 	wkeLoadURLW(m_web, strUrl.c_str());
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web loadLocal %d wkeLoadURLW ok "), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web loadLocal %d wkeLoadURLW ok "), m_web);
 	return true;
 }
 
 bool CPiNCWke::Show(bool bShow)
 {
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d, show:%d"), m_web, bShow);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d, show:%d"), m_web, bShow);
 	::ShowWindow(m_pWData->hParent, bShow ? SW_SHOW : SW_HIDE);
 
 	return true;
@@ -741,7 +741,7 @@ bool CPiNCWke::Show(bool bShow)
 bool CPiNCWke::SetFocus()
 {
 	::SetFocus(m_pWData->hParent);
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d set focus"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d set focus"), m_web);
 	wkeSetFocus(m_web);
 	return true;
 }
@@ -868,9 +868,9 @@ bool CPiNCWke::NotifyLoadEnd()
 	FunOnLoadEndEventFunc pCB = m_pWData->tagCB.pOnLoadEndEvent;
 	if (pCB)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d LoadEnd cb bg"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d LoadEnd cb bg"), m_web);
 		(*pCB)(m_pWData->pWeb);
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d LoadEnd cb end"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d LoadEnd cb end"), m_web);
 	}
 	return true;
 }
@@ -907,7 +907,7 @@ bool CPiNCWke::ExecScript(tcpchar szScript, tstring& strReturnString)
 	else
 	{
 		strReturnString = CWkeCommon::GetString(m_web, vVal);
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d exeScript <%s> ok"), m_web, szScript);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d exeScript <%s> ok"), m_web, szScript);
 	}
 
 	return true;
@@ -915,7 +915,7 @@ bool CPiNCWke::ExecScript(tcpchar szScript, tstring& strReturnString)
 
 bool CPiNCWke::EnableDrag(bool bEnabel)
 {
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d set is allow draw file:%d"), m_web, bEnabel);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d set is allow draw file:%d"), m_web, bEnabel);
 	m_pWData->bEnabelDrag = bEnabel;
 	::DragAcceptFiles(m_pWData->hParent, bEnabel ? TRUE : FALSE);
 	return true;
@@ -923,7 +923,7 @@ bool CPiNCWke::EnableDrag(bool bEnabel)
 
 bool CPiNCWke::EnableKeyNavigate(bool bEnabel)
 {
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d set will allow KeyNavigate:%d"), m_web, bEnabel);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d set will allow KeyNavigate:%d"), m_web, bEnabel);
 	m_pWData->bEnabelKeyNavigation = bEnabel;
 	::DragAcceptFiles(m_pWData->hParent, bEnabel ? TRUE : FALSE);
 	return true;
@@ -935,9 +935,9 @@ bool CPiNCWke::NotifyConsoleMsg(const tstring& strMsg)
 	FunOnConsoleMsgEventFunc pCB = m_pWData->tagCB.pOnConsoleMsgEvent;
 	if (pCB)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d ConsoleMsg cb bg"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d ConsoleMsg cb bg"), m_web);
 		(*pCB)(m_pWData->pWeb, strMsg.c_str());
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d ConsoleMsg cb end"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d ConsoleMsg cb end"), m_web);
 	}
 	return true;
 }
@@ -965,9 +965,9 @@ wkeJSValue JS_CALL CPiNCWke::JS_CallBack_P2(wkeJSState* es)
 	bool bRet = true;
 	if (pFun)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("webFun cb bg"));
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("webFun cb bg"));
 		bRet = (*pFun)(strP1.c_str(), strP2.c_str(), &str.at(0));
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("webFun cb end"));
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("webFun cb end"));
 		
 		if (!bRet)
 		{
@@ -993,7 +993,7 @@ bool CPiNCWke::BindJsFunction(tcpchar szFunc, FunOnClientWebFunc pCallBack)
 		return false;
 	}
 	wkeJSBindFunction(pw2psSmart(szFunc), JS_CallBack_P2, 2);
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("bind js src %s,  dist: %d"), szFunc, pCallBack);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("bind js src %s,  dist: %d"), szFunc, pCallBack);
 
 	if (szFunc && pCallBack)
 	{
@@ -1014,11 +1014,11 @@ bool CPiNCWke::NotifyNavigation(tstring& strUrl)
 	FunOnRequestEventFunc pCB = pWData->tagCB.pOnRequestEvent;
 	if (pCB)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d Navigation cb bg"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Navigation cb bg"), m_web);
 		(*pCB)(pWData->pWeb, strUrl.c_str());
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d Navigation cb end"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Navigation cb end"), m_web);
 	}
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d Navigation end"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Navigation end"), m_web);
 	return true;
 
 }
@@ -1043,11 +1043,11 @@ void CPiNCWke::NotifyAlert(const wstring& strMsg)
 	FunOnAlertEventFunc pCB = m_pWData->tagCB.pOnAlertEvent;
 	if (pCB)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d Alert cb bg"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Alert cb bg"), m_web);
 		(*pCB)(m_pWData->pWeb, strMsg.c_str());
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d Alert cb end"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Alert cb end"), m_web);
 	}
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d OnwkeAlertBoxCallback ok"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d OnwkeAlertBoxCallback ok"), m_web);
 }
 
 void CPiNCWke::SetInst(HINSTANCE hModule)
@@ -1165,9 +1165,9 @@ bool CPiNCWke::NotifyDropFile(StringCRef strName)
 	FunOnDragFiles pFun = GetDropFilesFun();
 	if (pFun)
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d DropFile cb bg"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d DropFile cb bg"), m_web);
 		(*pFun)(m_web, strName.c_str());
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_ALL, _T("web %d DropFile cb end"), m_web);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d DropFile cb end"), m_web);
 	}
 	return true;
 }

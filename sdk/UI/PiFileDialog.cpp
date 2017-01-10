@@ -163,7 +163,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 		{
 			break;
 		}
-		m_strSelect.push_back(pw2psSmart(szName));
+		m_strSelect.push_back(w2t(szName));
 		CoTaskMemFree(szName);
 	}
 	
@@ -186,7 +186,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 			{
 				break;
 			}
-			strDirCurrent = pw2psSmart(szTemp);
+			strDirCurrent = w2t(szTemp);
 			CoTaskMemFree(szTemp);
 
 			if (path.GetPath() != strDirCurrent)
@@ -201,7 +201,7 @@ void CPiFileDialog::OnButtonClicked(DWORD dwIDCtl)
 			{
 				break;
 			}
-			strTemp = pw2psSmart(szTemp);
+			strTemp = w2t(szTemp);
 			CoTaskMemFree(szTemp);
 			if (strTemp.empty())
 			{

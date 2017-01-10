@@ -151,7 +151,7 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	//std::function<bool(bool)> fDrag = std::bind(&CEventLight::SetEventSign, &ev, std::placeholders::_1);
 
 	m_droptarget.SetDragFun(std::bind(&CMFCTest1Dlg::DealDrag, this, std::placeholders::_1));
-	m_droptarget.SetDragFun(std::bind(&CMFCTest1Dlg::DealDragStatic, std::placeholders::_1));
+	//m_droptarget.SetDragFun(std::bind(&CMFCTest1Dlg::DealDragStatic, std::placeholders::_1));
 	m_droptarget.DragDropRegister(GetSafeHwnd());
 
 	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");

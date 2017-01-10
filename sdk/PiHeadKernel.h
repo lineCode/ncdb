@@ -5,8 +5,6 @@
 #include "k_STLString.h"
 #include "define_gnl.h"
 #include "functional.h"
-#include "LogSpilit.h"
-#include "SingleLog.h"
 #include "Lock.h"
 #include "LockData.h"
 #include "PiSemaphore.h"

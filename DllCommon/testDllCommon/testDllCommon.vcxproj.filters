@@ -60,7 +60,19 @@
     <ClInclude Include="..\..\sdk\TextStringCut.h">
       <Filter>sdk</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\sdk\PathLight.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\sdk\UI\PiFileDialog.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\FileOpr.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\MD5.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\StrCoding.h">
       <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,7 +107,19 @@
     <ClCompile Include="..\..\sdk\TextStringCut.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sdk\PathLight.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\FileOpr.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\MD5.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\StrCoding.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>

@@ -107,9 +107,13 @@
     <ClInclude Include="..\..\..\nc\src\common\sdk\AutoType.h" />
     <ClInclude Include="..\..\..\nc\src\common\sdk\doString.h" />
     <ClInclude Include="..\..\sdk\DataStruct\PiRect.h" />
+    <ClInclude Include="..\..\sdk\FileOpr.h" />
+    <ClInclude Include="..\..\sdk\MD5.h" />
+    <ClInclude Include="..\..\sdk\PathLight.h" />
     <ClInclude Include="..\..\sdk\PiString.h" />
     <ClInclude Include="..\..\sdk\PiTypeDef.h" />
     <ClInclude Include="..\..\sdk\PiWindowPack.h" />
+    <ClInclude Include="..\..\sdk\StrCoding.h" />
     <ClInclude Include="..\..\sdk\TextStringCut.h" />
     <ClInclude Include="..\..\sdk\UI\PiFileDialog.h" />
     <ClInclude Include="..\..\sdk\UI\PiUITool.h" />
@@ -123,8 +127,12 @@
     <ClCompile Include="..\..\..\nc\src\common\sdk\AutoType.cpp" />
     <ClCompile Include="..\..\..\nc\src\common\sdk\doString.cpp" />
     <ClCompile Include="..\..\sdk\DataStruct\PiRect.cpp" />
+    <ClCompile Include="..\..\sdk\FileOpr.cpp" />
+    <ClCompile Include="..\..\sdk\MD5.cpp" />
+    <ClCompile Include="..\..\sdk\PathLight.cpp" />
     <ClCompile Include="..\..\sdk\PiString.cpp" />
     <ClCompile Include="..\..\sdk\PiWindowPack.cpp" />
+    <ClCompile Include="..\..\sdk\StrCoding.cpp" />
     <ClCompile Include="..\..\sdk\TextStringCut.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiFileDialog.cpp" />
     <ClCompile Include="..\..\sdk\UI\PiUITool.cpp" />

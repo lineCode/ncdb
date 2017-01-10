@@ -20,6 +20,7 @@ CPiDropTarget::CPiDropTarget()
 
 CPiDropTarget::~CPiDropTarget()
 {
+	Revoke();
 	if (m_piDropHelper)
 	{
 		m_piDropHelper->Release();
@@ -47,7 +48,18 @@ bool CPiDropTarget::DragDropRegister(HWND hWnd, DWORD AcceptKeyState)
 
 }
 
+bool CPiDropTarget::Revoke()
+{
+	if (m_hWnd == NULL)
+	{
+		return false;
+	}
 
+	RevokeDragDrop(m_hWnd);
+	//CoLockObjectExternal((LPUNKNOWN)GetInterface(&IID_IUnknown), FALSE, TRUE);
+	m_hWnd = NULL;
+	return true;
+}
 bool CPiDropTarget::DragDropRevoke(HWND hWnd)
 {
 	if (!IsWindow(hWnd))return false;

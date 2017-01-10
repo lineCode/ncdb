@@ -1,5 +1,4 @@
 #pragma once
-#include "afxdlgs.h"
 #include "PiTypeDef.h"
 
 class CPiFileDialog :

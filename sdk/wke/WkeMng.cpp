@@ -3,6 +3,7 @@
 #include "StrCoding.h"
 #include "RAIILock.h"
 #include "PiNCWke.h"
+#include "System\LogSystemDll.h"
 
 CWkeMng::CWkeMng()
 {
@@ -215,6 +216,7 @@ CPiNCWke* CWkeMng::CreateWke(HWND hParent, tagCallBack* pTagCallBack)
 	CPiNCWke* pWke = CreateWke();
 	if (!pWke)
 	{
+		LogSystem::WriteLogToFileErrorFormat(_T("create wke on parent %d faild: new Null"), hParent);
 		return nullptr;
 	}
 	if (!pWke->Create(hParent, pTagCallBack))

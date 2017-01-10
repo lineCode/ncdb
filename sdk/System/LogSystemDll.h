@@ -11,7 +11,8 @@ class LogSystem
 public:
 	enum ENUM_LOG_LEVEL 
 	{
-		LOG_NORMAL = 0, LOG_ALL
+		LOG_NORMAL = 0		//比较重要
+		, LOG_LIGHT			//不是很重要
 	};
 	FunWriteLogToFile GetFuncWriteLog();
 	static LogSystem* instance();
