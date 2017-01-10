@@ -9,7 +9,8 @@
 #include "PiWindowPack.h"
 #include "functional.h"
 #include "ui/PiDataSource.h"
-#include "Math/mathUnit.h"
+#include "Math/PiMathUnit.h"
+#include "EventLight.h"
 //#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
@@ -62,7 +63,6 @@ BOOL CAboutDlg::OnInitDialog()
 
 CMFCTest1Dlg::CMFCTest1Dlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CMFCTest1Dlg::IDD, pParent)
-	,m_droptarget(&c_FileList)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bBtnDown = false;
@@ -144,8 +144,15 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 	Test();
 	//c_FileList.InsertItem(0, _T("3333"));
 
+	m_droptarget.SetSelfFlagFormat(CPiDataSource::DataDragSelfFlag());
+	//bool SetEventSign(bool bRet = true);
+	CEventLight ev;
+	
+	//std::function<bool(bool)> fDrag = std::bind(&CEventLight::SetEventSign, &ev, std::placeholders::_1);
 
-	//m_droptarget.Register(this);
+	m_droptarget.SetDragFun(std::bind(&CMFCTest1Dlg::DealDrag, this, std::placeholders::_1));
+	m_droptarget.SetDragFun(std::bind(&CMFCTest1Dlg::DealDragStatic, std::placeholders::_1));
+	m_droptarget.DragDropRegister(GetSafeHwnd());
 
 	/*const wchar_t pszFilter[] = _T("EXE File (*.txt)|*.txt|All Files (*.*)|*.*||");
 	CFileDialog dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -903,4 +910,17 @@ void CMFCTest1Dlg::Test()
 	/*(1.0 * szLimit.cx / szLimit.cx)
 	assert(szResult.cx == 100 && szResult.cy == 100);*/
 	szResult.cx = 0;
+}
+
+void CMFCTest1Dlg::DealDrag(const LST_STRING& lstPath)
+{
+	for (auto& strPath:lstPath)
+	{
+		OutInfo(strPath.c_str());
+	}
+}
+
+void CMFCTest1Dlg::DealDragStatic(const LST_STRING& lstPath)
+{
+
 }

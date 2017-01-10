@@ -48,7 +48,8 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnBegindragFilelist(NMHDR* pNMHDR, LRESULT* pResult);
-
+	void DealDrag(const LST_STRING& lstPath);
+	static void DealDragStatic(const LST_STRING& lstPath);
 	bool BeginDrag();
 	void DragIng();
 	void DragIng2();
@@ -58,5 +59,5 @@ public:
 	//CPiDropTarget		m_DropTarget;
 	CListCtrl			c_FileList;
 	CPiDataSource		m_idSource;
-	CMyDropTarget		m_droptarget;
+	CPiDropTarget		m_droptarget;
 };

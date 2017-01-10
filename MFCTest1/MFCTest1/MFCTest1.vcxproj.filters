@@ -39,9 +39,6 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdk\AutoType.h">
-      <Filter>sdk</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\sdk\define_gnl.h">
       <Filter>sdk</Filter>
     </ClInclude>
@@ -96,7 +93,16 @@
     <ClInclude Include="..\..\sdk\UI\PiDragDropImpl.h">
       <Filter>sdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sdk\math\mathUnit.h">
+    <ClInclude Include="..\..\sdk\AutoType.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\math\PiMathUnit.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\PiDropTarget.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sdk\UI\IPiDataObject.h">
       <Filter>sdk</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\sdk\AutoType.cpp">
-      <Filter>sdk</Filter>
     </ClCompile>
     <ClCompile Include="..\..\sdk\FileOpr.cpp">
       <Filter>sdk</Filter>
@@ -161,7 +164,16 @@
     <ClCompile Include="..\..\sdk\UI\PiDragDropImpl.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sdk\math\mathUnit.cpp">
+    <ClCompile Include="..\..\sdk\AutoType.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\math\PiMathUnit.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\PiDropTarget.cpp">
+      <Filter>sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sdk\UI\IPiDataObject.cpp">
       <Filter>sdk</Filter>
     </ClCompile>
   </ItemGroup>
