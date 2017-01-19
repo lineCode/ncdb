@@ -1,0 +1,2 @@
+#pragma once
+#define STRING_NC_CLIPBOARD_FORMAT_DRAG_FLAG			_T("PiDataSource_BDDC9C13-68E5-4885-8EA6-4724501357E7")	//NCBrowserÍÏ×§±êÊ¾

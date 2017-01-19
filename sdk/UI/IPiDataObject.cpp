@@ -15,6 +15,10 @@ IPiDataObjectHelper::~IPiDataObjectHelper()
 
 bool IPiDataObjectHelper::IsHasData(UINT cfFormat)
 {
+	if (!cfFormat)
+	{
+		return false;
+	}
 	FORMATETC ft = { 0 };
 	STGMEDIUM stg = { 0 };
 	ft.cfFormat = cfFormat;

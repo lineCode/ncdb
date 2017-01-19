@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "renderD3D.h"
+#include "System\LogSystemDll.h"
+#include <tchar.h>
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }
@@ -55,42 +57,53 @@ bool CRenderD3D::init(HWND hView)
     m_hView = hView;
 
     HMODULE hModD3D9 = LoadLibrary(L"d3d9.dll");
-    if (hModD3D9)
-    {
-        LPDIRECT3DCREATE9 pfnDirect3DCreate9 = (LPDIRECT3DCREATE9)GetProcAddress(hModD3D9, "Direct3DCreate9");
-        m_pD3D = pfnDirect3DCreate9(D3D_SDK_VERSION);
+	if (!hModD3D9)
+	{
+		DWORD dwErr = GetLastError();
+		LogSystem::WriteLogToFileErrorFormat(_T("load d3d9.dll fail, err: %d"), dwErr);
+		return false;
+	}
 
-        DWORD BehaviorFlags = D3DCREATE_FPU_PRESERVE | D3DCREATE_PUREDEVICE | D3DCREATE_HARDWARE_VERTEXPROCESSING;
-        D3DPRESENT_PARAMETERS PresentParams = GetPresentParams(hView);
+	LPDIRECT3DCREATE9 pfnDirect3DCreate9 = (LPDIRECT3DCREATE9)GetProcAddress(hModD3D9, "Direct3DCreate9");
+	m_pD3D = pfnDirect3DCreate9(D3D_SDK_VERSION);
+	if (!m_pD3D)
+	{
+		LogSystem::WriteLogToFileErrorFormat(_T("create IDirect3D9 fail, View %d"), hView);
+		return false;
+	}
 
-		HRESULT hr = m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetParent(hView), BehaviorFlags, &PresentParams, &m_pDevice);
-        if (FAILED(hr) && hr != D3DERR_DEVICELOST)
-        {
-			switch (hr)
-			{
-			case D3DERR_INVALIDCALL:
-				hr = 0;
-				break;
-			case D3DERR_NOTAVAILABLE:
-				hr = 0;
-				break;
-			case D3DERR_OUTOFVIDEOMEMORY:
-				hr = 0;
-				break;
-			default:
-				break;
-			}
-            BehaviorFlags = D3DCREATE_FPU_PRESERVE | D3DCREATE_PUREDEVICE | D3DCREATE_SOFTWARE_VERTEXPROCESSING;
-            hr = m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetParent(hView), BehaviorFlags, &PresentParams, &m_pDevice);
-            if (FAILED(hr) && hr != D3DERR_DEVICELOST)
-                return false;
-        }
+	DWORD BehaviorFlags = D3DCREATE_FPU_PRESERVE | D3DCREATE_PUREDEVICE | D3DCREATE_HARDWARE_VERTEXPROCESSING;
+	D3DPRESENT_PARAMETERS PresentParams = GetPresentParams(hView);
 
-        resize(PresentParams.BackBufferWidth, PresentParams.BackBufferHeight);
-		return true;
-    }
+	HRESULT hr = m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetParent(hView), BehaviorFlags, &PresentParams, &m_pDevice);
+	if (FAILED(hr) && hr != D3DERR_DEVICELOST)
+	{
+		switch (hr)
+		{
+		case D3DERR_INVALIDCALL:
+			hr = 0;
+			break;
+		case D3DERR_NOTAVAILABLE:
+			hr = 0;
+			break;
+		case D3DERR_OUTOFVIDEOMEMORY:
+			hr = 0;
+			break;
+		default:
+			break;
+		}
+		BehaviorFlags = D3DCREATE_FPU_PRESERVE | D3DCREATE_PUREDEVICE | D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+		hr = m_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, GetParent(hView), BehaviorFlags, &PresentParams, &m_pDevice);
+		if (FAILED(hr) && hr != D3DERR_DEVICELOST)
+		{
+			DWORD dwErr = GetLastError();
+			LogSystem::WriteLogToFileErrorFormat(_T("IDirect3D9 CreateDevice faild, code:%d"), dwErr);
+			return false;
+		}
+	}
 
-    return false;
+	resize(PresentParams.BackBufferWidth, PresentParams.BackBufferHeight);
+	return true;
 }
 
 void CRenderD3D::destroy()

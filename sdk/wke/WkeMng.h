@@ -1,6 +1,16 @@
 #pragma once
 #include <windows.h>
 #include "wke/PiWkeDef.h"
+/************************************************************************** 
+        *  @Copyright (c) 2017, ChenMH, All rights reserved. 
+     
+        *  @file     : WkeMng.h 
+        *  @version  : ver 1.0 
+     
+        *  @author   : liwanliang 
+        *  @date     : 2017/01/16 19:02 
+        *  @brief    : 管理创建所有的wke web 
+**************************************************************************/
 
 //#include "NCWke.h"
 class CPiNCWke;
@@ -12,38 +22,23 @@ public:
 	~CWkeMng();
 public:
 	typedef map<HWND, CPiNCWke*> MAP_WKE;
-
-	//tagWKE_DATA* operator [](HWebView pWeb);
-	//tagWKE_DATA* GetFirst();
-	//bool Exist(HWND hWnd);
 	HWebView GetWebView(HWND hWnd);
-	//tagWKE_DATA* GetStruct(HWebView pWeb);
-	//MAP_WKE_DATA::iterator GetStructIter(HWebView pWeb);
-	//CRender*		GetRender(HWebView pWeb);
 	/************************************************************************
 			js绑定
 	************************************************************************/
 	bool AddJsBind(const wchar_t* szFunc, void* pCallBack);
 	void* GetJsCallBack(const string& strName);
 	void* GetJsFirstBind();
-	//bool Release(HWebView pWeb);
-	//void Erase(MAP_WKE_DATA::iterator it);
 	void Erase(CPiNCWke* pWke);
-	//bool IsValidWeb(HWebView pWeb);
 
 	CPiNCWke*			CreateWke();
 	CPiNCWke*			CreateWke(HWND hParent, tagCallBack* pTagCallBack);
 	CPiNCWke*			GetObj(HWebView pWeb);
 protected:
-	//tagWKE_DATA* operator [](HWND hWnd);
 
 private:
-	//MAP_WKE_DATA				m_pWkeData;
 	MAP_JS_BIND					m_mapJsCallBack;
-
-	auto_ptr<CLock>				m_pLockWkeData;
+	auto_ptr<CLock>				m_pLockWkeData;		//考虑下多线程调用的互斥锁
 	auto_ptr<CLock>				m_pLockJsCB;
-
-	//list<CPiNCWke*>				m_lstWke;
 	MAP_WKE						m_mapWke;
 };

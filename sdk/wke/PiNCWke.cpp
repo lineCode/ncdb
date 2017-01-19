@@ -15,7 +15,7 @@ Pi_NameSpace_Using
 #define UM_RELOAD					WM_USER + 100
 #define UM_DESTROY					WM_USER + 101
 
-#define NUM_TIMER_ID_DRAW_WKE		270
+#define NUM_TIMER_ID_DRAW_WKE		270			//定时绘制HWebView
 #define NUM_TIMERID_RELOAD				30
 #define NUM_RELOAD_LIMIT				30
 #define NUM_RELOAD_PERIOD				1000
@@ -42,7 +42,6 @@ CPiNCWke::~CPiNCWke()
 	if (m_web || 
 		(m_bDestroying && m_webDestroy) )
 	{
-		wkeFinalize();
 	}
 }
 
@@ -74,6 +73,10 @@ void CPiNCWke::NCDrawIfNeed()
 
 LRESULT CALLBACK CPiNCWke::WebViewDllWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	/************************************************************************
+			通过响应的窗口句柄获取到嵌入在它之下的HWebView
+			通过HWebView 获取到web对象CPiNCWke
+	************************************************************************/
 	bool handled = true;
 	bool bCustom = false;
 	DWORD dwRetCustom = 0;
@@ -102,7 +105,7 @@ LRESULT CALLBACK CPiNCWke::WebViewDllWndProc(HWND hWnd, UINT message, WPARAM wPa
 	break;
 	case WM_DESTROY:
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d 's wnd destroying"), pWeb);
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d 's wnd destroying"), pWeb);
 		::KillTimer(hWnd, NUM_TIMER_ID_DRAW_WKE);
 		break;
 	}
@@ -575,7 +578,7 @@ void CPiNCWke::OnwkeLoadingFinishCallback(HNCwkeWebView webView, void* param, co
 
 	if (pWke->GetUrl() != strUrlTemp)	//url中文会url加密
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d loadEnd other web :%s"), webView, strUrlTemp.c_str());
+		LogSystem::WriteLogToFileErrorFormat(_T("web %d loadEnd other web :%s"), webView, strUrlTemp.c_str());
 		return;
 	}
 	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d loadEnd, code:%d"), webView, result);
@@ -583,7 +586,7 @@ void CPiNCWke::OnwkeLoadingFinishCallback(HNCwkeWebView webView, void* param, co
 
 	if (pWke->IsCancel())
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d had cancel in url<%s>, code:%d"), webView, pWke->GetUrl().c_str(), result);
+		LogSystem::WriteLogToFileErrorFormat(_T("web %d had cancel in url<%s>, code:%d"), webView, pWke->GetUrl().c_str(), result);
 	}
 	else if (pWke->IsLoadError()
 		&& pWke->CanReLoad())
@@ -617,7 +620,7 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 		LogSystem::WriteLogToFileError(_T("init browser, CreateHostWnd ret null"));
 		return false;
 	}
-	::SetTimer(hHost, NUM_TIMER_ID_DRAW_WKE, 100, NULL);
+	::SetTimer(hHost, NUM_TIMER_ID_DRAW_WKE, 100, NULL);		//WebView需要定时绘制
 
 #ifdef M_TEST_DUMP
 	{
@@ -631,7 +634,6 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 	}
 #endif
 
-	wkeInitialize();
 
 	wkeSettings settings;
 	memset(&settings, 0, sizeof(settings));
@@ -654,7 +656,7 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 	wkeSetUserAgent(hWebView, "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
 
 	wkeSetHostWindow(hWebView, hHost);
-	LogSystem::WriteLogToFileMsg(LogSystem::LOG_NORMAL, _T("init browser, create done"));
+	LogSystem::WriteLogToFileMsg(LogSystem::LOG_LIGHT, _T("init browser, create done"));
 
 	tagWKE_DATA* WD = m_pWData;
 	WD->pWeb = hWebView;
@@ -685,10 +687,14 @@ bool CPiNCWke::Create(HWND hParent, tagCallBack* pTagCallBack)
 	}
 	if (!WD->pRender->init(hHost))
 	{
-		LogSystem::WriteLogToFileError(_T("init browser, Render init fail!"));
-		return false;
+		LogSystem::WriteLogToFileError(_T("init browser, Render init fail! retry"));
+		if (!WD->pRender->init(hHost))
+		{
+			LogSystem::WriteLogToFileError(_T("init browser, Render retry init fail!"));
+			return false;
+		}
 	}
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d init browser end ok"), hWebView);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d init browser end ok"), hWebView);
 	return true;
 }
 
@@ -720,7 +726,7 @@ bool CPiNCWke::LoadFile(tcpchar szPath)
 		return false;
 	}
 
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web:%d, load file: %s"), m_web, szPath);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web:%d, load file: %s"), m_web, szPath);
 	CPiString strUrl(_T("file:///"));
 	strUrl += szPath;
 	strUrl.Replace(_T("\\"), _T("/"));//路径在回调时返回的是坐斜杠， 保证数据一致性
@@ -818,6 +824,9 @@ bool CPiNCWke::HasConsoleError()
 bool CPiNCWke::NotifyConsoleError()
 {
 	LogSystem::WriteLogToFileErrorFormat(_T("web %d occur some web Console err when load"), m_web);
+	/************************************************************************
+			当检测到有控制台网页加载错误信息， post消息来重新加载页面，进行重试， 不能在任何回调里同步调用Reload 会崩溃
+	************************************************************************/
 	PostReload();
 	//NotifyError();
 
@@ -836,7 +845,7 @@ bool CPiNCWke::IsLoadError()
 		{
 			strMsg = wkeGetStringW(m_failedReason);
 		}
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d load fail, code: %d, reason: %s"), m_web, m_result, strMsg.c_str());
+		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d load fail, code: %d, reason: %s"), m_web, m_result, strMsg.c_str());
 	}
 
 	//bool bOk = wkeIsLoadingSucceeded(m_web);	//有时成功但wkeIsLoadingSucceeded返回false， wke bug?
@@ -892,16 +901,18 @@ bool CPiNCWke::ExecScript(tcpchar szScript, tstring& strReturnString)
 	{
 		return false;
 	}
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d will exeScript: %s"), m_web, szScript);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d will exeScript: %s"), m_web, szScript);
 
 	//有该接口并且调用成功则视为执行成功
 	CRAIILock raii(m_pWData->pLock);
-
+	/************************************************************************
+			区分执行失败和执行成功没返回值的情况
+	************************************************************************/
 	wkeJSValue vVal = wkeRunJSW(m_web, szScript);
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d had exec Script"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d had exec Script"), m_web);
 	if (CWkeCommon::IsJSUnderined(m_web, vVal))
 	{
-		LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d, exeScript <%s> failed!"), m_web, szScript);
+		LogSystem::WriteLogToFileErrorFormat(_T("web %d, exeScript <%s> failed!"), m_web, szScript);
 		return false;
 	}
 	else
@@ -944,7 +955,7 @@ bool CPiNCWke::NotifyConsoleMsg(const tstring& strMsg)
 
 bool CPiNCWke::ReLoad()
 {	
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d will reload"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d will reload"), m_web);
 	
 	wkeStopLoading(m_web);
 	wkeReload((HNCwkeWebView)m_web);
@@ -1005,7 +1016,7 @@ bool CPiNCWke::BindJsFunction(tcpchar szFunc, FunOnClientWebFunc pCallBack)
 
 bool CPiNCWke::NotifyNavigation(tstring& strUrl)
 {
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d navigation to url:%s"), m_web, strUrl.c_str());
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d navigation to url:%s"), m_web, strUrl.c_str());
 	tagWKE_DATA* pWData = m_pWData;
 	if (!pWData)
 	{
@@ -1059,7 +1070,7 @@ void CPiNCWke::LoadOk()
 {
 	m_nReloadTimes = 0;
 	m_mapErrorConsole.clear();
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d loadEnd ok"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d loadEnd ok"), m_web);
 }
 
 void CPiNCWke::SetLoadError(FunOnLoadError pFun)
@@ -1108,7 +1119,7 @@ bool CPiNCWke::PostReload()
 	}
 	m_nReloadTimes++;
 
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d reload timer, times:%d"), m_web, m_nReloadTimes);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d reload timer, times:%d"), m_web, m_nReloadTimes);
 	::SetTimer(m_pWData->hParent, NUM_TIMERID_RELOAD, NUM_RELOAD_PERIOD, NULL);
 	return true;
 }
@@ -1182,7 +1193,7 @@ bool CPiNCWke::DestroySync()
 
 	//释放流程:取消定时器， 删除绘制， 销毁wke， 销毁父窗口, 
 
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d Freeing"), m_web);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d Freeing"), m_web);
 	m_bDestroying = true;
 	::KillTimer(m_pWData->hParent, NUM_TIMER_ID_DRAW_WKE);
 
@@ -1212,6 +1223,6 @@ bool CPiNCWke::DestroySync()
 	g_wkeMng.Erase(this);
 #endif // M_DESTROY_NEW
 
-	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_NORMAL, _T("web %d has Free"), hWeb);
+	LogSystem::WriteLogToFileMsgFormat(LogSystem::LOG_LIGHT, _T("web %d has Free"), hWeb);
 	return true;
 }

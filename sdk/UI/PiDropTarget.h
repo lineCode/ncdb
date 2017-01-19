@@ -1,7 +1,8 @@
 #pragma once
-#include "afxole.h"
+#include <oleidl.h>
 #include <functional>
 #include "PiTypeDef.h"
+#include <shobjidl.h>
 class CPiDropTarget :
 	public IDropTarget
 {

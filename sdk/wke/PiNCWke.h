@@ -5,6 +5,17 @@
 #include <map>
 #include "WkeMng.h"
 using std::multimap;
+/************************************************************************** 
+        *  @Copyright (c) 2017, ChenMH, All rights reserved. 
+     
+        *  @file     : PiNCWke.h 
+        *  @version  : ver 1.0 
+     
+        *  @author   : liwanliang 
+        *  @date     : 2017/01/16 17:44 
+        *  @brief    : wke对象， 对应每个wke页面 
+**************************************************************************/
+
 class CPiNCWke
 {
 public:
@@ -24,12 +35,22 @@ public:
 	void ChangeSize(int x, int y, int width, int height);
 	bool Destroy();
 	/************************************************************************
-		fun:	通知外部网页加载完成后有错误发生
-		param:	
+		fun:	执行脚本
+		param:	szScript:脚本字符串;     strReturnString: 执行后的返回值
 		memo:	
 	************************************************************************/
 	bool ExecScript(tcpchar szScript, tstring& strReturnString);
+	/************************************************************************
+		fun:	是否允许响应文件拖拽进来
+		param:	
+		memo:	
+	************************************************************************/
 	bool EnableDrag(bool bEnabel);
+	/************************************************************************
+		fun:	是否允许设置键盘前进后退
+		param:	
+		memo:	
+	************************************************************************/
 	bool EnableKeyNavigate(bool bEnabel);
 	static bool BindJsFunction(tcpchar szFunc, FunOnClientWebFunc pCallBack);
 
@@ -50,6 +71,11 @@ public:
 	void NotifyLoadError();
 	bool NotifyLoadEnd();
 	bool NotifyConsoleMsg(const tstring& strMsg);
+	/************************************************************************
+		fun:	重新加载当前页面
+		param:	
+		memo:	
+	************************************************************************/
 	bool ReLoad();
 	HNCwkeWebView GetWeb();
 	HWND GetParent();
@@ -58,7 +84,11 @@ public:
 	void ClearData();
 	bool DestroySync();
 private:
-	
+	/************************************************************************
+		fun:	创建wke页面依赖的父窗口
+		param:	
+		memo:	
+	************************************************************************/
 	HWND CreateHostWnd(HWND hParent);
 	bool registerWebViewDllWindowClass();
 	static LRESULT CALLBACK WebViewDllWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -68,10 +98,16 @@ private:
 	static bool onNavigation(HNCwkeWebView webView, void* param, wkeNavigationType type, const wkeString* url_);
 	static HNCwkeWebView onCreateView(HNCwkeWebView webView, void* param, const wkeNewViewInfo* info);
 
+	/************************************************************************
+		fun:	wkeView的控制台信息， 警告信息， 重定向， 加载完成的回调
+		param:	
+		memo:	
+	************************************************************************/
 	static void OnwkeConsoleMessageCallback(HNCwkeWebView webView, void* param, const wkeConsoleMessage* message);
 	static void OnwkeAlertBoxCallback(HNCwkeWebView webView, void* param, const wkeString* msg);
 	static bool OnwkeNavigationCallback(HNCwkeWebView webView, void* param, wkeNavigationType navigationType, const wkeString* url);
 	static void OnwkeLoadingFinishCallback(HNCwkeWebView webView, void* param, const wkeString* url, wkeLoadingResult result, const wkeString* failedReason);
+
 	FunOnDragFiles GetDropFilesFun();
 	static wkeJSValue JS_CALL JS_CallBack_P2(wkeJSState* es);
 
@@ -91,7 +127,7 @@ private:
 private:
 	multimap<tstring, tstring>		m_mapErrorConsole;
 	HNCwkeWebView					m_web;
-	HNCwkeWebView					m_webDestroy;	
+	HNCwkeWebView					m_webDestroy;		//保存上次销毁前的HWeb
 	tagWKE_DATA*					m_pWData;
 	int								m_nReloadTimes;
 	static		HINSTANCE			m_hInstance;

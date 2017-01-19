@@ -11,7 +11,8 @@
 using std::string;
 using std::wstring;
 
-UINT CPiDataSource::m_nDataDragSelfFlag = CPiDataSource::RegisterSelfFlag();
+UINT		CPiDataSource::m_nDataDragSelfFlag = 0;
+tstring		CPiDataSource::m_strClipBoardFormatDrag;
 
 Pi_NameSpace_Using
 
@@ -399,11 +400,25 @@ SIZE CPiDataSource::GetDragImgDistSize(const SIZE& szSrc)
 
 UINT CPiDataSource::RegisterSelfFlag()
 {
-	UINT m_nDataDragSelfFlag = RegisterClipboardFormat(_T("PiDataSource_BDDC9C13-68E5-4885-8EA6-4724501357E7"));
+	if (m_nDataDragSelfFlag)
+	{
+		return m_nDataDragSelfFlag;
+	}
+	tcpchar szData = m_strClipBoardFormatDrag.c_str();
+	if (!szData)
+	{
+		szData = _T("PiDataSource_BDDC9C13-68E5-4885-8EA6-4724501357E7");
+	}
+	m_nDataDragSelfFlag = RegisterClipboardFormat(szData);
 	if (!m_nDataDragSelfFlag)
 	{
 		int n = GetLastError();
 		n++;
 	}
 	return m_nDataDragSelfFlag;
+}
+
+void CPiDataSource::SetClipboardDragSelfFlag(StringCRef strFormat)
+{
+	m_strClipBoardFormatDrag = strFormat;
 }

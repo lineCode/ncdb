@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PiDropTarget.h"
 #include "IPiDataObject.h"
+#include <shlguid.h>
+#include <shlwapi.h>
 
 
 
@@ -32,7 +34,6 @@ CPiDropTarget::~CPiDropTarget()
 
 bool CPiDropTarget::DragDropRegister(HWND hWnd, DWORD AcceptKeyState)
 {
-
 	if (!IsWindow(hWnd))return false;
 
 	HRESULT s = ::RegisterDragDrop(hWnd, this);
@@ -96,7 +97,7 @@ ULONG STDMETHODCALLTYPE CPiDropTarget::Release()
 //½øÈë
 HRESULT STDMETHODCALLTYPE CPiDropTarget::DragEnter(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
-	DROPEFFECT dwEffect = DROPEFFECT_NONE;
+	DWORD dwEffect = DROPEFFECT_NONE;
 
 	// Check for our own custom clipboard format in the data object.  If it's
 	// present, then the DnD was initiated from our own window, and we won't
@@ -128,7 +129,7 @@ HRESULT STDMETHODCALLTYPE CPiDropTarget::DragEnter(__RPC__in_opt IDataObject *pD
 //ÒÆ¶¯
 HRESULT STDMETHODCALLTYPE CPiDropTarget::DragOver(DWORD grfKeyState, POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
-	DROPEFFECT dwEffect = DROPEFFECT_NONE;
+	DWORD dwEffect = DROPEFFECT_NONE;
 	IPiDataObjectHelper piDO(m_pDataObj);
 	if (!piDO.IsHasData(m_nDragSelfFlag)
 		&& piDO.IsHasData(CF_HDROP))
@@ -172,6 +173,10 @@ HRESULT STDMETHODCALLTYPE CPiDropTarget::Drop(__RPC__in_opt IDataObject *pDataOb
 
 void CPiDropTarget::SetSelfFlagFormat(UINT nFormat)
 {
+	if (!nFormat)
+	{
+		return;
+	}
 	m_nDragSelfFlag = nFormat;
 }
 

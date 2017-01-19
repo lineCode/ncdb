@@ -55,13 +55,16 @@ public:
 	SIZE GetDragImgDistSize(const SIZE& szSrc);
 	static UINT RegisterSelfFlag();
 	static UINT DataDragSelfFlag() { return m_nDataDragSelfFlag; }
+	static void SetClipboardDragSelfFlag(StringCRef strFormat);
 private:
 	HWND				m_hWnd;			//ref
 	HDC					m_dc;
 	HBITMAP				m_hDragBitmap;
 	SIZE				m_szDragImg;
+
 	static UINT				m_nDataDragSelfFlag;
-	
+	static tstring			m_strClipBoardFormatDrag;
+
 	bool m_bDraging;
 	bool m_bBtnDown;
 	bool m_bClientPos;

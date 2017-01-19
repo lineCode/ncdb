@@ -28,8 +28,8 @@ SIZE CPiMath::GetKeepRadio(const SIZE& szSrc, const SIZE& szLimit)
 	放大， radio < 1,
 	************************************************************************/
 	SIZE szBig = { 0, 0 };
-	float fRadioCx = 1.0 * szSrc.cx / szLimit.cx;
-	float fRadioCy = 1.0 * szSrc.cy / szLimit.cy;
+	float fRadioCx = INT_TO_FLOAT(1) * szSrc.cx / szLimit.cx;
+	float fRadioCy = INT_TO_FLOAT(1) * szSrc.cy / szLimit.cy;
 	float nRadio = 0;
 	bool bZoomOut = (fRadioCx > 1 || fRadioCy > 1);
 	SIZE szDist = { 0 };
@@ -41,8 +41,8 @@ SIZE CPiMath::GetKeepRadio(const SIZE& szSrc, const SIZE& szLimit)
 	{
 		nRadio = max(fRadioCx, fRadioCy);	//放大时， 比例为0~1范围,  约大的比例系数变更值小
 	}
-	szDist.cx = szSrc.cx / nRadio;
-	szDist.cy = szSrc.cy / nRadio;
+	szDist.cx = (int)(szSrc.cx / nRadio);
+	szDist.cy = (int)(szSrc.cy / nRadio);
 	return szDist;
 }
 
