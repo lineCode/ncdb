@@ -11,6 +11,7 @@
 #include "ui/PiDataSource.h"
 #include "Math/PiMathUnit.h"
 #include "EventLight.h"
+#include "NC/NCBrowserCommon.h"
 //#include "UI/PiFileDialog.h"
 
 #ifdef _DEBUG
@@ -142,9 +143,12 @@ BOOL CMFCTest1Dlg::OnInitDialog()
 
 
 	Test();
-	//c_FileList.InsertItem(0, _T("3333"));
+	CPiDataSource::SetClipboardDragSelfFlag(STRING_NC_CLIPBOARD_FORMAT_DRAG_FLAG);
+	CPiDataSource::RegisterSelfFlag();
 
-	m_droptarget.SetSelfFlagFormat(CPiDataSource::DataDragSelfFlag());
+
+	m_droptarget.SetSelfFlagFormat(RegisterClipboardFormat(STRING_NC_CLIPBOARD_FORMAT_DRAG_FLAG));
+	//m_droptarget.SetSelfFlagFormat(CPiDataSource::DataDragSelfFlag());
 	//bool SetEventSign(bool bRet = true);
 	CEventLight ev;
 	
