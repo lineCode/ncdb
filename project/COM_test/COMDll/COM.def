@@ -1,0 +1,7 @@
+LIBRARY			COMDll.dll
+EXPORTS
+				CreateInstance				@ 1 
+				DllRegisterServer			@ 2
+				DllUnregisterServer			@ 3
+				DllGetClassObject			@ 4
+				DllCanUnloadNow				@ 5
