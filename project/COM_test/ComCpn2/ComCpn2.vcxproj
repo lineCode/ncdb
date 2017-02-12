@@ -80,7 +80,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\COMDll\REGISTRY.H" />
-    <ClInclude Include="COMGUID.h" />
     <ClInclude Include="Cpn2.h" />
   </ItemGroup>
   <ItemGroup>

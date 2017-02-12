@@ -18,9 +18,6 @@
     <ClInclude Include="Cpn2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="COMGUID.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\COMDll\REGISTRY.H">
       <Filter>头文件</Filter>
     </ClInclude>

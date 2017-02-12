@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="..\COMDll\interface.h" />
     <ClInclude Include="Create.h" />
+    <ClInclude Include="IGuid.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="COM_test.cpp" />
     <ClCompile Include="Create.cpp" />
+    <ClCompile Include="IGuid.cpp" />
     <ClCompile Include="Ptr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -5,45 +5,48 @@
 #include <iostream>
 #include "Create.h"
 #include "..\COMDll\interface.h"
+#include "Ptr.h"
 using namespace std;
 void trace(const char* szMsg){ cout << szMsg << endl; }
+void SpCOM();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	::CoInitialize(NULL);
+	SpCOM();
+
+	::CoUninitialize();
+	return 0;
+}
+
+
+void SpCOM()
+{
 	HRESULT hr = S_FALSE;
 	//IUnknown* pIUnknown = CallCreateInstance("COMDll.dll");
-	IX* pIX = nullptr;
+	IPtr<IX, &IID_IX> spIX;
 	bool bClassFactoryDirect = true;
 	if (bClassFactoryDirect)
 	{
 		IClassFactory* pICF = nullptr;
 		hr = CoGetClassObject(CLSID_Component1, CLSCTX_INPROC_SERVER, NULL, IID_IClassFactory, (void**)&pICF);
-		pICF->CreateInstance(NULL, IID_IX, (void**)&pIX);
+		pICF->CreateInstance(NULL, IID_IX, (void**)&spIX);
 		pICF->Release();
 	}
 	else
 	{
-		hr = ::CoCreateInstance(CLSID_Component1, nullptr, CLSCTX_INPROC_SERVER, IID_IX, (void**)&pIX);
+		hr = ::CoCreateInstance(CLSID_Component1, nullptr, CLSCTX_INPROC_SERVER, IID_IX, (void**)&spIX);
 	}
-	if (SUCCEEDED(hr))
+	if (spIX)
 	{
 		trace("client: succeeded getting IX");
-		pIX->Fx();
-
-		IY* pIY = nullptr;
-		hr = pIX->QueryInterface(IID_IY, (void**)&pIY);
-		if (SUCCEEDED(hr))
+		spIX->Fx();
+		IPtr<IY, &IID_IY> spIY;
+		spIY = spIX;
+		//hr = spIX->QueryInterface(IID_IY, (void**)&spIY);//导致多增加一次， 得不到释放？
+		if (spIY)
 		{
-			trace("client: succeeded getting IY");
-			pIY->Fy();
-			pIY->Release();
-			trace("client: release IY");
+			spIY->Fy();
 		}
-		pIX->Release();
-		trace("client: release IX");
 	}
-	::CoUninitialize();
-	return 0;
 }
-

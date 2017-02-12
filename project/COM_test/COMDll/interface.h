@@ -2,9 +2,9 @@
 #include <unknwn.h>
 #include "..\COMDll\COMGUID.h"
 //#define interface struct
-extern const IID IID_IX;
-extern const IID IID_IY;
-extern const IID IID_IZ;
+extern const  IID IID_IX;
+extern IID IID_IY;
+extern IID IID_IZ;
 
 
 interface IX:IUnknown

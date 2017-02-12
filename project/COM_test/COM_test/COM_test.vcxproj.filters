@@ -36,6 +36,9 @@
     <ClInclude Include="Ptr.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="IGuid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Ptr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IGuid.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
