@@ -13,42 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="iface">
-      <UniqueIdentifier>{1a3663a5-b657-442e-849d-5a00b450d2a6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClCompile Include="implement.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="REGISTRY.CPP">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="interface.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\COMDll\interface.h">
-      <Filter>iface</Filter>
-    </ClInclude>
-    <ClInclude Include="Create.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Ptr.h">
+    <ClInclude Include="REGISTRY.H">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <None Include="COM.def">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="COM_test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Create.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Ptr.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    </None>
   </ItemGroup>
 </Project>
