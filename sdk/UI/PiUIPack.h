@@ -14,4 +14,5 @@ public:
 	static bool ChangeShortCutIcon( StringCRef strLinkPath, StringCRef strIconPath );
 	static bool Jpg2Ico( tcpchar szPicPath, tcpchar szPathIcon );
 	static bool IsAeroStyle();
+	static bool SaveDesktopScreenshot( tcpchar szPath );
 };

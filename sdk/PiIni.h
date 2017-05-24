@@ -35,6 +35,7 @@ public:
 	LST_STRING GetAllKey(tcpchar section);
 	bool UnInit();
 	bool IsValidConfig();
+	tstring GetPath();
 protected:
 	/*union {
 		char	m_pBuf[100];

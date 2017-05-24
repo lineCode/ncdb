@@ -1,13 +1,13 @@
 #pragma once
 #include <Windows.h>
-class CLock
+class CPiLock
 {
 public:
-    CLock(void);
-    ~CLock(void);
+    CPiLock(void);
+    ~CPiLock(void);
 
 public:
-    CLock*  Lock();
+    CPiLock*  Lock();
     void    UnLock();
     
 private:
@@ -18,4 +18,4 @@ private:
 /************************************************************************/
 /*  fun:资源管理对象里释放资源
 /************************************************************************/
-void FunUnLock(CLock*   pLock);
+void FunUnLock(CPiLock*   pLock);

@@ -1,13 +1,12 @@
 #include "StdAfx.h"
 #include "PiIrregularWindow.h"
 #include "ResCommon.h"
-#include "functional.h"
 
-static const TCHAR* __className  =  _T("__IrregularWindowClass");
-static const TCHAR* __windowName =  _T("__IrregularWindow");
-
+static const TCHAR* __className  =  _T("PI_IrregularWindowClass");
+static const TCHAR* __windowName =  _T("PI_IrregularWindow");
+typedef map<HWND, CPiIrregularWindow*> MAP_OBJECT;
+MAP_OBJECT g_mapObject;
 CPiIrregularWindow::CPiIrregularWindow(void)
-
 {
 	m_hdcMem = NULL;
 	m_hWndDist	= NULL;
@@ -28,63 +27,34 @@ bool CPiIrregularWindow::SetTransWnd( HWND hWnd, LPCTSTR szPic /*= NULL*/ )
 {
 	m_hWndDist = hWnd;
 	//SIZE sizeWindow = { pImage->GetWidth(), pImage->GetHeight()};
+	/*
 	GetWindowRect(m_hWndDist,&m_rcWindow);
-	m_sizeWindow.cx = m_rcWindow.right = m_rcWindow.left;
-	m_sizeWindow.cy = m_rcWindow.bottom = m_rcWindow.top;
-
+		m_sizeWindow.cx = m_rcWindow.right = m_rcWindow.left;
+		m_sizeWindow.cy = m_rcWindow.bottom = m_rcWindow.top;
+	*/
+	
 	if (szPic)
 	{
 		m_strPicBk = szPic;
 		Gdiplus::Image* pImage = Gdiplus::Image::FromFile(m_strPicBk.c_str());
-		if(pImage->GetLastStatus() != Ok)
+		if(pImage->GetLastStatus() == Ok)
 		{
-			return false;
-		}
-		m_sizeWindow.cx = pImage->GetWidth();
-		m_sizeWindow.cy = pImage->GetHeight();
-		if (m_sizeWindow.cx <= 0 || m_sizeWindow.cy <= 0)
-		{
-			return false;
-		}
+			UINT nCX = pImage->GetWidth();
+			UINT nCY = pImage->GetHeight();
+			if (nCX > 0 && nCY > 0)
+			{
+				m_sizeWindow.cx = nCX;
+				m_sizeWindow.cy = nCY;
+			}
+		}		
 	}
 	
 
-	HDC hDC = ::GetDC(m_hWndDist);
+	CreateMemDC();
 
-	if (!m_hdcMem)
-	{
-		m_hdcMem = CreateCompatibleDC(hDC);
-	}
-
-	if (m_bmMem)
-	{
-		::SelectObject(m_hdcMem, m_bmMem);
-		ClearObject(m_bmMem);
-	}
-	//m_bmMem = CreateCompatibleBitmap(hDC, m_sizeWindow.cx, m_sizeWindow.cy);
-
-	BYTE                           * pBits = NULL;
-	BITMAPINFO          bmih;
-	ZeroMemory( &bmih, sizeof( BITMAPINFO ) );
-
-	bmih.bmiHeader.biSize                  = sizeof (BITMAPINFO) ;
-	bmih.bmiHeader.biWidth                 = m_sizeWindow.cx ;
-	bmih.bmiHeader.biHeight                = m_sizeWindow.cy ;
-	bmih.bmiHeader.biPlanes                = 1 ;
-	bmih.bmiHeader.biBitCount              = 32;        //这里一定要是32
-	bmih.bmiHeader.biCompression           = BI_RGB ;
-	bmih.bmiHeader.biSizeImage             = 0 ;
-	bmih.bmiHeader.biXPelsPerMeter         = 0 ;
-	bmih.bmiHeader.biYPelsPerMeter         = 0 ;
-	bmih.bmiHeader.biClrUsed               = 0 ;
-	bmih.bmiHeader.biClrImportant          = 0 ;
-
-	m_bmMem = CreateDIBSection (NULL, (BITMAPINFO *)  &bmih, 0, (VOID**)&pBits, NULL, 0) ;
-	::SelectObject(m_hdcMem, m_bmMem);
 	return true;
 
 }
-
 
 
 bool CPiIrregularWindow::UpdateLayeredWnd()
@@ -129,7 +99,7 @@ bool CPiIrregularWindow::UpdateLayeredWnd()
 #define MySprintf sprintf_s
 #endif
 		MySprintf(tmp, _countof(tmp), _T("UpdateLayeredWindow 调用失败,错误代码:%d"), nErr);
-		OutInfo(tmp);
+		OutputDebugString(tmp);
 		return false;
 	}
 	::ReleaseDC(m_hWndDist, hdc);
@@ -179,28 +149,25 @@ bool CPiIrregularWindow::BeginDrawLayer()
 	//绘制背景
 	Image img(m_strPicBk.c_str());
 	//TODO:检测图片构造是否成功
-	if (img.GetLastStatus() != Ok)
+	if (img.GetLastStatus() == Ok)
 	{
-		OutInfo(_T("图片加载失败"));
-		return false;
+		//OutputDebugString(_T("图片加载失败"));
+		Graphics gp(m_hdcMem);
+		if(gp.DrawImage(&img, 0, 0, img.GetWidth(), img.GetHeight()) != Ok)
+		{
+			//return false;
+		}
 	}
-	Graphics gp(m_hdcMem);
-	if(gp.DrawImage(&img, 0, 0, img.GetWidth(), img.GetHeight()) != Ok)
-	{
-		return false;
-	}
+	
+	OnBeginDrawLayer();
 	return true;
 }
 
 bool CPiIrregularWindow::CreateIrregularWindow( tcpchar szPic )
 {
-	if (!szPic)
-	{
-		return false;
-	}
 	//使用图片创建不规则窗口, 指定默认大小和默认位置
 	if( ! RegisterWindowClass()
-		|| ! this->Create())
+		|| ! this->_Create())
 	{
 		return false;
 	}
@@ -209,9 +176,19 @@ bool CPiIrregularWindow::CreateIrregularWindow( tcpchar szPic )
 	{
 		return false;
 	}
-	
-	return BeginDrawLayer()
-		&& UpdateLayeredWnd();
+	bool bSuc = Update();
+	if (bSuc)
+	{
+		g_mapObject[m_hWnd] = this;
+	}
+	return bSuc;
+}
+
+bool CPiIrregularWindow::CreateIrregularWindow( UINT nCX, UINT nCY )
+{
+	m_sizeWindow.cx = nCX;
+	m_sizeWindow.cy = nCY;
+	return CreateIrregularWindow(NULL);
 }
 
 
@@ -223,7 +200,6 @@ bool CPiIrregularWindow::RegisterWindowClass()
 	wc.cbWndExtra = 0;
 	wc.hIcon = NULL;
 	wc.lpfnWndProc = CPiIrregularWindow::__WndProc;
-	//wc.lpfnWndProc = DefWindowProc;
 	wc.hInstance = (HINSTANCE)::GetModuleHandle(NULL);
 	wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 
@@ -239,12 +215,12 @@ bool CPiIrregularWindow::RegisterWindowClass()
 	return true;
 }
 
-bool CPiIrregularWindow::Create()
+bool CPiIrregularWindow::_Create()
 {
 	m_hWnd = ::CreateWindowEx(NULL/*WS_EX_LAYERED*/, __className, _T(""),	//WS_CAPTION,
 		WS_OVERLAPPEDWINDOW,
-		300, 300, 
-		300, 300, 
+		0, 0, 
+		m_sizeWindow.cx, m_sizeWindow.cy, 
 		NULL, NULL, (HINSTANCE)::GetModuleHandle(NULL), 0);
 
 	if(m_hWnd == NULL || !::IsWindow(m_hWnd))
@@ -261,6 +237,8 @@ LRESULT CALLBACK  CPiIrregularWindow::__WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 	//HWND hAttackWnd = (HWND)GetWindowLong(hWnd,GWL_USERDATA);
 	switch(uMsg)
 	{
+	case WM_PAINT:
+		break;
 	case WM_CREATE:
 		{
 			LONG styleValue = ::GetWindowLong(hWnd, GWL_STYLE);
@@ -285,18 +263,39 @@ LRESULT CALLBACK  CPiIrregularWindow::__WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 		break;
 	case WM_LBUTTONDOWN:
 		{
-			OutputDebugString(_T("IrWnd lbtnDown\n"));
-			return 0;
-			//::SendMessage( hWnd, WM_SYSCOMMAND, 0xF012, 0);
-			//::SendMessage( hAttackWnd, WM_SYSCOMMAND, 0xF012, 0);
 		}
+		break;
+	case WM_LBUTTONUP:
+		{
+
+		}
+		break;
 	case WM_DESTROY:
-		OutputDebugString(_T("destroy \n"));
-		PostQuitMessage(0) ;
+		{
+			OutputDebugString(_T("piIr destroy \n"));
+			//PostQuitMessage(0) ;
+			//DestroyWindow(hWnd);
+		}
+		break;
+	case WM_NCDESTROY:
+		{
+			OutputDebugString(_T("piIr nc destroy \n"));
+			//m_hWnd = NULL;
+		}
 		break;
 	}
-
-	return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
+	CPiIrregularWindow* pIW = g_mapObject[hWnd];
+	bool bHandle = false;
+	DWORD dwRet = 0;
+	if (pIW)
+	{
+		dwRet = pIW->HandleMessage(uMsg, wParam, lParam, bHandle);
+	}
+	if (!bHandle)
+	{
+		return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
+	}
+	return dwRet;	
 }
 
 
@@ -320,7 +319,62 @@ bool CPiIrregularWindow::DestroyIrregularWindow()
 {
 	if (m_hWnd)
 	{
-		::SendMessage(m_hWnd, WM_DESTROY, 0, 0);
+		::SendMessage(m_hWnd, WM_CLOSE, 0, 0);
+		m_hWnd = NULL;
 	}
 	return true;
+}
+
+DWORD CPiIrregularWindow::HandleMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandle )
+{
+	bHandle = false;
+	return 1;
+}
+
+bool CPiIrregularWindow::OnBeginDrawLayer()
+{
+	throw std::exception("The method or operation is not implemented.");
+}
+
+bool CPiIrregularWindow::CreateMemDC()
+{
+	HDC hDC = ::GetDC(m_hWndDist);
+
+	if (!m_hdcMem)
+	{
+		m_hdcMem = CreateCompatibleDC(hDC);
+	}
+	//::ReleaseDC(m_hWndDist, hDC);
+	if (m_bmMem)
+	{
+		::SelectObject(m_hdcMem, m_bmMem);
+		ClearObject(m_bmMem);
+	}
+	//m_bmMem = CreateCompatibleBitmap(hDC, m_sizeWindow.cx, m_sizeWindow.cy);
+
+	BYTE                           * pBits = NULL;
+	BITMAPINFO          bmih;
+	ZeroMemory( &bmih, sizeof( BITMAPINFO ) );
+
+	bmih.bmiHeader.biSize                  = sizeof (BITMAPINFO) ;
+	bmih.bmiHeader.biWidth                 = m_sizeWindow.cx ;
+	bmih.bmiHeader.biHeight                = m_sizeWindow.cy ;
+	bmih.bmiHeader.biPlanes                = 1 ;
+	bmih.bmiHeader.biBitCount              = 32;        //这里一定要是32
+	bmih.bmiHeader.biCompression           = BI_RGB ;
+	bmih.bmiHeader.biSizeImage             = 0 ;
+	bmih.bmiHeader.biXPelsPerMeter         = 0 ;
+	bmih.bmiHeader.biYPelsPerMeter         = 0 ;
+	bmih.bmiHeader.biClrUsed               = 0 ;
+	bmih.bmiHeader.biClrImportant          = 0 ;
+
+	m_bmMem = CreateDIBSection (NULL, (BITMAPINFO *)  &bmih, 0, (VOID**)&pBits, NULL, 0) ;
+	::SelectObject(m_hdcMem, m_bmMem);
+	return m_bmMem > 0;
+}
+
+bool CPiIrregularWindow::Update() 
+{
+	return BeginDrawLayer()
+		&& UpdateLayeredWnd();
 }

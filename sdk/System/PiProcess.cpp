@@ -5,7 +5,6 @@
 #include "define_gnl.h"
 #include <Psapi.h>
 #include <algorithm>
-#include "doString.h"
 #include "PiString.h"
 #include "PiDisk.h"
 

@@ -12,10 +12,12 @@
 #include <windows.h>
 #include <Shtypes.h>
 #include <shlguid.h>
+#include "GDIPUtil.h"
 
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "ole32.lib")
+using namespace Gdiplus;
 
 
 typedef HRESULT (*FuncDwmIsCompositionEnabled)(BOOL *pfEnabled);
@@ -258,4 +260,125 @@ bool CPiUIPack::IsAeroStyle()
 		}
 	}
 	return false;
+}
+
+
+
+bool CPiUIPack::SaveDesktopScreenshot( tcpchar szPath )
+{
+	if (!szPath || *szPath)
+	{
+		return false;
+	}
+	tstring strPWTemp(tstring(szPath) + _T("temp"));
+	tstring strPW(szPath);
+
+
+	HDC hDCDesktop = ::GetDC(GetDesktopWindow());
+	RECT rtScreen = {0};
+	if(!GetClientRect(GetDesktopWindow(), &rtScreen))
+	{
+		return FALSE;
+	}
+	int nWidth = rtScreen.right - rtScreen.left;
+	int nHeight = rtScreen.bottom - rtScreen.top;
+
+	HDC hDCMem = CreateCompatibleDC(hDCDesktop);
+	HBITMAP hBm = ::CreateCompatibleBitmap(hDCDesktop, nWidth, nHeight);
+	HGDIOBJ hOld = ::SelectObject(hDCMem, hBm);
+	//桌面拷贝到hMemDC
+	if(!::BitBlt(hDCMem, 0, 0, nWidth, nHeight, hDCDesktop, 0, 0, SRCCOPY))
+	{
+		::SelectObject(hDCMem, hOld);
+		::DeleteDC(hDCMem);
+		::DeleteObject(hBm);
+		return FALSE;
+	}
+
+	::SelectObject(hDCMem, hOld);
+
+
+
+	BITMAP bit = {0};
+	CBitmap* bmpTemp = CBitmap::FromHandle(hBm);
+	if(!bmpTemp->GetBitmap(&bit)
+		|| bit.bmWidth <=0 || bit.bmHeight <=0)
+	{
+		::DeleteObject(hBm);
+		::DeleteDC(hDCMem);
+		return FALSE;
+	}
+
+	//定义 图像大小（单位：byte）  
+	DWORD size = bit.bmWidthBytes * bit.bmHeight ;  
+	LPSTR lpdata = (LPSTR)GlobalAlloc(GPTR , size) ;  
+
+	int nErr = 0;
+	BITMAPINFOHEADER pbitinfo;  
+	pbitinfo.biSize = sizeof(BITMAPINFOHEADER);  
+	pbitinfo.biBitCount = 24 ;   
+	pbitinfo.biClrImportant = 0;  
+	pbitinfo.biCompression = BI_RGB ;  
+	pbitinfo.biHeight = bit.bmHeight ;   
+	pbitinfo.biPlanes = 1 ;  
+	pbitinfo.biSizeImage = size;  
+	pbitinfo.biWidth = bit.bmWidth;  
+	pbitinfo.biXPelsPerMeter = 0;  
+	pbitinfo.biYPelsPerMeter = 0 ; 
+
+	if(!GetDIBits(hDCDesktop, hBm, 0, bit.bmHeight, lpdata, (BITMAPINFO*)&pbitinfo, DIB_RGB_COLORS))
+	{
+		nErr = 1;
+	}
+	::ReleaseDC(GetDesktopWindow(), hDCDesktop);
+	::DeleteObject(hBm);
+	::DeleteDC(hDCMem);
+
+	BITMAPFILEHEADER bfh;  
+	bfh.bfReserved1 = bfh.bfReserved2 = 0 ;  
+	bfh.bfType = ((WORD)('M'<< 8)|'B');  
+	bfh.bfSize = 54 + size ;   
+	bfh.bfOffBits = 54 ;  
+
+	//写入文件  
+	CFile file;
+
+	if ( !file.Open(strPWTemp.c_str(), CFile::modeCreate|CFile::modeWrite) )  
+	{  
+		return FALSE;
+	} 
+
+	file.Write( &bfh , sizeof(BITMAPFILEHEADER) );  
+	file.Write( &pbitinfo , sizeof(BITMAPINFOHEADER));  
+	file.Write(lpdata , size);  
+	file.Close();  
+
+	GlobalFree(lpdata);
+	{
+		Image image(strPWTemp.c_str());
+		if(Ok != image.GetLastStatus())
+		{
+			return FALSE;
+		}
+		int quality = 40;
+		CLSID encoderClsid = {0};  
+		if( -1 == CGDIPUtil::GetEncoderClsid(_T("image/jpeg"), &encoderClsid))
+		{
+			return FALSE;
+		}
+		EncoderParameters encoderParameters;
+		encoderParameters.Count = 1;   
+		encoderParameters.Parameter[0].Guid = EncoderQuality;   
+		encoderParameters.Parameter[0].Type = EncoderParameterValueTypeLong;   
+		encoderParameters.Parameter[0].NumberOfValues = 1;   
+		encoderParameters.Parameter[0].Value = &quality;  
+
+
+		if(Ok != image.Save(strPW.c_str(), &encoderClsid, &encoderParameters))
+		{
+			return FALSE;
+		}
+	}
+	_tremove(strPWTemp.c_str());
+	return TRUE;
 }
