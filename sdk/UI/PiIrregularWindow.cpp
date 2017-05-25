@@ -13,8 +13,11 @@ CPiIrregularWindow::CPiIrregularWindow(void)
 	m_hdcMem 	= NULL;;
 	m_bmMem	= NULL;
 	m_sizeWindow.cx = m_sizeWindow.cy = 0;
-		
+	m_bMouseEnter = false;
 
+	m_clNormal = Color(255, 255, 255, 255);
+	m_clEnter = m_clNormal;
+	m_bCursorHand	= true;
 }
 
 CPiIrregularWindow::~CPiIrregularWindow(void)
@@ -217,6 +220,8 @@ bool CPiIrregularWindow::RegisterWindowClass()
 
 bool CPiIrregularWindow::_Create()
 {
+	m_clText = m_clNormal;
+
 	m_hWnd = ::CreateWindowEx(NULL/*WS_EX_LAYERED*/, __className, _T(""),	//WS_CAPTION,
 		WS_OVERLAPPEDWINDOW,
 		0, 0, 
@@ -235,6 +240,7 @@ bool CPiIrregularWindow::_Create()
 LRESULT CALLBACK  CPiIrregularWindow::__WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	//HWND hAttackWnd = (HWND)GetWindowLong(hWnd,GWL_USERDATA);
+	CPiIrregularWindow* pIW = g_mapObject[hWnd];
 	switch(uMsg)
 	{
 	case WM_PAINT:
@@ -256,10 +262,32 @@ LRESULT CALLBACK  CPiIrregularWindow::__WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 			
 		}
 		break;
-	case WM_MOVE:
+	case WM_MOUSEMOVE:
 		{
-			
+			TRACKMOUSEEVENT tme = {0};
+			tme.cbSize = sizeof(TRACKMOUSEEVENT);
+			tme.dwFlags = TME_HOVER | TME_LEAVE;
+			tme.dwHoverTime = 1;
+			tme.hwndTrack = hWnd;
+			if(!TrackMouseEvent(&tme))
+			{
+				OutputDebugString(_T("TrackMouseEvent fail"));
+			}
+			if (pIW->m_bCursorHand)
+			{
+				::SetCursor(::LoadCursor(NULL, IDC_HAND));
+			}
 		}
+		break;
+	case WM_MOUSEHOVER:		
+		if(!pIW->m_bMouseEnter)
+		{
+			pIW->OnMouseEnter(wParam, lParam);
+		}
+		break;
+	case WM_MOUSELEAVE:
+		
+		pIW->OnMouseLeave(wParam, lParam);
 		break;
 	case WM_LBUTTONDOWN:
 		{
@@ -284,7 +312,6 @@ LRESULT CALLBACK  CPiIrregularWindow::__WndProc(HWND hWnd, UINT uMsg, WPARAM wPa
 		}
 		break;
 	}
-	CPiIrregularWindow* pIW = g_mapObject[hWnd];
 	bool bHandle = false;
 	DWORD dwRet = 0;
 	if (pIW)
@@ -377,4 +404,23 @@ bool CPiIrregularWindow::Update()
 {
 	return BeginDrawLayer()
 		&& UpdateLayeredWnd();
+}
+
+LRESULT CPiIrregularWindow::OnMouseEnter( WPARAM wp, LPARAM lp )
+{
+	m_bMouseEnter = true;
+	m_clText = m_clEnter;
+	
+	//OutputDebugString(_T("OnMouseEnter"));
+	Update();
+	return 1;
+}
+
+LRESULT CPiIrregularWindow::OnMouseLeave( WPARAM wp, LPARAM lp )
+{
+	m_bMouseEnter = false;
+	m_clText = m_clNormal;
+	//OutputDebugString(_T("OnMouseLeave"));
+	Update();
+	return 1;
 }

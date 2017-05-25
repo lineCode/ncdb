@@ -37,6 +37,8 @@ protected:
 	virtual bool RegisterWindowClass();
 	virtual bool _Create();
 	static LRESULT CALLBACK  __WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMouseEnter(WPARAM wp, LPARAM lp);
+	virtual LRESULT OnMouseLeave(WPARAM wp, LPARAM lp);
 
 public:
 protected:
@@ -50,6 +52,10 @@ protected:
 	RECT		m_rcWindow;		
 	tstring		m_strPicBk;			//背景图, 每次绘制都会先画这张
 
-	HWND m_hWnd;
-
+	HWND				m_hWnd;
+	bool				m_bMouseEnter;
+	bool				m_bCursorHand;
+	Color				m_clText;
+	Color				m_clNormal;
+	Color				m_clEnter;
 };

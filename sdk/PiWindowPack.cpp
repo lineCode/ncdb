@@ -115,12 +115,14 @@ bool CPiWindowPack::GetWindowPos( HWND hWnd, POINT& pt )
 bool CPiWindowPack::TopMostWindow( HWND hWnd , bool bTopMost /*= true*/ )
 {
 	HWND hTop = (bTopMost ? HWND_TOPMOST : HWND_NOTOPMOST);
+	SetForegroundWindow(hWnd);
 	::SetWindowPos(hWnd, hTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	return true;
 }
 
 bool CPiWindowPack::TopWindow( HWND hWnd )
 {
+	SetForegroundWindow(hWnd);
 	::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	return true;
 }
