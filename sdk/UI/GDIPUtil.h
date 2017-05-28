@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include <GdiPlus.h>
 #include "PiTypeDef.h"
 class CPiGdip
 {
@@ -18,5 +19,5 @@ public:
 	
 	static int GetEncoderClsid( const WCHAR* format, CLSID* pClsid );
 	static void ClipPic( LPCTSTR strPicSize, LPCTSTR strPicSrc );
-	static HBITMAP GetBitmapFromImage(tcpchar szPath, SIZE szPicSize = { 0 });
+	static HBITMAP GetBitmapFromImage(tcpchar szPath, SIZE szPicSize);
 };

@@ -1,30 +1,30 @@
 #include "StdAfx.h"
-#include "Lock.h"
+#include "PiLock.h"
 
-CLock::CLock(void)
+CPiLock::CPiLock(void)
 {
     InitializeCriticalSection(&m_cs);
 }
 
-CLock::~CLock(void)
+CPiLock::~CPiLock(void)
 {
     DeleteCriticalSection(&m_cs);
 }
 
 
-CLock* CLock::Lock()
+CPiLock* CPiLock::Lock()
 {
     EnterCriticalSection(&m_cs);
     return this;
 }
 
-void CLock::UnLock()
+void CPiLock::UnLock()
 {
     LeaveCriticalSection(&m_cs);
 }
 
 
-void FunUnLock( CLock* pLock )
+void FunUnLock( CPiLock* pLock )
 {
     pLock->UnLock();
 }

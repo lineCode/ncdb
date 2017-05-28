@@ -111,7 +111,7 @@ void CGDIPUtil::ClipPic( LPCTSTR strPicSize, LPCTSTR strPicSrc )
 	
 }
 
-HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize /*= { 0 }*/)
+HBITMAP CGDIPUtil::GetBitmapFromImage(tcpchar szPath, SIZE szPicSize )
 {
 	Gdiplus::Bitmap tempBmp(szPath);
 	if (tempBmp.GetLastStatus() != Ok

@@ -4,8 +4,7 @@
 #include "PiTypeDef.h"
 
 #include "define_gnl.h"
-#include "ResCommon.h"
-#include "AutoType.h"
+//#include "ResCommon.h"
 #include <shlwapi.h>
 
 Pi_NameSpace_Using
@@ -50,7 +49,8 @@ bool CPiIni::Init()
 
 bool CPiIni::UnInit()
 {
-	ClearMemArr(m_pBuf);
+	delete [] m_pBuf;
+	m_pBuf = NULL;
 	return true;
 }
 
@@ -103,12 +103,16 @@ bool CPiIni::WriteParam(tcpchar section, tcpchar key, tcpchar value)
 
 bool CPiIni::WriteParam( tcpchar section, tcpchar key, int value )
 {
-	return WriteParam(section, key, (tcpchar)CAutoType(value));
+	TCHAR szBuf[100] = {0};
+	_itot(value, szBuf, 10);
+	return WriteParam(section, key, szBuf);
 }
 
 bool CPiIni::WriteParam( tcpchar section, tcpchar key, UNINT value )
 {
-	return WriteParam(section, key, (tcpchar)CAutoType(value));
+	TCHAR szBuf[100] = {0};
+	_itot(value, szBuf, 10);
+	return WriteParam(section, key, szBuf);
 }
 
 bool CPiIni::WriteParam( tcpchar section, tcpchar key, tstring value )
@@ -125,6 +129,11 @@ bool CPiIni::DeleteKey(tcpchar section, tcpchar key)
 		return false;
 	}
 	return true;
+}
+
+tstring CPiIni::GetPath()
+{
+	return m_strFilePath;
 }
 
 LST_STRING ns_PiPi::CPiIni::GetAllKey( tcpchar section )

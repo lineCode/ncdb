@@ -372,3 +372,4 @@ int CPiString::ToInt()
 	return (int)_ttoi64(c_str());
 
 }
+
