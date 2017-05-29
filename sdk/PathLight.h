@@ -25,7 +25,7 @@ public:
     bool SyncCache();
     bool ModifyFileName( const tstring& strNewName );
 	tstring GetExt();
-	operator tstring() const;
+	operator const tstring&() const;
     operator tcpchar();
 
 	CPathLight operator +(tcpchar szPath);

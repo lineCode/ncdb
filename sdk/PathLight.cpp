@@ -169,10 +169,6 @@ tstring CPathLight::GetFileTitleFromPath( tcpchar szPath )
     return szTitle;
 }
 
-CPathLight::operator tstring() const
-{
-    return m_strPath;
-}
 
 bool CPathLight::IsValidPath( tcpchar szPath )
 {
@@ -445,6 +441,12 @@ CPathLight& CPathLight::operator=( tcpchar szPath )
 	m_strPath = szPath;
 	SyncCache();
 	return *this;
+}
+
+CPathLight::operator const tstring&() const
+{
+	return m_strPath;
+
 }
 
 bool CPathLight::RenameTitle( StringCRef nameNew )

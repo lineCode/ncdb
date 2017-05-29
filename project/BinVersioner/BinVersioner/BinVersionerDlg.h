@@ -4,6 +4,7 @@
 
 #pragma once
 #include <string>
+#include "..\..\..\sdk\PiTypeDef.h"
 using namespace std;
 
 
@@ -36,5 +37,5 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-	tagMemBlock GetFileVersionData();
+	tagMemBlock GetFileVersionData(const tstring& strPath);
 };
