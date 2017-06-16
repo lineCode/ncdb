@@ -3,7 +3,7 @@
 #include "PiTypeDef.h"
 #include "define_gnl.h"
 using namespace std;
-
+//ºê¿ª¹Ø: M_DEBUG_INFO
 #define _FUNCTIONAL_H_COMMON
 
 #ifdef _FUNCTIONAL_H_COMMON 

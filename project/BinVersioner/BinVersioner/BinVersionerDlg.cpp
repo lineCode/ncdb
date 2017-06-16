@@ -106,9 +106,10 @@ bool SetPEResource( LPCTSTR exepath, LPCTSTR type, LPCTSTR name, tagMemBlock& mb
 	int pStringFileInfo = pTemp + sizeof(VS_FIXEDFILEINFO);
 
 	int pStringTabel = AlignMem(pStringFileInfo + 2 + 2 + 2 + _countof("StringFileInfo") * sizeof(wchar_t), nAlignByte, dwMove);
+	DWORD dwTableEnd = pStringTabel + *(WORD*)pStringTabel;
 	int pStringS = AlignMem(((int)pStringTabel + 2 + 2 + 2 + 8 * sizeof(wchar_t)), nAlignByte, dwMove);
 	void* pResourceDataNew = NULL;
-	while ((pStringS = AlignMem(pStringS, nAlignByte, dwMove))
+	while (pStringS < dwTableEnd && (pStringS = AlignMem(pStringS, nAlignByte, dwMove))
 		&& *(char*)pStringS)
 	{
 		;
@@ -210,16 +211,20 @@ BOOL CBinVersionerDlg::OnInitDialog()
 
 	CPathLight path;
 	path = path.GetSelfModuleFolder();
-	tstring strPathSrc = (path +_T("test.exe")).GetPath();
+	tstring strPathSrc = (path + _T("test.exe")).GetPath();
 
 	wstring strVersion(_T("1.2.3.50"));
 	tagMemBlock mb = GetFileVersionData(strPathSrc);
-
-	tstring strPathDist = (path + _T("testWrite.exe")).GetPath();
+	if(!mb.pMem)
+	{
+		return FALSE;
+	}
+	tstring strPathDist = (path + _T("test.exe")).GetPath();
 
 	SetPEResource(strPathDist.c_str(), RT_VERSION
 		, MAKEINTRESOURCE(VS_VERSION_INFO), mb, 0);
-
+	delete []mb.pMem;
+	mb.pMem = NULL;
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -307,8 +312,11 @@ tagMemBlock CBinVersionerDlg::GetFileVersionData(const tstring& strPath)
 
 	// Lock the dialog box into global memory. 
 	lpResLock = LockResource(hResLoad); 
-	mb.pMem = lpResLock;
 	mb.dwSize = *(WORD*)lpResLock;
+	mb.pMem = new char[mb.dwSize];
+	memcpy(mb.pMem, lpResLock, mb.dwSize);
+	result = FreeResource(hExe);
+	FreeLibrary(hExe);
 	return mb;
 	//VS_VERSIONINFO* 
 
