@@ -50,4 +50,5 @@ public:
 private:
 	//tstring		m_strData;
 };
+
 Pi_NameSpace_End

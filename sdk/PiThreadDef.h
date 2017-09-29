@@ -3,6 +3,7 @@
 #include <Windows.h>
 typedef DWORD (*ProcThreadFun)(void* paramR) ;	//线程回调函数
 
+Pi_NameSpace_Begin
 //通知类型
 class CThreadLight;
 
@@ -41,3 +42,5 @@ public:
         pAdd = pAddR;
     }
 };
+
+Pi_NameSpace_End

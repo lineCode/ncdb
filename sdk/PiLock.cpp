@@ -1,12 +1,12 @@
 #include "StdAfx.h"
 #include "PiLock.h"
-
-CPiLock::CPiLock(void)
+Pi_NameSpace_Begin
+CPiLock::CPiLock()
 {
     InitializeCriticalSection(&m_cs);
 }
 
-CPiLock::~CPiLock(void)
+CPiLock::~CPiLock()
 {
     DeleteCriticalSection(&m_cs);
 }
@@ -28,3 +28,5 @@ void FunUnLock( CPiLock* pLock )
 {
     pLock->UnLock();
 }
+
+Pi_NameSpace_End

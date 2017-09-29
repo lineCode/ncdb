@@ -2,14 +2,14 @@
 #include <memory>
 #include "ResCommon.h"
 
-
+Pi_NameSpace_Begin
 //ºê, M_STL_RAII, BOOST_SHARE_PTR, M_PI_RAII
 
 #ifdef BOOST_SHARE_PTR
 #include <boost/shared_ptr.hpp>
 #endif
 
-class CLock;
+class CPiLock;
 
 void FuncClearMemArr(void* p);
 void FuncUnLock(void* p);
@@ -19,15 +19,15 @@ void FuncUnLock(void* p);
 
 class CRAIILock
 #ifdef BOOST_SHARE_PTR
-	:public boost::shared_ptr<CLock>
+	:public boost::shared_ptr<CPiLock>
 #elif defined (M_STL_RAII)
 
 	//:public std::tr1::shared_ptr<CLock>
 #endif
 {
 public:
-	CRAIILock(CLock* pLock);
-    CRAIILock(auto_ptr<CLock>& pLock);
+	CRAIILock(CPiLock* pLock);
+    CRAIILock(auto_ptr<CPiLock>& pLock);
     ~CRAIILock(void);
 };
 
@@ -36,13 +36,13 @@ public:
 class CRAIILock
 {
 public:
-	CRAIILock(CLock* pLock);
-	CRAIILock(auto_ptr<CLock>& pLock);
+	CRAIILock(CPiLock* pLock);
+	CRAIILock(auto_ptr<CPiLock>& pLock);
 	~CRAIILock(void);
 public:
 	void reset();
 private:
-	CLock*	m_pLock;
+	CPiLock*	m_pLock;
 };
 
 #endif
@@ -148,3 +148,5 @@ private:
 
 };
 #endif
+
+Pi_NameSpace_End

@@ -11,8 +11,12 @@ public:
 	static void OutTime(tcpchar szMsg);
 	static void OutFormat(const TCHAR* format,...);
 	static bool SetDumpUnhandledException();
-	/************************************************************************
-		fun:	获取当前文件(PiDebugUnit.h)的编译时间
+    //???????
+    void StartUpConsole()
+    //???????
+    void ColseConsole()
+    /************************************************************************
+		fun:	??????(PiDebugUnit.h)?????
 		param:	
 		memo:	
 	************************************************************************/

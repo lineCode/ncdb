@@ -1,8 +1,9 @@
 #include "StdAfx.h"
 #include "RAIILock.h"
-#include "Lock.h"
+#include "PiLock.h"
 #include "PiTypeDef.h"
 
+Pi_NameSpace_Begin
 #if defined(BOOST_SHARE_PTR) || defined(M_STL_RAII)
 
 #ifdef BOOST_SHARE_PTR
@@ -11,18 +12,18 @@ Pi_M_NameSpace_Using(boost)
 Pi_M_NameSpace_Using(std::tr1)
 #endif
 
-CRAIILock::CRAIILock( CLock* pLock )
+CRAIILock::CRAIILock( CPiLock* pLock )
 #ifdef BOOST_SHARE_PTR
-	:shared_ptr<CLock>(pLock, FuncUnLock)
+	:shared_ptr<CPiLock>(pLock, FuncUnLock)
 #elif defined(M_STL_RAII)
-	:std::tr1::shared_ptr<CLock>(pLock, FuncUnLock)
+	:std::tr1::shared_ptr<CPiLock>(pLock, FuncUnLock)
 #endif
 {
 	pLock->Lock();
 }
 
 #else
-CRAIILock::CRAIILock( CLock* pLock )
+CRAIILock::CRAIILock( CPiLock* pLock )
 {
 	if (!pLock)
 	{
@@ -32,7 +33,7 @@ CRAIILock::CRAIILock( CLock* pLock )
 	m_pLock->Lock();
 }
 
-CRAIILock::CRAIILock( auto_ptr<CLock>& pLock )
+CRAIILock::CRAIILock( auto_ptr<CPiLock>& pLock )
 {
 	if (!pLock.get())
 	{
@@ -62,11 +63,11 @@ void CRAIILock::reset()
 
 #if defined(BOOST_SHARE_PTR) || defined(M_STL_RAII)
 
-CRAIILock::CRAIILock( auto_ptr<CLock>& pLock )
+CRAIILock::CRAIILock( auto_ptr<CPiLock>& pLock )
 #ifdef BOOST_SHARE_PTR
-:shared_ptr<CLock>(pLock.get(), FuncUnLock)
+:shared_ptr<CPiLock>(pLock.get(), FuncUnLock)
 #else
-:std::tr1::shared_ptr<CLock>(pLock.get(), FuncUnLock)
+:std::tr1::shared_ptr<CPiLock>(pLock.get(), FuncUnLock)
 #endif
 {
 	pLock->Lock();
@@ -88,10 +89,12 @@ CRAIILock::~CRAIILock(void)
 
 void FuncUnLock(void* p)
 {
-	((CLock*)p)->UnLock();
+	((CPiLock*)p)->UnLock();
 }
 
 void FuncClearMemArr(void* p)
 {
     ClearMemArr(p);
 }
+
+Pi_NameSpace_End

@@ -4,6 +4,8 @@
 #include <assert.h>
 #include "ResCommon.h"
 const int NUM_WAIT_TIMEOUT                  = 500;  //
+Pi_NameSpace_Begin
+
 CEventLight::CEventLight(void)
 {
 	m_hEventSync = NULL;
@@ -86,3 +88,5 @@ bool CEventLight::IsExist( tcpchar cName )
     }
     return ERROR_ALREADY_EXISTS == ev.m_dwErr;
 }
+
+Pi_NameSpace_End

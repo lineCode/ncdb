@@ -5,6 +5,8 @@
 ************************************************************************/
 #include "PiTypeDef.h"
 #include <Windows.h>
+Pi_NameSpace_Begin
+
 class CEventLight
 {
 public:
@@ -36,3 +38,5 @@ private:
     DWORD           m_dwErr;
     bool            m_bWaitRet; //等待结果, 用于通知外部等待成功或失败
 };
+
+Pi_NameSpace_End

@@ -1,10 +1,13 @@
 #pragma once
 #include <Windows.h>
+#include "PiTypeDef.h"
+Pi_NameSpace_Begin
+
 class CPiLock
 {
 public:
-    CPiLock(void);
-    ~CPiLock(void);
+    CPiLock();
+    ~CPiLock();
 
 public:
     CPiLock*  Lock();
@@ -19,3 +22,5 @@ private:
 /*  fun:资源管理对象里释放资源
 /************************************************************************/
 void FunUnLock(CPiLock*   pLock);
+
+Pi_NameSpace_End

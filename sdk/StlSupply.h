@@ -238,3 +238,15 @@ public:
 		return it;
 	}
 };
+
+
+template<class Key, class MapType>
+typename MapType::mapped_type GetElement(const MapType& map, Key k)
+{
+	auto it = map.find(k);
+	if (it == map.end())
+	{
+		return MapType::mapped_type();
+	}
+	return it->second;
+}

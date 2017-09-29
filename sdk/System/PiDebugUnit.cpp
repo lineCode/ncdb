@@ -142,3 +142,20 @@ tstring CPiDebugUnit::GetBuildDateTime()
 	strDT += _T(__TIME__);
 	return strDT;
 }
+
+void CPiDebugUnit::StartUpConsole()
+{
+	setlocale(LC_ALL, "CHS"); 
+	int nCrt = 0;
+	FILE* fp;
+	AllocConsole();
+	nCrt = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+	fp = _fdopen(nCrt, "w+");
+	*stdout = *fp;
+	setvbuf(stdout, NULL, _IONBF, 0);
+}
+
+void CPiDebugUnit::ColseConsole()
+{
+	FreeConsole();
+}

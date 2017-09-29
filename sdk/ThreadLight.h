@@ -14,12 +14,14 @@
 ************************************************************************/
 
 //参数, 1:传进来的参数,  2: NotifyObj*类型
+Pi_NameSpace_Begin
+
 typedef void (*CallBackFun)(void* pObj, void* pNodify);
 typedef void (*FunLog)(tcpchar strMsg);
 
 
 class CEventLight;
-class CLock;
+class CPiLock;
 
 using namespace std;
 
@@ -55,7 +57,7 @@ public:
         remark:
         ret:   
     ************************************************************************/
-    bool ExitThread();
+	bool ExitThread(UNLONG dwWaitThread = 1000);
 
     HANDLE GetThreadHandle();
     void SetThreadName(tcpchar szName);
@@ -110,7 +112,7 @@ protected:
     bool                    m_bStopThread;    //是否停止线程
 	auto_ptr<CEventLight>                   m_pLockDetect;
 	auto_ptr<CEventLight>                   m_pLockThreadInitDone;	//是否初始化完成
-    auto_ptr<CLock>                 m_pLockThread;
+    auto_ptr<CPiLock>                 m_pLockThread;
     bool m_bAutoDestroy;        //在任务执行完后是否自动销毁
     tstring         m_strThreadName;
     bool                m_bInit;    //是否已经初始化
@@ -138,3 +140,5 @@ CThreadLight* CThreadLight::Run( T pFun, Param paramR, bool bAutoDestroy /*= fal
 	return pThread;
 }
 
+
+Pi_NameSpace_End

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-    #include "doString.h"   
+#include "doString.h"   
 
 #include <tchar.h>
 #include "functional.h"

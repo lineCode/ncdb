@@ -4,16 +4,17 @@
 #include "ResCommon.h"
 #include "EventLight.h"
 //#include "RAIILock.h"
-#include "Lock.h"
-#include "functional.h"
+#include "PiLock.h"
+//#include "functional.h"
 #include "AutoType.h"
 #include "System/PiExceptionHandle.h"
 #include <process.h>
 #include "PiString.h"
 //#include "PiRandom.h"
 
+
+Pi_NameSpace_Begin
 FunLog			CThreadLight::m_funLog = NULL;
-Pi_NameSpace_Using
 
 /*
 CThreadLight::CThreadLight( CallBackFun pCB / *= NULL* /, void* pObject / *= NULL* /)
@@ -42,7 +43,7 @@ bool CThreadLight::Init()
 {
 	Create_Auto_Ptr(m_pLockDetect, CEventLight);
     Create_Auto_Ptr(m_pLockThreadInitDone, CEventLight);
-    Create_Auto_Ptr(m_pLockThread, CLock);
+    Create_Auto_Ptr(m_pLockThread, CPiLock);
     if(!m_pLockDetect->Init()
 		|| ! m_pLockThreadInitDone->Init())
     {
@@ -75,7 +76,10 @@ bool CThreadLight::Run()
 	m_pLockThread->UnLock();
 	return true;
 }
+void OutInfo(tcpchar szInfo)
+{
 
+}
 unsigned __stdcall CThreadLight::SProc( void* pAdd )
 {
 	//OutLog(_T("sproc begin"));
@@ -124,7 +128,7 @@ bool CThreadLight::StopThread()
 
 }
 
-bool CThreadLight::ExitThread()
+bool CThreadLight::ExitThread( UNLONG dwWaitThread /*= 1000*/ )
 {
     if (! m_bInit)
     {
@@ -143,9 +147,9 @@ bool CThreadLight::ExitThread()
     if(hTemp)
     {
         at.SetData(GetCurrentThreadId());
-		OutInfo(_T("cur thread id"), at.ToHex());
+		//OutInfo(_T("cur thread id"), at.ToHex());
         //LOG(INFO) << "CThreadLight::ExitThread call ThreadID:"), at.ToHex(;
-        DWORD dwWait = ::WaitForSingleObject(hTemp, m_dwWaitThread);
+        DWORD dwWait = ::WaitForSingleObject(hTemp, dwWaitThread);
         //CRAIILock raii(m_pLockThread->Lock());
 		m_pLockThread->Lock();
         if(WAIT_TIMEOUT == dwWait)
@@ -153,7 +157,7 @@ bool CThreadLight::ExitThread()
             strMsg += _T(" CThreadLight force exit");
 			int n = 0;
 			at.SetData(m_dwThreadID);
-			OutInfo(_T("tmn thread id"), at.ToHex());
+			//OutInfo(_T("tmn thread id"), at.ToHex());
 
             if(!TerminateThread(hTemp, -1))
 				n = GetLastError();
@@ -391,3 +395,4 @@ DWORD CThreadLight::DoThread( ThreadParam* pThreadParam )
 	return dwRet;
 }
 
+Pi_NameSpace_End
